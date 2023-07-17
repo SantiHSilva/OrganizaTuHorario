@@ -1,4 +1,4 @@
-import {getValueById} from "../Utils/Utils.js";
+import {getValueById} from "../../Utils/Utils.js";
 
 function saveValues(){
   const name = getValueById("groupName");

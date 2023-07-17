@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { limpiarInputsById, getValueById, setCustomValidityById } from '../../Utils/Utils.js'
+import { limpiarInputsById, getValueById, setCustomValidityById } from '../Utils.js'
 
 export default function FormMusica() {
 	useEffect(() => {

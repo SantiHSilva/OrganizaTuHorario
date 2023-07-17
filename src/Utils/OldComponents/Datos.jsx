@@ -1,4 +1,4 @@
-import { getValueById, limpiarInputsById } from '../../Utils/Utils.js'
+import { getValueById, limpiarInputsById } from '../Utils.js'
 
 import { useEffect } from 'react';
 

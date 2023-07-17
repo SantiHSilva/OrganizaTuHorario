@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "./Components/Home.jsx";
-import ToDo from "./Components/OldComponents/ToDo.jsx";
-import DynamicPage from "./Components/OldComponents/DynamicPage.jsx";
-import TestPage from "./Components/OldComponents/TestingTimestamps.jsx";
-import Datos from "./Components/OldComponents/Datos.jsx";
-import Modal from "./Components/CrearGrupoModal.jsx";
+import ToDo from "./Utils/OldComponents/ToDo.jsx";
+import DynamicPage from "./Utils/OldComponents/DynamicPage.jsx";
+import TestPage from "./Utils/OldComponents/TestingTimestamps.jsx";
+import Datos from "./Utils/OldComponents/Datos.jsx";
+import Modal from "./Components/Modals/CrearGrupoModal.jsx";
 
 export const Urls = createBrowserRouter([
     {

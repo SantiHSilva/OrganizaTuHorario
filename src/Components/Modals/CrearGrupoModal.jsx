@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
-import { getValueById, randomHexColor } from '../Utils/Utils.js'
-import { saveValues, getGroupList } from "./groupManager.js";
+import { getValueById, randomHexColor } from '../../Utils/Utils.js'
+import { saveValues, getGroupList } from "../Data/groupManager.js";
 
 export default function TestingModal(){
   const [show, setShow] = useState(false);

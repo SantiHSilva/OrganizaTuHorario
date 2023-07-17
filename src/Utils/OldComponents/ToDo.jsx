@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { getValueById, limpiarInputsById } from "../../Utils/Utils.js";
+import { getValueById, limpiarInputsById } from "../Utils.js";
 
 export default function ToDo(){
 
     const [tareas, setTareas] = useState([]);
 
     useEffect(() => {
-        import ('../Styles/ToDo.css'); // importar estilos una vez que el componente se haya cargado
+        import ('../../Components/Styles/ToDo.css'); // importar estilos una vez que el componente se haya cargado
         console.log("Se ha cargado el componente!");
     }, []);
 
