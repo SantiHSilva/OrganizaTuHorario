@@ -1,12 +1,11 @@
 import './Components/Styles/App.css';
-import { RouterProvider } from 'react-router-dom';
-import { Urls } from './Urls.jsx';
+import DataRoot from "./Components/CRUD/DataRoot.jsx";
 
 function App() {
   return (
-    <main>
-      <RouterProvider router={ Urls }/>
-    </main>
+    <>
+      < DataRoot />
+    </>
   )
 }
 

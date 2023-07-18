@@ -5,10 +5,14 @@ import { Form } from 'react-bootstrap';
 import { getValueById, randomHexColor } from '../../Utils/Utils.js'
 import { saveValues, getGroupList } from "../Data/groupManager.js";
 
-export default function TestingModal(){
+export default function TestingModal({update, toggleUpdate}){
+
   const [show, setShow] = useState(false);
 
   const [hexColor, setHexColor] = useState(randomHexColor());
+
+  console.log("Updating TestingModal...");
+  console.log(update)
 
   const createNewColor = () => {
     setHexColor(randomHexColor());
@@ -37,6 +41,7 @@ export default function TestingModal(){
     saveValues();
     setShow(false);
     console.log(getGroupList());
+    toggleUpdate(true);
   }
 
   const handleSave = () => setShow(false);
