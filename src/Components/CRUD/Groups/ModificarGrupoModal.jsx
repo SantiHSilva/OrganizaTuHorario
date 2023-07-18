@@ -1,8 +1,8 @@
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
-import {getGroupById, modifyColorName, modifyGroupName} from "../Data/groupManager.js";
-import {getValueById} from "../../Utils/Utils.js";
+import {getGroupById, modifyColorName, modifyGroupName} from "../../Data/groupManager.js";
+import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import Swal from 'sweetalert2';
 
 export function ModificarGrupoModal({idGroup, openModal, ...props}) {
@@ -11,8 +11,9 @@ export function ModificarGrupoModal({idGroup, openModal, ...props}) {
 		// Borde modal
 		document.getElementsByClassName('modal-content')[0].setAttribute('style', `box-shadow: 0px 5px 15px  ${hexColor}; border-color: ${hexColor}`);
 		// Boton guardar
-		document.getElementById("modifyButtonSave").setAttribute('style', `background-color: ${hexColor}; border-color: ${hexColor}`);
-		document.getElementById("modifyButtonSave").setAttribute('disabled', 'true');
+		const buttonSave = document.getElementById("modifyButtonSave");
+		buttonSave.setAttribute('style', `background-color: ${hexColor}; border-color: ${hexColor}; color: ${adaptColorByHexColor(hexColor)}`);
+		buttonSave.setAttribute('disabled', 'true');
 	}
 
 	console.log("Updating ModificarGrupoModal...");

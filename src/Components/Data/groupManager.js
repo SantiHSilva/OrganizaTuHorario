@@ -20,6 +20,11 @@ function findIndexGroup(idGroup = 0){
   return temp.findIndex((element) => element.key === idGroup);
 }
 
+function getNextIdForANewGroup(){
+  const temp = getGroupList();
+  return temp.length === 0 ? 1 : Math.max(...temp.map((element) => element.key)) + 1;
+}
+
 // Modify Default Values
 
 function modifyGroupName(idGroupName = 0, newName = ""){
@@ -45,7 +50,7 @@ function saveValues(name, color){
 function addGroupToSystem(name = "", color = ""){
   const temp = getGroupList();
   const newGroup = {
-    key: temp.length,
+    key: getNextIdForANewGroup(),
     name: name,
     color: color,
     materias : [],
