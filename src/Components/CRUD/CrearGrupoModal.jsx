@@ -5,14 +5,14 @@ import { Form } from 'react-bootstrap';
 import { getValueById, randomHexColor } from '../../Utils/Utils.js'
 import { saveValues, getGroupList } from "../Data/groupManager.js";
 
-export default function TestingModal({update, toggleUpdate}){
+// eslint-disable-next-line react/prop-types
+export default function TestingModal({toggleUpdate}){
 
   const [show, setShow] = useState(false);
 
   const [hexColor, setHexColor] = useState(randomHexColor());
 
   console.log("Updating TestingModal...");
-  console.log(update)
 
   const createNewColor = () => {
     setHexColor(randomHexColor());
@@ -38,10 +38,12 @@ export default function TestingModal({update, toggleUpdate}){
 
   function saveChanges(){
     console.log("Guardando cambios...")
-    saveValues();
+    const name = getValueById("groupName");
+    if (name)
+      saveValues(name, hexColor);
     setShow(false);
     console.log(getGroupList());
-    toggleUpdate(true);
+    toggleUpdate();
   }
 
   const handleSave = () => setShow(false);
@@ -105,7 +107,7 @@ export default function TestingModal({update, toggleUpdate}){
           </Button>
         </Modal.Footer>
 
-      </Modal>  
+      </Modal>
     </>
   );
 }

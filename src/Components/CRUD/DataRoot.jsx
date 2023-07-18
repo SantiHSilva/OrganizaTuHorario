@@ -7,7 +7,7 @@ export default function DataRoot(){
 
   return (
     <>
-      <CrearGrupoModal update={update} toggleUpdate={toggleUpdate} />
+      <CrearGrupoModal toggleUpdate={toggleUpdate} />
       <MostrarGrupos update={update} toggleUpdate={toggleUpdate} />
     </>
   )

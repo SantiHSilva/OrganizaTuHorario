@@ -1,17 +1,45 @@
-import {getValueById} from "../../Utils/Utils.js";
-
-function saveValues(){
-  const name = getValueById("groupName");
-  if (name)
-    addGroupToSystem(
-      name,
-      getValueById("groupColor")
-    );
-}
-
 function getGroupList() {
   const storedGroup = window.sessionStorage.getItem("groupList");
   return storedGroup === null ? [] : JSON.parse(storedGroup);
+}
+
+function getGroupById(idGroup = 0){
+  const temp = getGroupList();
+  return temp.find((element) => element.key === idGroup);
+}
+
+function deleteSpecifiedGroup(idGroup = 0){
+  const temp = getGroupList();
+  const index = temp.findIndex((element) => element.key === idGroup);
+  temp.splice(index, 1);
+  addSessionStorageGroup(temp);
+}
+
+function findIndexGroup(idGroup = 0){
+  const temp = getGroupList();
+  return temp.findIndex((element) => element.key === idGroup);
+}
+
+// Modify Default Values
+
+function modifyGroupName(idGroupName = 0, newName = ""){
+  const temp = getGroupList();
+  const index = findIndexGroup(idGroupName);
+  temp[index].name = newName;
+  addSessionStorageGroup(temp);
+}
+
+function modifyColorName(idGroupName = 0, newColor = ""){
+  const temp = getGroupList();
+  const index = findIndexGroup(idGroupName);
+  temp[index].color = newColor;
+  addSessionStorageGroup(temp);
+}
+
+// Default Values
+
+function saveValues(name, color){
+  addGroupToSystem(name, color);
 }
 
 function addGroupToSystem(name = "", color = ""){
@@ -26,9 +54,8 @@ function addGroupToSystem(name = "", color = ""){
   addSessionStorageGroup(temp);
 }
 
-function addSessionStorageGroup(groupList = []){
-  window.sessionStorage.setItem("groupList", JSON.stringify(groupList));
-  window.location.hash = 'update'
+function addSessionStorageGroup(newGroupList = []){
+  window.sessionStorage.setItem("groupList", JSON.stringify(newGroupList));
 }
 
-export {saveValues, getGroupList, addGroupToSystem, addSessionStorageGroup}
+export {saveValues, getGroupList, addGroupToSystem, addSessionStorageGroup, getGroupById, deleteSpecifiedGroup, modifyGroupName, modifyColorName};
