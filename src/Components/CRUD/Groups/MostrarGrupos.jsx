@@ -1,11 +1,14 @@
 import {deleteSpecifiedGroup} from "../../Data/groupManager.js";
-import {ModificarGrupoModal} from "./ModificarGrupoModal.jsx";
+import { EditGroupModal } from "./ModificarGrupoModal.jsx";
 import Swal from "sweetalert2";
 import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
+import {memo, useEffect} from "react";
 
-export default function MostrarGrupos({toggleUpdate, data}){
+function MostrarGrupos({toggleUpdate, data}){
 
-  console.log("Updating MostrarGrupos...");
+  useEffect(() => {
+    console.log("Creating MostrarGrupos...");
+  }, []);
 
   function eliminarGrupo(idGroupToErase, nameGroup) {
     Swal.fire({
@@ -47,7 +50,7 @@ export default function MostrarGrupos({toggleUpdate, data}){
           <p className="card-text">
           </p>
           <div className='d-block mb-2 align-items-left'>
-            <ModificarGrupoModal idGroup={group.key} onHide={() => toggleUpdate()} />
+            <EditGroupModal idGroup={group.key} onHide={() => toggleUpdate()} />
             <SubgroupDashboard idGroup={group.key} />
           </div>
         </div>
@@ -65,3 +68,5 @@ export default function MostrarGrupos({toggleUpdate, data}){
     </div>
   )
 }
+
+export const ListGroups =  memo(MostrarGrupos);

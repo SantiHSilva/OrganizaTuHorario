@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, memo} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import {adaptColorByHexColor, getValueById, randomHexColor} from '../../../Utils/Utils.js'
 import { saveValues, getGroupList } from "../../Data/groupManager.js";
-import Swal from "sweetalert2";
+import {toast, ToastContainer} from "react-toastify";
 
-export default function TestingModal({toggleUpdate}){
+function TestingModal({toggleUpdate}){
 
   const [show, setShow] = useState(false);
 
   const [hexColor, setHexColor] = useState(randomHexColor());
 
-  console.log("Updating TestingModal...");
+  useEffect(() => {
+    import ('react-toastify/dist/ReactToastify.css');
+
+    console.log("Creating CrearGrupoModal...");
+  }, []);
 
   const createNewColor = () => {
     setHexColor(randomHexColor());
@@ -54,12 +58,23 @@ export default function TestingModal({toggleUpdate}){
     const name = getValueById("groupName");
     if (name){
       saveValues(name, hexColor);
-      Swal.fire({
+      toast.info('Wow so easy!', {
+        icon: "success",
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+/*      Swal.fire({
         icon: 'success',
         title: 'Grupo "' + name + '" creado',
         showConfirmButton: true,
         timer: 1500
-      });
+      });*/
     }
     setShow(false);
     console.log(getGroupList());
@@ -72,6 +87,9 @@ export default function TestingModal({toggleUpdate}){
 
   return (
     <div className='text-center'>
+
+      <ToastContainer />
+
       <Button variant="primary" onClick={handleShow}>
         Crear nuevo grupo
       </Button>
@@ -131,3 +149,5 @@ export default function TestingModal({toggleUpdate}){
     </div>
   );
 }
+
+export const CrearGrupoModal = memo(TestingModal);

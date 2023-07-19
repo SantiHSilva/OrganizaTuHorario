@@ -5,10 +5,13 @@ import {getGroupById, modifyColorName, modifyGroupName} from "../../Data/groupMa
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import Swal from 'sweetalert2';
 import useToggle from "../../CustomHooks/useToggle.js";
+import {memo, useEffect} from "react";
 
-export function ModificarGrupoModal({idGroup, onHide}) {
+function ModificarGrupoModal({idGroup, onHide}) {
 
-  console.log("Updating ModificarGrupoModal...");
+	useEffect(() => {
+		console.log("Creando ModificarGrupoModal para el grupo " + idGroup + "...");
+	}, [idGroup]);
 
 	const [show, setShow] = useToggle(false);
   const groupListed = getGroupById(idGroup);
@@ -135,3 +138,5 @@ export function ModificarGrupoModal({idGroup, onHide}) {
 		</>
 	)
 }
+
+export const EditGroupModal = memo(ModificarGrupoModal);

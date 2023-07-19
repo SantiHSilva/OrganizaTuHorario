@@ -1,6 +1,11 @@
+import {useEffect} from "react";
+
 export function SubgroupDashboard({idGroup}) {
 
-	console.log("Cargando SubgroupDashboard...")
+
+	useEffect(() => {
+		console.log("Cargando SubgroupDashboard para el grupo " + idGroup + "...");
+	}, [idGroup]);
 
 	return (
 		<>
