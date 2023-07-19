@@ -3,42 +3,38 @@ function getGroupList() {
   return storedGroup === null ? [] : JSON.parse(storedGroup);
 }
 
+let globalGroupList = getGroupList(); // TODO: Global Variable
+
 function getGroupById(idGroup = 0){
-  const temp = getGroupList();
-  return temp.find((element) => element.key === idGroup);
+  return globalGroupList.find((element) => element.key === idGroup);
 }
 
 function deleteSpecifiedGroup(idGroup = 0){
-  const temp = getGroupList();
-  const index = temp.findIndex((element) => element.key === idGroup);
-  temp.splice(index, 1);
-  addSessionStorageGroup(temp);
+  const index = globalGroupList.findIndex((element) => element.key === idGroup);
+  globalGroupList.splice(index, 1);
+  addSessionStorageGroup(globalGroupList);
 }
 
 function findIndexGroup(idGroup = 0){
-  const temp = getGroupList();
-  return temp.findIndex((element) => element.key === idGroup);
+  return globalGroupList.findIndex((element) => element.key === idGroup);
 }
 
 function getNextIdForANewGroup(){
-  const temp = getGroupList();
-  return temp.length === 0 ? 1 : Math.max(...temp.map((element) => element.key)) + 1;
+  return globalGroupList.length === 0 ? 1 : Math.max(...globalGroupList.map((element) => element.key)) + 1;
 }
 
 // Modify Default Values
 
 function modifyGroupName(idGroupName = 0, newName = ""){
-  const temp = getGroupList();
   const index = findIndexGroup(idGroupName);
-  temp[index].name = newName;
-  addSessionStorageGroup(temp);
+  globalGroupList[index].name = newName;
+  addSessionStorageGroup(globalGroupList);
 }
 
 function modifyColorName(idGroupName = 0, newColor = ""){
-  const temp = getGroupList();
   const index = findIndexGroup(idGroupName);
-  temp[index].color = newColor;
-  addSessionStorageGroup(temp);
+  globalGroupList[index].color = newColor;
+  addSessionStorageGroup(globalGroupList);
 }
 
 // Default Values
@@ -48,19 +44,18 @@ function saveValues(name, color){
 }
 
 function addGroupToSystem(name = "", color = ""){
-  const temp = getGroupList();
   const newGroup = {
     key: getNextIdForANewGroup(),
     name: name,
     color: color,
     materias : [],
   };
-  temp.push(newGroup)
-  addSessionStorageGroup(temp);
+  globalGroupList.push(newGroup)
+  addSessionStorageGroup(globalGroupList);
 }
 
 function addSessionStorageGroup(newGroupList = []){
   window.sessionStorage.setItem("groupList", JSON.stringify(newGroupList));
 }
 
-export {saveValues, getGroupList, addGroupToSystem, addSessionStorageGroup, getGroupById, deleteSpecifiedGroup, modifyGroupName, modifyColorName};
+export {saveValues, getGroupList, addGroupToSystem, addSessionStorageGroup, getGroupById, deleteSpecifiedGroup, modifyGroupName, modifyColorName, globalGroupList};

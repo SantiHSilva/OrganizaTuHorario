@@ -2,13 +2,14 @@ import useToggle from "../CustomHooks/useToggle.js";
 import CrearGrupoModal from "./Groups/CrearGrupoModal.jsx";
 import MostrarGrupos from "./Groups/MostrarGrupos.jsx";
 
-export default function DataRoot(){
+export default function DataRoot({data}){
   const [, toggleUpdate] = useToggle(false);
+  console.log("Updating DataRoot...");
 
   return (
     <div className='container'>
       <CrearGrupoModal toggleUpdate={toggleUpdate} />
-      <MostrarGrupos toggleUpdate={toggleUpdate} />
+      <MostrarGrupos toggleUpdate={toggleUpdate} data={data} />
     </div>
   )
 }

@@ -1,11 +1,9 @@
-import {deleteSpecifiedGroup, getGroupList} from "../../Data/groupManager.js";
+import {deleteSpecifiedGroup} from "../../Data/groupManager.js";
 import {ModificarGrupoModal} from "./ModificarGrupoModal.jsx";
 import Swal from "sweetalert2";
 import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
 
-export default function MostrarGrupos({toggleUpdate}){
-
-  let groups = getGroupList();
+export default function MostrarGrupos({toggleUpdate, data}){
 
   console.log("Updating MostrarGrupos...");
 
@@ -31,7 +29,7 @@ export default function MostrarGrupos({toggleUpdate}){
     });
   }
 
-  let groupCarts = groups.map((group) => (
+  let groupCarts = data.map((group) => (
     <div className="col-sm-4 p-3" key={group.key}>
       <div className="card">
         <div className="card-body">
