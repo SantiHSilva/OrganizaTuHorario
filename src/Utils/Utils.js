@@ -10,7 +10,6 @@ export function adaptColorByBackground(elementId){
 }
 
 export function adaptColorByHexColor(hexColor){
-    console.log(hexColor)
     const red = parseInt(hexColor.substring(1, 3), 16);
     const green = parseInt(hexColor.substring(3, 5), 16);
     const blue = parseInt(hexColor.substring(5, 7), 16);

@@ -4,9 +4,12 @@ import { Form } from 'react-bootstrap';
 import {getGroupById, modifyColorName, modifyGroupName} from "../../Data/groupManager.js";
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import Swal from 'sweetalert2';
+import useToggle from "../../CustomHooks/useToggle.js";
 
-export function ModificarGrupoModal({idGroup, openModal, ...props}) {
+export function ModificarGrupoModal({idGroup, onHide}) {
 
+	const [show, setShow] = useToggle(false);
+	
 	function modifyModal(){
 		// Borde modal
 		document.getElementsByClassName('modal-content')[0].setAttribute('style', `box-shadow: 0px 5px 15px  ${hexColor}; border-color: ${hexColor}`);
@@ -17,12 +20,8 @@ export function ModificarGrupoModal({idGroup, openModal, ...props}) {
 	}
 
 	console.log("Updating ModificarGrupoModal...");
-
-	// Evitar que se muestre el modal si no se ha seleccionado un grupo
-	if(isNaN(idGroup)) return (<></>);
-
+	
 	const groupListed = getGroupById(idGroup);
-
 	let hexColor = groupListed.color;
 
 	function onOpenModal(){
@@ -44,27 +43,37 @@ export function ModificarGrupoModal({idGroup, openModal, ...props}) {
 			document.getElementById("modifyButtonSave").setAttribute('disabled', 'true');
 	}
 
+	function handleClose(){
+		setShow(false);
+	}
+
 	function submitChanges(){
 		const name = getValueById("groupName");
 		const color = getValueById("groupColor");
 		if(name !== groupListed.name) modifyGroupName(idGroup, name);
 		if(color !== groupListed.color) modifyColorName(idGroup, color);
-		props.onHide();
+		setShow(false);
 		Swal.fire({
 			icon: 'success',
 			title: 'Cambios guardados',
 			showConfirmButton: false,
 			timer: 1500
 		});
+		onHide();
 	}
 
 	return (
 		<>
+			<button className="btn d-inline" style={{backgroundColor: hexColor, borderColor: hexColor, color: adaptColorByHexColor(hexColor)}}
+							onClick={() => setShow(true)}
+			>
+				Modificar grupo
+			</button>
+			
 			<Modal
-				{...props}
-				show={openModal}
+				show={show}
 				onShow={onOpenModal}
-				onHide={props.onHide}
+				onHide={handleClose}
 				size=''
 				aria-labelledby="contained-modal-title-vcenter"
 				centered
@@ -81,12 +90,7 @@ export function ModificarGrupoModal({idGroup, openModal, ...props}) {
 				<Modal.Body>
 
 					<Form
-						onSubmit={
-							(e) => {
-								e.preventDefault();
-								huboCambios() ? submitChanges() : props.onHide();
-							}
-						}
+						onSubmit={handleClose}
 						onChange={detectChanges}
 					>
 						<Form.Group>
@@ -112,9 +116,7 @@ export function ModificarGrupoModal({idGroup, openModal, ...props}) {
 				{/* Footer */}
 				<Modal.Footer>
 					<Button variant="danger"
-									onClick={
-										props.onHide
-									}
+									onClick={handleClose}
 					>
 						❌ Cancelar cambios
 					</Button>

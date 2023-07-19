@@ -1,28 +1,13 @@
 import {deleteSpecifiedGroup, getGroupList} from "../../Data/groupManager.js";
 import {ModificarGrupoModal} from "./ModificarGrupoModal.jsx";
-import {useEffect, useState} from "react";
-import {adaptColorByHexColor} from "../../../Utils/Utils.js";
 import Swal from "sweetalert2";
+import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
 
 export default function MostrarGrupos({toggleUpdate}){
 
   let groups = getGroupList();
-  let [key, setKey] = useState(NaN);
-  const [showModal, setShowModal] = useState(false);
 
   console.log("Updating MostrarGrupos...");
-
-  function clickEditEvent(groupKey){
-    console.log("Click en editar grupo con id: " + groupKey);
-    setKey(groupKey);
-    setShowModal(true);
-  }
-
-  useEffect(() => {
-    if (isNaN(key)) return;
-    console.log("Abriendo modal de modificación...")
-    //Detectar cuando se cierra el modal
-  },[key])
 
   function eliminarGrupo(idGroupToErase, nameGroup) {
     Swal.fire({
@@ -55,7 +40,6 @@ export default function MostrarGrupos({toggleUpdate}){
             <p className='fw-semibold'>{group.name}</p>
             <button type="button" className="btn-close" aria-label="Close" onClick={() => {
               eliminarGrupo(group.key, group.name)
-
             }}>
 
             </button>
@@ -65,14 +49,8 @@ export default function MostrarGrupos({toggleUpdate}){
           <p className="card-text">
           </p>
           <div className='d-block mb-2 align-items-left'>
-            <button className="btn d-inline" style={{backgroundColor: group.color, borderColor: group.color, color: adaptColorByHexColor(group.color)}}
-              onClick={() => clickEditEvent(group.key)}
-            >
-              Modificar grupo
-            </button>
-            <button className="btn bg-dark text-white m-2">
-              Modificar clases
-            </button>
+            <ModificarGrupoModal idGroup={group.key} onHide={() => toggleUpdate()} />
+            <SubgroupDashboard idGroup={group.key} />
           </div>
         </div>
       </div>
@@ -81,9 +59,6 @@ export default function MostrarGrupos({toggleUpdate}){
 
   return(
     <div>
-      <ModificarGrupoModal idGroup={key} openModal={showModal} onHide={
-        () => setShowModal(false)
-      } />
       <div className="container">
         <div className="row">
           {groupCarts}
