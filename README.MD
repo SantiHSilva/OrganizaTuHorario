@@ -4,12 +4,13 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 
 ## Caracteristicas
 
-- [ ]  Alternar entre horarios con/sin dias libres
-- [ ]  Soporte de horas por 24h-12h
+- [x]  Alternar entre temas oscuros y claros
 - [x]  Añadir colores a los grupos
-- [ ]  Filtración de horarios por materia seleccionada
 - [ ]  Añadir apodos a los horarios
 - [ ]  Añadir anotaciones a las materias
+- [ ]  Alternar entre horarios con/sin dias libres
+- [ ]  Soporte de horas por 24h-12h
+- [ ]  Filtración de horarios por materia seleccionada
 - [ ]  Manual de usuario
 - [ ]  Exportación de los horarios por:
     - [ ]  Imagenes (Separadas)

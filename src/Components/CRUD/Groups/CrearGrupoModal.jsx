@@ -56,8 +56,9 @@ function TestingModal({toggleUpdate}){
   function saveChanges(){
     console.log("Guardando cambios...")
     const name = getValueById("groupName");
+    const color = getValueById("groupColor");
     if (name){
-      saveValues(name, hexColor);
+      saveValues(name, color);
       toast.info('Wow so easy!', {
         icon: "success",
         position: "top-center",
@@ -96,8 +97,7 @@ function TestingModal({toggleUpdate}){
 
       <Modal
        show={show}
-       onShow={createNewColor}
-       onHide={handleSave}
+       onHide={() => {handleSave(); createNewColor();}}
        size=''
        aria-labelledby="contained-modal-title-vcenter"
        centered
