@@ -5,10 +5,15 @@ import {RxCalendar} from "react-icons/rx";
 import {AiOutlineGithub} from "react-icons/ai";
 import {Tooltip} from "react-tooltip";
 
-function NavBar({currentTheme}){
+function NavBar({currentTheme, updateTheme}){
   return(
     <div>
-      <Navbar className="bg-body-tertiary shadow-sm">
+      <Navbar className="bg-body-tertiary shadow"
+        style={{
+          borderRadius : "0px 0px 30px 30px",
+          transition: 'all 0.2s ease-in-out',
+      }}
+      >
         <Container>
           <Navbar.Brand
             style={{
@@ -23,12 +28,20 @@ function NavBar({currentTheme}){
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
             <NavLink href="https://github.com/MetTheCarrot/OrganizaTuHorario" className='m-2' data-tooltip-id={'srcCode'}>
-              <AiOutlineGithub
-                class='github-icon-link'
-                size={30}
-              />
+
+              <button
+                className='btn noClickBorder'
+                color='transparent'
+                data-tooltip-id = 'themeButton'
+              >
+                <AiOutlineGithub
+                  className='github-icon-link'
+                  size={30}
+                />
+              </button>
+
             </NavLink>
-            <ThemeButton currentTheme={currentTheme} />
+            <ThemeButton currentTheme={currentTheme} updateTheme={updateTheme} />
           </Navbar.Collapse>
         </Container>
       </Navbar>
@@ -40,7 +53,8 @@ function NavBar({currentTheme}){
         border={'1px solid #ffffff'}
         style={{
           userSelect: 'none',
-borderRadius: '20px',
+          borderRadius: '20px',
+          transition: 'all 0.2s ease-in-out',
         }
       } // No seleccionar el texto del tooltip
       >

@@ -1,13 +1,14 @@
 import {deleteSpecifiedGroup} from "../../Data/groupManager.js";
-import { EditGroupModal } from "./ModificarGrupoModal.jsx";
 import Swal from "sweetalert2";
-import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
 import {memo, useEffect} from "react";
+import {FaEdit, FaTrashAlt} from "react-icons/fa";
+import {adaptColorByHexColor} from "../../../Utils/Utils.js";
 
-function MostrarGrupos({toggleUpdate, data}){
+function MostrarGrupos({toggleUpdate, data, theme}){
 
   useEffect(() => {
     console.log("Creating MostrarGrupos...");
+    console.log(theme)
   }, []);
 
   function eliminarGrupo(idGroupToErase, nameGroup) {
@@ -33,39 +34,73 @@ function MostrarGrupos({toggleUpdate, data}){
   }
 
   let groupCarts = data.map((group) => (
-    <div className="col-sm-4 p-3" key={group.key}>
-      <div className="card">
-        <div className="card-body">
-          <div className='d-flex justify-content-between'>
-            <span className="text-black fst-italic">ID: {group.key}</span>
-            <p className='fw-semibold'>{group.name}</p>
-            <button type="button" className="btn-close" aria-label="Close" onClick={() => {
-              eliminarGrupo(group.key, group.name)
-            }}>
+      <div className="d-flex mb-2 rounded p-1 shadow"
+           key={group.key}
+           style={{
+             transition: 'all 0.2s ease-in-out',
+             backgroundColor: theme === 'dark' ? '#3F4E4F' : '#F2EAD3',
+           }}
+      >
+            <div className='flex-fill p-2 text-center justify-content-center rounded shadow'
+                 style={{
+                   backgroundColor: group.color,
+                 }}
+            >
+              <span
+                className='d-inline-block text-truncate align-center'
+                style={{
+                  maxWidth: '25ch', // 20 caracteres por línea
+                  color: adaptColorByHexColor(group.color),
+                }}
+              >
+                {group.name}
+              </span>
+            </div>
 
-            </button>
+            <div className= 'p-2 rounded m-1 shadow-lg'
+              style={{
+                transition: 'all 0.2s ease-in-out',
+                backgroundColor: theme === 'dark' ? '#FEFBF3' : '#212121',
+              }}
+            >
+              <FaEdit
+                size={25}
+                className='editarGrupo'
+                style={{
+                  transition: 'all 0.2s ease-in-out',
+                  cursor: 'pointer',
+                  fill: theme === 'dark' ? '#212121' : '#FEFBF3',
+                }}
+              />
+              <FaTrashAlt
+                size={25}
+                className='borrarGrupo'
+                style={{
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease-in-out',
+                  fill: theme === 'dark' ? '#212121' : '#FEFBF3',
+                }}
+                onClick={() => {
+                  eliminarGrupo(group.key, group.name)
+                }}
+              />
           </div>
-          <h5 className="card-title text-center">
+{/*          <h5 className="card-title text-center">
           </h5>
           <p className="card-text">
           </p>
           <div className='d-block mb-2 align-items-left'>
             <EditGroupModal idGroup={group.key} onHide={() => toggleUpdate()} />
             <SubgroupDashboard idGroup={group.key} />
-          </div>
-        </div>
+          </div>*/}
       </div>
-    </div>
   ));
 
   return(
-    <div>
-      <div className="container">
-        <div className="row">
-          {groupCarts}
-        </div>
-      </div>
-    </div>
+    <>
+      &nbsp;
+      {groupCarts}
+    </>
   )
 }
 

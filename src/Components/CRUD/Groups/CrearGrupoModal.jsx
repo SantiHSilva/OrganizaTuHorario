@@ -62,7 +62,7 @@ function TestingModal({toggleUpdate}){
       toast.info('Wow so easy!', {
         icon: "success",
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -90,13 +90,15 @@ function TestingModal({toggleUpdate}){
     <div className='text-center'>
 
       <ToastContainer />
-
-      <Button variant="primary" onClick={handleShow}>
+      <Button variant="primary"
+              className={'shadow-sm m-2'}
+              onClick={handleShow}>
         Crear nuevo grupo
       </Button>
 
       <Modal
        show={show}
+       onShow={createNewColor}
        onHide={() => {handleSave(); createNewColor();}}
        size=''
        aria-labelledby="contained-modal-title-vcenter"

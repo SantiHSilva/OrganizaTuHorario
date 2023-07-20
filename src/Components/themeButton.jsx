@@ -5,17 +5,15 @@ import {HiSun, HiMoon} from "react-icons/hi2";
 // TODO: Cambiar el tooltip por rendimiento
 import {Tooltip} from 'react-tooltip';
 
-function ComponentThemeButton({currentTheme}){
+function ComponentThemeButton({currentTheme, updateTheme}){
 
   const [theme, setTheme] = useState(currentTheme);
 
   const props = {
-    onClick: changeThemeButton,
-    'data-tooltip-id': "themeButton",
+
     className: 'icon-link iconChangeTheme',
     size: 30,
     style: {
-      cursor: "pointer",
     }
   }
 
@@ -23,6 +21,7 @@ function ComponentThemeButton({currentTheme}){
     () => {
       console.log("Updating ThemeButton...")
       console.log("Current theme: " + theme)
+      updateTheme(theme);
       return (getIcon(props));
     }, [theme]);
 
@@ -49,7 +48,14 @@ function ComponentThemeButton({currentTheme}){
       >
         Cambiar tema
       </Tooltip>
-      {SetIcon}
+      <button
+        onClick={changeThemeButton}
+        className='btn noClickBorder'
+        color='transparent'
+        data-tooltip-id = 'themeButton'
+      >
+        {SetIcon}
+      </button>
 
     </div>
   )

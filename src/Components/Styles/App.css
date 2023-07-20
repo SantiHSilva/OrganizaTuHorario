@@ -1,11 +1,16 @@
 .github-icon-link:hover{
-    fill:white
+    fill: #FFD700;
 }
 
 .iconChangeTheme:hover{
-    fill: #f7e100;
+    fill: #FFD700;
 }
 
-.iconChangeTheme{
-    fill: #bfae04;
+.borrarGrupo:hover{
+    fill: #ff1e1e;
+}
+
+.noClickBorder,
+.noClickBorder:hover{
+    border: none;
 }
