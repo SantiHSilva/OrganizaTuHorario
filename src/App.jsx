@@ -1,7 +1,6 @@
-import './Components/Styles/App.css';
 import DataRoot from "./Components/CRUD/DataRoot.jsx";
 import { globalGroupList, theme } from "./Utils/GlobalVars.js";
-import {ThemeButton} from "./Components/themeButton.jsx";
+import {NavBarMenu} from "./Components/NavBar.jsx";
 
 function App() {
 
@@ -9,7 +8,7 @@ function App() {
 
   return (
     <>
-      <ThemeButton currentTheme={theme} />
+      <NavBarMenu currentTheme={theme} />
       <DataRoot data={globalGroupList} />
     </>
   )

@@ -4,6 +4,7 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 
 ## Caracteristicas
 
+- [ ]  Selector de idiomas personalizables
 - [x]  Alternar entre temas oscuros y claros
 - [x]  Añadir colores a los grupos
 - [ ]  Añadir apodos a los horarios

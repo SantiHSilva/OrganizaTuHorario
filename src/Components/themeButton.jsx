@@ -2,49 +2,32 @@ import {toggleTheme} from "./Data/themeManager.js";
 import {memo, useMemo, useState} from "react";
 import {HiSun, HiMoon} from "react-icons/hi2";
 
+// TODO: Cambiar el tooltip por rendimiento
+import {Tooltip} from 'react-tooltip';
+
 function ComponentThemeButton({currentTheme}){
 
   const [theme, setTheme] = useState(currentTheme);
 
-  const setIcon = useMemo(
+  const props = {
+    onClick: changeThemeButton,
+    'data-tooltip-id': "themeButton",
+    className: 'icon-link iconChangeTheme',
+    size: 30,
+    style: {
+      cursor: "pointer",
+    }
+  }
+
+  const SetIcon = useMemo(
     () => {
       console.log("Updating ThemeButton...")
       console.log("Current theme: " + theme)
-      return getIcon();
+      return (getIcon(props));
     }, [theme]);
 
-  function getIcon(){
-    const id = "themeButton";
-    return theme === "dark" ?
-      <HiMoon
-        id={id}
-        onClick={changeThemeButton}
-        className={'shadow-lg icon-link'}
-        size={50}
-        aria-hidden = "true"
-        style={
-          {
-            fill: "#f7e100",
-            cursor: "pointer",
-            borderRadius: "50%",
-          }
-        }
-
-      /> :
-      <HiSun
-        id={id}
-        onClick={changeThemeButton}
-        className={'shadow-lg icon-link'}
-        size={50}
-        aria-hidden = "true"
-        style={
-          {
-            fill: "#f7e100",
-            cursor: "pointer",
-            borderRadius: "50%",
-          }
-        }
-      />;
+  function getIcon(props){
+    return theme === "dark" ? <HiMoon {...props}/> : <HiSun {...props}/>;
   }
 
   function changeThemeButton(){
@@ -54,7 +37,20 @@ function ComponentThemeButton({currentTheme}){
 
   return(
     <div>
-      {setIcon}
+      <Tooltip
+        id="themeButton"
+        noArrow
+        place={'bottom'}
+        border={'1px solid #ffffff'}
+        style={{
+          userSelect: 'none',
+          borderRadius: '20px',
+      }} // No seleccionar el texto del tooltip
+      >
+        Cambiar tema
+      </Tooltip>
+      {SetIcon}
+
     </div>
   )
 }
