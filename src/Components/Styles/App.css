@@ -1,3 +1,38 @@
+aside{
+    height: 480px;
+    overflow: auto;
+}
+
+.ajustarTabla{
+    height: 480px;
+    overflow: auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+
+
+
+
 .github-icon-link:hover{
     fill: #FFD700;
 }
@@ -13,4 +48,27 @@
 .noClickBorder,
 .noClickBorder:hover{
     border: none;
+}
+
+[data-bs-theme='dark'] .crearGrupoBtn{
+    background-color: #27374D;
+    fill: white;
+}
+
+[data-bs-theme='dark'] .borrarTodosLosGruposBtn{
+    background-color: #27374D;
+    fill: white;
+}
+
+.borrarTodosLosGruposBtn:hover,
+.crearGrupoBtn:hover{
+    fill: #F1C376;
+}
+
+.borrarTodosLosGruposBtn,
+.crearGrupoBtn{
+    background-color: #FEFBF3;
+    border: none;
+    cursor: pointer;
+    fill: black;
 }

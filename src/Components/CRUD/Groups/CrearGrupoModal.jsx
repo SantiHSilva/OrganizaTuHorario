@@ -1,12 +1,13 @@
 import {useState, useEffect, memo} from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import {adaptColorByHexColor, getValueById, randomHexColor} from '../../../Utils/Utils.js'
 import { saveValues, getGroupList } from "../../Data/groupManager.js";
 import {toast, ToastContainer} from "react-toastify";
+import {BiBookAdd} from "react-icons/bi";
+import {Tooltip} from "react-tooltip";
 
-function TestingModal({toggleUpdate}){
+function TestingModal({toggleUpdate, theme}){
 
   const [show, setShow] = useState(false);
 
@@ -59,8 +60,10 @@ function TestingModal({toggleUpdate}){
     const color = getValueById("groupColor");
     if (name){
       saveValues(name, color);
-      toast.info('Wow so easy!', {
-        icon: "success",
+      toast.info(
+        `Se ha creado el grupo "${name}"`,
+        {
+        icon: '💾',
         position: "top-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -68,14 +71,8 @@ function TestingModal({toggleUpdate}){
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: theme,
       });
-/*      Swal.fire({
-        icon: 'success',
-        title: 'Grupo "' + name + '" creado',
-        showConfirmButton: true,
-        timer: 1500
-      });*/
     }
     setShow(false);
     console.log(getGroupList());
@@ -90,11 +87,26 @@ function TestingModal({toggleUpdate}){
     <div className='text-center'>
 
       <ToastContainer />
-      <Button variant="primary"
-              className={'shadow-sm m-2'}
-              onClick={handleShow}>
-        Crear nuevo grupo
-      </Button>
+
+      <BiBookAdd
+        data-tooltip-id='crearGrupoBtn'
+        onClick={handleShow}
+        className='crearGrupoBtn'
+        size={25}
+      />
+
+      <Tooltip
+        id="crearGrupoBtn"
+        noArrow
+        place={'bottom'}
+        border={'1px solid #ffffff'}
+        style={{
+          userSelect: 'none',
+          borderRadius: '20px',
+        }}
+      >
+        Crear un nuevo grupo
+      </Tooltip>
 
       <Modal
        show={show}
@@ -139,12 +151,12 @@ function TestingModal({toggleUpdate}){
 
         {/* Footer */}
         <Modal.Footer>
-          <Button variant="danger" onClick={handleSave}>
+          <button className='btn bg-danger' onClick={handleSave}>
           ❌ Cancelar
-          </Button>
-          <Button onClick={saveChanges} id='modifyButtonSave'>
+          </button>
+          <button className='btn' onClick={saveChanges} id='modifyButtonSave'>
           💾 Crear 
-          </Button>
+          </button>
         </Modal.Footer>
 
       </Modal>

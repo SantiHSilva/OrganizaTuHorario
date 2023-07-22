@@ -9,6 +9,11 @@ function getGroupById(idGroup = 0){
   return globalGroupList.find((element) => element.key === idGroup);
 }
 
+function globalDeleteGroups(){
+  globalGroupList.splice(0, globalGroupList.length);
+  addSessionStorageGroup(globalGroupList);
+}
+
 function deleteSpecifiedGroup(idGroup = 0){
   const index = globalGroupList.findIndex((element) => element.key === idGroup);
   globalGroupList.splice(index, 1);
@@ -58,4 +63,15 @@ function addSessionStorageGroup(newGroupList = []){
   window.sessionStorage.setItem("groupList", JSON.stringify(newGroupList));
 }
 
-export {saveValues, getGroupList, addGroupToSystem, addSessionStorageGroup, getGroupById, deleteSpecifiedGroup, modifyGroupName, modifyColorName, globalGroupList};
+export {
+  saveValues,
+  getGroupList,
+  addGroupToSystem,
+  addSessionStorageGroup,
+  getGroupById,
+  deleteSpecifiedGroup,
+  modifyGroupName,
+  modifyColorName,
+  globalDeleteGroups,
+  globalGroupList
+};

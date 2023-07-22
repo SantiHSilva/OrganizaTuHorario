@@ -41,13 +41,13 @@ function MostrarGrupos({toggleUpdate, data, theme}){
              backgroundColor: theme === 'dark' ? '#3F4E4F' : '#F2EAD3',
            }}
       >
-            <div className='flex-fill p-2 text-center justify-content-center rounded shadow'
+            <div className='flex-fill text-center rounded'
                  style={{
                    backgroundColor: group.color,
                  }}
             >
               <span
-                className='d-inline-block text-truncate align-center'
+                className='d-inline-block m-2 text-truncate align-center'
                 style={{
                   maxWidth: '25ch', // 20 caracteres por línea
                   color: adaptColorByHexColor(group.color),
@@ -97,10 +97,10 @@ function MostrarGrupos({toggleUpdate, data, theme}){
   ));
 
   return(
-    <>
+    <aside>
       &nbsp;
       {groupCarts}
-    </>
+    </aside>
   )
 }
 
