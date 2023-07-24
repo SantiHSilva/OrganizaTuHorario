@@ -1,16 +1,39 @@
 import Modal from "react-bootstrap/Modal";
-import {Form, InputGroup} from "react-bootstrap";
+import {Form, InputGroup, Pagination} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {getGroupById, modifyColorName, modifyGroupName} from "../../Data/groupManager.js";
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
+import {HiFolderAdd} from "react-icons/hi";
+import {TbTrashXFilled} from "react-icons/tb";
+import {useEffect, useState} from "react";
+import useArray from "../../CustomHooks/useArray.js";
 
 export function SubgroupDashboard({idGroup, openModal, onHide}) {
+
+	const [numPageMaterias, setNumPageMaterias] = useState(0);
+	const { array, set, push, remove, update, clear } = useArray([]);
+
+	useEffect(() => {
+		if(!openModal || idGroup === -1) return;
+		set(getGroupById(idGroup).materias);
+	}, [openModal, idGroup]);
+
+	// Cambiar página global cuando se
+
+	useEffect(() => {
+		setNumPageMaterias(array.length);
+	}, [array.length]);
 
 	if (idGroup === -1) return; // No group selected
 
 	const groupListed = getGroupById(idGroup);
-	console.log(groupListed)
+
 	let hexColor = groupListed.color;
+
+	// Pagination globalmaterias
+
+	console.log(groupListed)
+	console.log(array) // materias
 
 	function modifyModal(){
 		document.getElementsByClassName('modal-content')[0].setAttribute('style', `box-shadow: 0px 5px 15px ${hexColor}; border-color: ${hexColor}`);
@@ -20,8 +43,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 	function huboCambios(){
 		const name = getValueById("groupName");
-		const color = getValueById("groupColor");
-		return name !== groupListed.name || color !== groupListed.color;
+		return name !== groupListed.name || hexColor !== groupListed.color || array !== groupListed.materias;
 	}
 
 	function detectChanges(){
@@ -46,6 +68,35 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		if(name !== groupListed.name) modifyGroupName(idGroup, name);
 		if(color !== groupListed.color) modifyColorName(idGroup, color);
 		onHide();
+	}
+
+	const prevPageGlobal = () => {
+		if (numPageMaterias > 1) setNumPageMaterias(numPageMaterias - 1);
+	}
+
+	const nextPageGlobal = () => {
+		if (numPageMaterias < array.length) setNumPageMaterias(numPageMaterias + 1);
+	}
+
+	const createNewMateria = () => {
+		console.log("Creando nueva materia...")
+		const newData = {
+			descripciones_generales: [],
+			descripciones_por_dia : [
+				{
+					dia: "",
+					inicio: "",
+					fin: "",
+					ajustes: [],
+				}
+			],
+		}
+		push(newData);
+	}
+
+	const deleteCurrentMateria = () => {
+		console.log(`Eliminando materia ${numPageMaterias}...`)
+
 	}
 
 	return (
@@ -90,39 +141,37 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 			{/* Body */}
 			<Modal.Body>
 
-{/*				<Form
-					onSubmit={onHide}
-					onChange={detectChanges}
+				<div
+					className=''
 				>
-					<Form.Group>
-						<div className='d-flex flex-row bd-highlight'>
-							<Form.Control
-								defaultValue={groupListed.name}
-								id="groupName" type="text"
-								placeholder="Nombre del grupo"
-								className='shadow-sm bg-body rounded'
-								onChange={detectChanges}
-							/>
 
-							<Form.Control
-								type="color"
-								defaultValue={hexColor}
-								title='Selecciona un color para el grupo'
-								className='shadow-sm bg-body rounded'
-								id='groupColor'
-								onChange={ (e) =>
-								{
-									hexColor = e.target.value;
-									modifyModal();
-									detectChanges();
-								}
-								}
-							/>
 
-						</div>
-					</Form.Group>
-				</Form>*/}
+					<div
+						className='d-flex border rounded p-1'
+					>
 
+						<HiFolderAdd
+							size={30}
+							onClick={createNewMateria}
+						/>
+
+						<Pagination
+							size='sm'
+							className='m-auto'
+						>
+							<Pagination.Prev onClick={prevPageGlobal}/>
+							<Pagination.Item active>{numPageMaterias}</Pagination.Item>
+							<Pagination.Next onClick={nextPageGlobal} />
+						</Pagination>
+
+						<TbTrashXFilled
+							size={30}
+							onClick={deleteCurrentMateria}
+						/>
+
+					</div>
+
+				</div>
 			</Modal.Body>
 
 			<Modal.Footer>

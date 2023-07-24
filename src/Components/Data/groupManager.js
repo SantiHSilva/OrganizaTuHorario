@@ -5,7 +5,8 @@ function getGroupList() {
 
 let globalGroupList = getGroupList(); // TODO: Global Variable
 
-function getGroupById(idGroup = 0){
+function getGroupById(idGroup = -1){
+  if (idGroup === -1) return [];
   return globalGroupList.find((element) => element.key === idGroup);
 }
 
