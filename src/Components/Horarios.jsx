@@ -19,14 +19,14 @@ export default function Horarios({theme}){
 
   return(
     <Paper sx={{ width: `100%`, overflow: 'hidden'}}>
-      <TableContainer sx={{ height: `${maxAltura}px`, backgroundColor: 'blue' }}>
+      <TableContainer sx={{ height: `${maxAltura}px`}}>
 
         <Table stickyHeader align='center'>
           <TableHead>
             <TableRow>
               <TableCell align='center'
                          style={{
-                           backgroundColor: 'green'
+                           //backgroundColor: 'green'
                          }}
               > # </TableCell>
               {
@@ -47,7 +47,7 @@ export default function Horarios({theme}){
                         key={index}
                         align="center"
                         style={{
-                          backgroundColor: 'red',
+                          // backgroundColor: 'red'
                         }}
                       > A
                       </TableCell>

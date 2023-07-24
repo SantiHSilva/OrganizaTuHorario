@@ -1,10 +1,20 @@
 import {deleteSpecifiedGroup} from "../../Data/groupManager.js";
 import Swal from "sweetalert2";
-import {memo, useEffect} from "react";
+import {memo, useEffect, useState} from "react";
 import {FaEdit, FaTrashAlt} from "react-icons/fa";
 import {adaptColorByHexColor} from "../../../Utils/Utils.js";
+import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
 
 function MostrarGrupos({toggleUpdate, data, theme}){
+
+  const [key, setKey] = useState(-1)
+  const [showModal, setShowModal] = useState(false)
+
+  const openDashboard = (idGroup) => {
+    console.log(`Abriendo dashboard del grupo ${idGroup}...`)
+    setKey(idGroup)
+    setShowModal(true)
+  }
 
   useEffect(() => {
     console.log("Creating MostrarGrupos...");
@@ -71,6 +81,9 @@ function MostrarGrupos({toggleUpdate, data, theme}){
                   cursor: 'pointer',
                   fill: theme === 'dark' ? '#212121' : '#FEFBF3',
                 }}
+                onClick={() => {
+                  openDashboard(group.key)
+                }}
               />
               <FaTrashAlt
                 size={25}
@@ -100,6 +113,7 @@ function MostrarGrupos({toggleUpdate, data, theme}){
     <aside>
       &nbsp;
       {groupCarts}
+      <SubgroupDashboard idGroup={key} openModal={showModal} onHide={() => setShowModal(false)} />
     </aside>
   )
 }
