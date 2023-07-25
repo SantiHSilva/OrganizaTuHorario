@@ -13,6 +13,9 @@ import {FaTrash} from "react-icons/fa";
 export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 	const [numPageMaterias, setNumPageMaterias] = useState(0);
+	const [numPageDescripciones, setNumPageDescripciones] = useState(1);
+	const [eventCreateMateria, activateEventCreateNewMateria] = useState(false);
+	const [eventDeleteMateria, activateEventDeleteMateria] = useState(false);
 	const { array, set, push, remove, update } = useArray([]);
 
 	useEffect(() => {
@@ -28,12 +31,29 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		console.log("Array: ", array)
 	}, [array]);
 
-
-	// Cambiar página global cuando se cambia el array
+	useEffect(() => {
+		if(!openModal || idGroup === -1 || !eventCreateMateria) return;
+		setNumPageMaterias(array.length);
+		activateEventCreateNewMateria(false);
+	}, [eventCreateMateria]);
 
 	useEffect(() => {
-		setNumPageMaterias(array.length);
-	}, [array.length]);
+		if(!openModal || idGroup === -1 || !eventDeleteMateria) return;
+		if(numPageMaterias !== 1)
+			setNumPageMaterias(numPageMaterias - 1);
+		if(array.length === 0)
+			setNumPageMaterias(0);
+		setNumPageDescripciones(1);
+		activateEventDeleteMateria(false);
+	}, [eventDeleteMateria]);
+
+	useEffect(() => {
+		console.log("--------------- SUBGROUP changed ---------------")
+		console.log("RESET...")
+		setNumPageMaterias(0);
+		setNumPageDescripciones(1);
+	}, []);
+
 
 	if (idGroup === -1) return; // No group selected
 
@@ -98,16 +118,18 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 			],
 		}
 		push(newData);
+		activateEventCreateNewMateria(true);
 	}
 
 	const deleteCurrentMateria = () => {
 		console.log(`Eliminando materia ${numPageMaterias}...`)
 		remove(numPageMaterias - 1);
-		setNumPageMaterias(numPageMaterias - 1)
+		activateEventDeleteMateria(true);
 	}
 
 	const handleClose = () => {
 		setNumPageMaterias(0);
+		setNumPageDescripciones(1);
 		onHide();
 	}
 
@@ -152,11 +174,9 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 			{/* Body */}
 			<Modal.Body>
-
 				<div
 					className='border rounded'
 				>
-
 					<div
 						className='d-flex border rounded p-1'
 					>
@@ -192,14 +212,10 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 					{
 						numPageMaterias === 0 ?
-							<div
-								className='d-flex p-3'
-							>
-														<span
-															className='m-auto'
-														>
-															Crea una nueva materia para personalizar...
-														</span>
+							<div className='d-flex p-3' >
+								<span	className='m-auto'>
+									Crea una nueva materia para personalizar...
+								</span>
 							</div>
 							:
 							<>
@@ -218,7 +234,9 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 												<BiBookAdd
 													size={30}
 													onClick={() => {
+														if(typeof array[numPageMaterias - 1] === "undefined") return; // No materia selected
 														console.log("Creando descripción general...")
+														console.log("NumPageMaterias: ", numPageMaterias)
 														const newData = {
 															mostrar_en_tabla: true,
 															titulo: "",
@@ -226,6 +244,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 														const materia = array[numPageMaterias - 1];
 														materia.descripciones_generales.push(newData);
 														update(numPageMaterias - 1, materia);
+														console.log("Descripción general creada")
 													}}
 												/>
 
@@ -237,29 +256,16 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 										<div
 											className='container p-2'
 										>
-{/*													<div
-														className='row p-2'
-													>
-														<InputGroup className="p-2 col-6" style={{width: '50%'}}>
-															<InputGroup.Checkbox aria-label="Añadir en tabla" />
-															<Form.Control aria-label="Valor a mostrar" placeholder='value' />
-															<InputGroup.Text
-																aria-label='Eliminar descripción de la lista'
-															>
-																<FaTrash
-																	size={20}
-																/>
-															</InputGroup.Text>
-														</InputGroup>
-													</div>*/}
 											<div
 												className='row p-2'
 											>
-														{
-															array[numPageMaterias - 1].descripciones_generales.map((descripcion, index) => (
-
+												{
+													typeof array[numPageMaterias - 1] === "undefined" ? <></> :
+													array[numPageMaterias - 1].descripciones_generales.map((descripcion, index) => (
 																	<InputGroup className="p-2 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
-																		<InputGroup.Checkbox aria-label="Añadir en tabla" checked={descripcion.mostrar_en_tabla}
+																		<InputGroup.Checkbox
+																			aria-label="Añadir en tabla"
+																			checked={descripcion.mostrar_en_tabla}
 																			onChange={() => {
 																				const materia = array[numPageMaterias - 1];
 																				materia.descripciones_generales[index].mostrar_en_tabla = !materia.descripciones_generales[index].mostrar_en_tabla;
@@ -287,7 +293,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 																			/>
 																		</InputGroup.Text>
 																	</InputGroup>
-															))
+																))
 
 														}
 											</div>
