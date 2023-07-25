@@ -7,18 +7,35 @@ import {HiFolderAdd} from "react-icons/hi";
 import {TbTrashXFilled} from "react-icons/tb";
 import {useEffect, useState} from "react";
 import useArray from "../../CustomHooks/useArray.js";
+import {BiBookAdd} from "react-icons/bi";
 
 export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 	const [numPageMaterias, setNumPageMaterias] = useState(0);
-	const { array, set, push, remove, update, clear } = useArray([]);
+	const { array, set, push, remove, update } = useArray([]);
 
 	useEffect(() => {
 		if(!openModal || idGroup === -1) return;
-		set(getGroupById(idGroup).materias);
+		const groupFilter = getGroupById(idGroup);
+		set(groupFilter.materias);
+		if(groupFilter.materias.length > 0)
+			setNumPageMaterias(1);
 	}, [openModal, idGroup]);
 
-	// Cambiar página global cuando se
+	useEffect(() => {
+		if(!openModal || idGroup === -1 || array.length == 0) return;
+		console.log("Array: ", array)
+/*		array.map((materia, index) => {
+			console.log("Materia: ", materia)
+			console.log("Index: ", index)
+			console.log("Descripciones generales: ", materia.descripciones_generales)
+			console.log("Descripciones por día: ", materia.descripciones_por_dia)
+		})
+		console.log(array[0].descripciones_generales)*/
+	}, [array]);
+
+
+	// Cambiar página global cuando se cambia el array
 
 	useEffect(() => {
 		setNumPageMaterias(array.length);
@@ -29,11 +46,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	const groupListed = getGroupById(idGroup);
 
 	let hexColor = groupListed.color;
-
-	// Pagination globalmaterias
-
-	console.log(groupListed)
-	console.log(array) // materias
 
 	function modifyModal(){
 		document.getElementsByClassName('modal-content')[0].setAttribute('style', `box-shadow: 0px 5px 15px ${hexColor}; border-color: ${hexColor}`);
@@ -96,7 +108,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 	const deleteCurrentMateria = () => {
 		console.log(`Eliminando materia ${numPageMaterias}...`)
-
+		remove(numPageMaterias - 1);
 	}
 
 	return (
@@ -142,9 +154,8 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 			<Modal.Body>
 
 				<div
-					className=''
+					className='border rounded'
 				>
-
 
 					<div
 						className='d-flex border rounded p-1'
@@ -159,9 +170,15 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 							size='sm'
 							className='m-auto'
 						>
-							<Pagination.Prev onClick={prevPageGlobal}/>
+							<Pagination.Prev
+								onClick={prevPageGlobal}
+								disabled={numPageMaterias === 1 || array.length === 0}
+							/>
 							<Pagination.Item active>{numPageMaterias}</Pagination.Item>
-							<Pagination.Next onClick={nextPageGlobal} />
+							<Pagination.Next
+								onClick={nextPageGlobal}
+								disabled={numPageMaterias === array.length || array.length === 0}
+							/>
 						</Pagination>
 
 						<TbTrashXFilled
@@ -171,7 +188,114 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 					</div>
 
+					{/* End Create Materia Global */}
+
+					{
+						numPageMaterias === 0 ?
+							<div
+								className='d-flex p-3'
+							>
+														<span
+															className='m-auto'
+														>
+															Crea una nueva materia para personalizar...
+														</span>
+							</div>
+							:
+							<>
+
+								{/* Descripciones generales */}
+
+								<div
+									className='border rounded m-2'
+								>
+										<div className='d-flex  p-1'>
+											<span
+												className='m-auto'
+											>
+												Descripciones generales
+											</span>
+												<BiBookAdd
+													size={30}
+												/>
+
+										</div>
+									<hr
+										style={{margin: 5}}
+									/>
+
+										<div
+											className='container p-2'
+										>
+													<div
+														className='d-flex p-1'
+													>
+														<span
+															className='m-auto'
+														>
+															Crea una descripción general
+														</span>
+													</div>
+										</div>
+
+								</div>
+
+								{/* Descripciones por día */}
+
+								<div
+									className='border rounded m-2'
+								>
+									<div className='border rounded p-1 d-flex flex-column'>
+
+										<span className='text-center'>
+											Descripciones por día
+										</span>
+
+										<hr
+											style={{margin: 5}}
+										/>
+
+										<section
+											className='d-flex'
+										>
+
+											<HiFolderAdd
+												size={30}
+												onClick={createNewMateria}
+											/>
+
+											<Pagination
+												size='sm'
+												className='m-auto'
+											>
+
+												<Pagination.Prev
+													onClick={prevPageGlobal}
+													disabled={numPageMaterias === 1 || array.length === 0}
+												/>
+												<Pagination.Item active>{numPageMaterias}</Pagination.Item>
+												<Pagination.Next
+													onClick={nextPageGlobal}
+													disabled={numPageMaterias === array.length || array.length === 0}
+												/>
+											</Pagination>
+
+											<TbTrashXFilled
+												size={30}
+												onClick={deleteCurrentMateria}
+											/>
+
+										</section>
+									</div>
+
+									test
+
+								</div>
+						</>
+}
+
 				</div>
+
 			</Modal.Body>
 
 			<Modal.Footer>

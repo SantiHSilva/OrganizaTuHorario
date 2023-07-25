@@ -21,7 +21,7 @@ export default function DataRoot({data}){
           >
             <Horarios />
           </div>
-          <div className="col-md-auto"
+          <div className="col"
             style={{
               backgroundColor: theme === 'dark' ? '#2C3333' : '#EEEEEE',
               transition: 'all 0.2s ease-in-out',
