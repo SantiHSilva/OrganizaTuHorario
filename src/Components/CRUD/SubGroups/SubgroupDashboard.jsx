@@ -8,6 +8,7 @@ import {TbTrashXFilled} from "react-icons/tb";
 import {useEffect, useState} from "react";
 import useArray from "../../CustomHooks/useArray.js";
 import {BiBookAdd} from "react-icons/bi";
+import {FaTrash} from "react-icons/fa";
 
 export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
@@ -25,13 +26,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	useEffect(() => {
 		if(!openModal || idGroup === -1 || array.length == 0) return;
 		console.log("Array: ", array)
-/*		array.map((materia, index) => {
-			console.log("Materia: ", materia)
-			console.log("Index: ", index)
-			console.log("Descripciones generales: ", materia.descripciones_generales)
-			console.log("Descripciones por día: ", materia.descripciones_por_dia)
-		})
-		console.log(array[0].descripciones_generales)*/
 	}, [array]);
 
 
@@ -109,6 +103,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	const deleteCurrentMateria = () => {
 		console.log(`Eliminando materia ${numPageMaterias}...`)
 		remove(numPageMaterias - 1);
+		setNumPageMaterias(numPageMaterias - 1)
 	}
 
 	return (
@@ -217,6 +212,16 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 											</span>
 												<BiBookAdd
 													size={30}
+													onClick={() => {
+														console.log("Creando descripción general...")
+														const newData = {
+															mostrar_en_tabla: true,
+															titulo: "",
+														}
+														const materia = array[numPageMaterias - 1];
+														materia.descripciones_generales.push(newData);
+														update(numPageMaterias - 1, materia);
+													}}
 												/>
 
 										</div>
@@ -227,15 +232,61 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 										<div
 											className='container p-2'
 										>
-													<div
-														className='d-flex p-1'
+{/*													<div
+														className='row p-2'
 													>
-														<span
-															className='m-auto'
-														>
-															Crea una descripción general
-														</span>
-													</div>
+														<InputGroup className="p-2 col-6" style={{width: '50%'}}>
+															<InputGroup.Checkbox aria-label="Añadir en tabla" />
+															<Form.Control aria-label="Valor a mostrar" placeholder='value' />
+															<InputGroup.Text
+																aria-label='Eliminar descripción de la lista'
+															>
+																<FaTrash
+																	size={20}
+																/>
+															</InputGroup.Text>
+														</InputGroup>
+													</div>*/}
+											<div
+												className='row p-2'
+											>
+														{
+															array[numPageMaterias - 1].descripciones_generales.map((descripcion, index) => (
+
+																	<InputGroup className="p-2 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
+																		<InputGroup.Checkbox aria-label="Añadir en tabla" checked={descripcion.mostrar_en_tabla}
+																			onChange={() => {
+																				const materia = array[numPageMaterias - 1];
+																				materia.descripciones_generales[index].mostrar_en_tabla = !materia.descripciones_generales[index].mostrar_en_tabla;
+																				update(numPageMaterias - 1, materia);
+																			}}
+																		/>
+																		<Form.Control aria-label="Valor a mostrar" placeholder='key' value={descripcion.titulo} onChange={
+																			(e) => {
+																				const materia = array[numPageMaterias - 1];
+																				materia.descripciones_generales[index].titulo = e.target.value;
+																				update(numPageMaterias - 1, materia);
+																			}
+																		} />
+																		<InputGroup.Text
+																			aria-label='Eliminar descripción de la lista'
+																		>
+																			<FaTrash
+																				size={20}
+																				onClick={() => {
+																					console.log(`Eliminando descripción general ${index}...`)
+																					const materia = array[numPageMaterias - 1];
+																					materia.descripciones_generales.splice(index, 1);
+																					update(numPageMaterias - 1, materia);
+																				}}
+																			/>
+																		</InputGroup.Text>
+																	</InputGroup>
+															))
+
+														}
+											</div>
+
 										</div>
 
 								</div>

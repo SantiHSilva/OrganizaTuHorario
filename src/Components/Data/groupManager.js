@@ -43,6 +43,12 @@ function modifyColorName(idGroupName = 0, newColor = ""){
   addSessionStorageGroup(globalGroupList);
 }
 
+function modifyMaterias(idGroupName = 0, newMaterias = []){
+  const index = findIndexGroup(idGroupName);
+  globalGroupList[index].materias = newMaterias;
+  addSessionStorageGroup(globalGroupList);
+}
+
 // Default Values
 
 function saveValues(name, color){
@@ -74,5 +80,6 @@ export {
   modifyGroupName,
   modifyColorName,
   globalDeleteGroups,
+  modifyMaterias,
   globalGroupList
 };
