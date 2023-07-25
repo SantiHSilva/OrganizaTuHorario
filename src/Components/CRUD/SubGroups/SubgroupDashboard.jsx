@@ -106,10 +106,15 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		setNumPageMaterias(numPageMaterias - 1)
 	}
 
+	const handleClose = () => {
+		setNumPageMaterias(0);
+		onHide();
+	}
+
 	return (
 		<Modal
 			show={openModal}
-			onHide={onHide}
+			onHide={handleClose}
 			onShow={handleOpen}
 			size=''
 			aria-labelledby="contained-modal-title-vcenter"
