@@ -16,6 +16,8 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	const [numPageDescripciones, setNumPageDescripciones] = useState(1);
 	const [eventCreateMateria, activateEventCreateNewMateria] = useState(false);
 	const [eventDeleteMateria, activateEventDeleteMateria] = useState(false);
+	const [eventCreateSubMateria, activateEventCreateNewSubMateria] = useState(false);
+	const [eventDeleteSubMateria, activateEventDeleteSubMateria] = useState(false);
 	const { array, set, push, remove, update } = useArray([]);
 
 	useEffect(() => {
@@ -48,12 +50,24 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	}, [eventDeleteMateria]);
 
 	useEffect(() => {
+		if(!eventCreateSubMateria) return;
+		setNumPageDescripciones(numPageDescripciones + 1)
+		activateEventCreateNewSubMateria(false);
+	}, [eventCreateSubMateria]);
+
+	useEffect(() => {
+		if(!eventDeleteSubMateria) return;
+		if(numPageDescripciones !== 1)
+			setNumPageDescripciones(numPageDescripciones - 1);
+		activateEventDeleteSubMateria(false);
+	}, [eventDeleteSubMateria]);
+
+	useEffect(() => {
 		console.log("--------------- SUBGROUP changed ---------------")
 		console.log("RESET...")
 		setNumPageMaterias(0);
 		setNumPageDescripciones(1);
 	}, []);
-
 
 	if (idGroup === -1) return; // No group selected
 
@@ -98,11 +112,57 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 	const prevPageGlobal = () => {
 		if (numPageMaterias > 1) setNumPageMaterias(numPageMaterias - 1);
+		setNumPageDescripciones(1)
 	}
 
 	const nextPageGlobal = () => {
 		if (numPageMaterias < array.length) setNumPageMaterias(numPageMaterias + 1);
+		setNumPageDescripciones(1)
 	}
+
+	const nextPageDescripciones = () => {
+		if (numPageDescripciones < array[numPageMaterias - 1].descripciones_por_dia.length) setNumPageDescripciones(numPageDescripciones + 1);
+	}
+
+	const prevPageDescripciones = () => {
+		if (numPageDescripciones > 1) setNumPageDescripciones(numPageDescripciones - 1);
+	}
+
+	const createSubMateria = () => {
+		console.log("Creando nueva submateria...")
+		if(typeof array[numPageMaterias - 1] === "undefined") return; // No materia selected
+		const newData =
+			{
+			dia: "",
+			inicio: "",
+			fin: "",
+			ajustes: [],
+		}
+		const materia = array[numPageMaterias - 1];
+		materia.descripciones_por_dia.push(newData);
+		update(numPageMaterias - 1, materia);
+		activateEventCreateNewSubMateria(true);
+	}
+
+	const deleteSubMateria = () => {
+		console.log("Eliminando submateria...")
+		if(typeof array[numPageMaterias - 1] === "undefined") return; // No materia selected
+		const materia = array[numPageMaterias - 1];
+		materia.descripciones_por_dia.splice(numPageDescripciones - 1, 1);
+		update(numPageMaterias - 1, materia);
+		activateEventDeleteSubMateria(true);
+	}
+
+	const canMoveToBackPageSubmateria = () => {
+		if (typeof array[numPageMaterias - 1] === "undefined") return false;
+		return numPageDescripciones === 1 || array[numPageMaterias - 1].descripciones_por_dia.length === 0;
+	}
+
+	const canMoveToNextPageSubmateria = () => {
+		if (typeof array[numPageMaterias - 1] === "undefined") return false;
+		return numPageDescripciones === array[numPageMaterias - 1].descripciones_por_dia.length || array[numPageMaterias - 1].descripciones_por_dia.length === 0;
+	}
+
 
 	const createNewMateria = () => {
 		console.log("Creando nueva materia...")
@@ -323,28 +383,27 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 											<HiFolderAdd
 												size={30}
-												onClick={createNewMateria}
+												onClick={createSubMateria}
 											/>
 
 											<Pagination
 												size='sm'
 												className='m-auto'
 											>
-
 												<Pagination.Prev
-													onClick={prevPageGlobal}
-													disabled={numPageMaterias === 1 || array.length === 0}
+													onClick={prevPageDescripciones}
+													disabled={canMoveToBackPageSubmateria()}
 												/>
-												<Pagination.Item active>{numPageMaterias}</Pagination.Item>
+												<Pagination.Item active>{numPageDescripciones}</Pagination.Item>
 												<Pagination.Next
-													onClick={nextPageGlobal}
-													disabled={numPageMaterias === array.length || array.length === 0}
+													onClick={nextPageDescripciones}
+													disabled={canMoveToNextPageSubmateria()}
 												/>
 											</Pagination>
 
 											<TbTrashXFilled
 												size={30}
-												onClick={deleteCurrentMateria}
+												onClick={deleteSubMateria}
 											/>
 
 										</section>
