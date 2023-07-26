@@ -11,7 +11,6 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 - [ ]  Añadir anotaciones a las materias
 - [ ]  Alternar entre horarios con/sin dias libres
 - [ ]  Soporte de horas por 24h-12h
-- [ ]  Filtración de horarios por materia seleccionada
 - [ ]  Manual de usuario
 - [ ]  Exportación de los horarios por:
     - [ ]  Imagenes (Separadas)

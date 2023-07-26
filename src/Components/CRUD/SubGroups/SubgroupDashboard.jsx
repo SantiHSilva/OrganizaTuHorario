@@ -36,6 +36,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	useEffect(() => {
 		if(!openModal || idGroup === -1 || !eventCreateMateria) return;
 		setNumPageMaterias(array.length);
+		setNumPageDescripciones(1)
 		activateEventCreateNewMateria(false);
 	}, [eventCreateMateria]);
 
@@ -144,10 +145,43 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		activateEventCreateNewSubMateria(true);
 	}
 
+	const obtenerDiaDeLaSemana = () => {
+		if(typeof array[numPageMaterias - 1] === "undefined") return 1;
+		if(typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined") return 1;
+		return array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].dia;
+	}
+
+	const obtenerHoraInicio = () => {
+		if(typeof array[numPageMaterias - 1] === "undefined") return "";
+		if(typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined") return "";
+		return array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].inicio;
+	}
+
+	const obtenerHoraFin = () => {
+		if(typeof array[numPageMaterias - 1] === "undefined") return "";
+		if(typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined") return "";
+		return array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].fin;
+	}
+
 	const deleteSubMateria = () => {
 		console.log("Eliminando submateria...")
 		if(typeof array[numPageMaterias - 1] === "undefined") return; // No materia selected
+
 		const materia = array[numPageMaterias - 1];
+		// TODO: si estaba en el primer elemento crea uno nuevo
+		if(materia.descripciones_por_dia.length === 1){
+			materia.descripciones_por_dia = [
+				{
+					dia: "",
+					inicio: "",
+					fin: "",
+					ajustes: [],
+				}
+			]
+			update(numPageMaterias - 1, materia);
+			activateEventDeleteSubMateria(true);
+			return;
+		}
 		materia.descripciones_por_dia.splice(numPageDescripciones - 1, 1);
 		update(numPageMaterias - 1, materia);
 		activateEventDeleteSubMateria(true);
@@ -162,7 +196,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		if (typeof array[numPageMaterias - 1] === "undefined") return false;
 		return numPageDescripciones === array[numPageMaterias - 1].descripciones_por_dia.length || array[numPageMaterias - 1].descripciones_por_dia.length === 0;
 	}
-
 
 	const createNewMateria = () => {
 		console.log("Creando nueva materia...")
@@ -198,7 +231,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 			show={openModal}
 			onHide={handleClose}
 			onShow={handleOpen}
-			size=''
 			aria-labelledby="contained-modal-title-vcenter"
 			centered
 		>
@@ -322,7 +354,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 												{
 													typeof array[numPageMaterias - 1] === "undefined" ? <></> :
 													array[numPageMaterias - 1].descripciones_generales.map((descripcion, index) => (
-																	<InputGroup className="p-2 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
+																	<InputGroup className="p-1 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
 																		<InputGroup.Checkbox
 																			aria-label="Añadir en tabla"
 																			checked={descripcion.mostrar_en_tabla}
@@ -409,7 +441,96 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 										</section>
 									</div>
 
-									test
+									<div
+										className='border rounded m-2'
+									>
+										<div
+											className='d-flex'
+										>
+											<span className='mx-auto'>
+												Horarios
+											</span>
+										</div>
+										<hr
+											style={{margin: '3px'}}
+										/>
+
+										<div
+											className='d-flex flex-column'
+										>
+											<Form.Group
+												className='p-1 mx-auto'
+												style={{
+													width: '90%',
+												}}
+											>
+												<Form.Label>
+													Día de la semana
+												</Form.Label>
+												<Form.Select
+													value={obtenerDiaDeLaSemana()}
+													onChange={(e) => {
+														const materia = array[numPageMaterias - 1];
+														materia.descripciones_por_dia[numPageDescripciones - 1].dia = e.target.value;
+														update(numPageMaterias - 1, materia);
+													}}
+												>
+													<option value='1' label={'Lunes'} />
+													<option value='2' label={'Martes'} />
+													<option value='3' label={'Miércoles'} />
+													<option value='4' label={'Jueves'} />
+													<option value='5' label={'Viernes'} />
+													<option value='6' label={'Sábado'} />
+													<option value='7' label={'Domingo'} />
+												</Form.Select>
+											</Form.Group>
+
+											<hr
+												style={{margin: '3px'}}
+											/>
+
+											<section
+												className='d-flex mx-auto'
+											>
+												<Form.Group
+													className='p-2'
+												>
+													<Form.Label>
+														Hora inicio
+													</Form.Label>
+													<Form.Control
+														type='time'
+														value={obtenerHoraInicio()}
+														onChange={(e) => {
+															const materia = array[numPageMaterias - 1];
+															materia.descripciones_por_dia[numPageDescripciones - 1].inicio = e.target.value;
+															update(numPageMaterias - 1, materia);
+														}
+													}
+														max={obtenerHoraInicio()}
+													/>
+												</Form.Group>
+												<Form.Group
+													className='p-2'
+												>
+													<Form.Label>
+																Hora Fin
+													</Form.Label>
+													<Form.Control
+														type='time'
+														value={obtenerHoraFin()}
+														onChange={(e) => {
+															const materia = array[numPageMaterias - 1];
+															materia.descripciones_por_dia[numPageDescripciones - 1].fin = e.target.value;
+															update(numPageMaterias - 1, materia);
+														}
+													}
+														min={obtenerHoraInicio()}
+													/>
+												</Form.Group>
+											</section>
+										</div>
+									</div>
 
 								</div>
 						</>
