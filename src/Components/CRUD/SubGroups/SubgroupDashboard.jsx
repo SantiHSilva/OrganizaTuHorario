@@ -1,7 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import {Form, InputGroup, Pagination} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import {getGroupById, modifyColorName, modifyGroupName} from "../../Data/groupManager.js";
+import {getGroupById, modifyColorName, modifyGroupName, modifyMaterias} from "../../Data/groupManager.js";
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import {HiFolderAdd} from "react-icons/hi";
 import {TbTrashXFilled} from "react-icons/tb";
@@ -101,13 +101,13 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	}
 
 	function submitChanges(){
-
-		// Valores base
-
 		const name = getValueById("groupName");
 		const color = getValueById("groupColor");
 		if(name !== groupListed.name) modifyGroupName(idGroup, name);
 		if(color !== groupListed.color) modifyColorName(idGroup, color);
+		if(array !== groupListed.materias) {
+			console.log("Verificando datos de las materias...")
+		}
 		onHide();
 	}
 
@@ -352,7 +352,10 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 												className='row p-2'
 											>
 												{
-													typeof array[numPageMaterias - 1] === "undefined" ? <></> :
+													(typeof array[numPageMaterias - 1] === "undefined" || array[numPageMaterias - 1].descripciones_generales.length === 0)
+														?
+															<span className='mx-auto text-center'>Crea una descripción nueva!</span>
+														:
 													array[numPageMaterias - 1].descripciones_generales.map((descripcion, index) => (
 																	<InputGroup className="p-1 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
 																		<InputGroup.Checkbox
@@ -530,6 +533,90 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 												</Form.Group>
 											</section>
 										</div>
+
+									</div>
+
+									{/* Sub anotaciones */}
+
+									<div
+										className='border rounded m-2'
+									>
+										<div className='d-flex  p-1'>
+											<span
+												className='m-auto'
+											>
+												Ajustes
+											</span>
+											<BiBookAdd
+												size={30}
+												onClick={() => {
+													if(typeof array[numPageMaterias - 1] === "undefined") return; // No materia selected
+													if(typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined") return;
+													const newData = {
+														mostrar_en_tabla: true,
+														titulo: "",
+													}
+													const materia = array[numPageMaterias - 1];
+													materia.descripciones_por_dia[numPageDescripciones - 1].ajustes.push(newData);
+													update(numPageMaterias - 1, materia);
+												}}
+											/>
+
+										</div>
+										<hr
+											style={{margin: 5}}
+										/>
+
+										<div
+											className='container p-2'
+										>
+											<div
+												className='row p-2'
+											>
+												{
+													(typeof array[numPageMaterias - 1] === "undefined" || typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined" || array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].ajustes.length === 0)
+														?
+														<span className='mx-auto text-center'>Crea un ajuste nuevo!</span>
+														:
+														array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].ajustes.map((descripcion, index) => (
+															<InputGroup className="p-1 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
+																<InputGroup.Checkbox
+																	aria-label="Añadir en tabla"
+																	checked={descripcion.mostrar_en_tabla}
+																	onChange={() => {
+																		const materia = array[numPageMaterias - 1];
+																		materia.descripciones_por_dia[numPageDescripciones - 1].ajustes[index].mostrar_en_tabla = !materia.descripciones_por_dia[numPageDescripciones - 1].ajustes[index].mostrar_en_tabla;
+																		update(numPageMaterias - 1, materia);
+																	}}
+																/>
+																<Form.Control aria-label="Valor a mostrar" placeholder='key' value={descripcion.titulo} onChange={
+																	(e) => {
+																		const materia = array[numPageMaterias - 1];
+																		materia.descripciones_por_dia[numPageDescripciones - 1].ajustes[index].titulo = e.target.value;
+																		update(numPageMaterias - 1, materia);
+																	}
+																} />
+																<InputGroup.Text
+																	aria-label='Eliminar descripción de la lista'
+																>
+																	<FaTrash
+																		size={20}
+																		onClick={() => {
+																			console.log(`Eliminando descripción general ${index}...`)
+																			const materia = array[numPageMaterias - 1];
+																			materia.descripciones_por_dia[numPageDescripciones - 1].ajustes.splice(index, 1);
+																			update(numPageMaterias - 1, materia);
+																		}}
+																	/>
+																</InputGroup.Text>
+															</InputGroup>
+														))
+
+												}
+											</div>
+
+										</div>
+
 									</div>
 
 								</div>

@@ -25,5 +25,9 @@ export const Urls = createBrowserRouter([
     {
         path: "/datos",
         element: <Datos />
+    },
+    {
+        path: "*",
+        element: <App />,
     }
 ]);
