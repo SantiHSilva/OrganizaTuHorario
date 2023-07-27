@@ -12,6 +12,14 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	const [numPageMaterias, setNumPageMaterias] = useState(0);
 	const [numPageDescripciones, setNumPageDescripciones] = useState(1);
 
+	//ToggleUpdate for if savechanges find any error
+	const [toggleUpdate, setToggleUpdate] = useState(false);
+
+	useEffect(() => {
+		if(!toggleUpdate) return;
+		setToggleUpdate(false);
+	}, [toggleUpdate]);
+
 	const { array, set, push, remove, update } = useArray([]);
 
 	useEffect(() => {
@@ -25,6 +33,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 	useEffect(() => {
 		if(!openModal || idGroup === -1 || array.length === 0) return;
 		console.log("Array: ", array)
+		detectChanges()
 	}, [array]);
 
 	useEffect(() => {
@@ -63,16 +72,17 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		detectChanges();
 	}
 
-	function submitChanges(){
+/*	function submitChanges(){
 		const name = getValueById("groupName");
 		const color = getValueById("groupColor");
 		if(name !== groupListed.name) modifyGroupName(idGroup, name);
 		if(color !== groupListed.color) modifyColorName(idGroup, color);
 		if(array !== groupListed.materias) {
 			console.log("Verificando datos de las materias...")
+			return;
 		}
 		onHide();
-	}
+	}*/
 
 	const handleClose = () => {
 		setNumPageMaterias(0);
@@ -113,7 +123,16 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 			</Modal.Body>
 
 			<Modal.Footer>
-				<FooterSubgroupDashboard submitChanges={submitChanges} onHide={onHide} />
+				<FooterSubgroupDashboard
+					setNumPageMaterias={setNumPageMaterias}
+					setNumPageDescripciones={setNumPageDescripciones}
+					array={array}
+					hexColor={hexColor}
+					idGroup={idGroup}
+					groupListed={groupListed}
+					onHide={onHide}
+					updateGlobal={setToggleUpdate}
+				/>
 			</Modal.Footer>
 
 		</Modal>

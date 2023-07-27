@@ -4,14 +4,14 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 
 ## Caracteristicas
 
-- [ ]  Selector de idiomas personalizables
 - [x]  Alternar entre temas oscuros y claros
 - [x]  Añadir colores a los grupos
+- [X]  Añadir anotaciones a las materias
 - [ ]  Añadir apodos a los horarios
-- [ ]  Añadir anotaciones a las materias
 - [ ]  Alternar entre horarios con/sin dias libres
 - [ ]  Soporte de horas por 24h-12h
 - [ ]  Manual de usuario
+- [ ]  Selector de idiomas personalizables
 - [ ]  Exportación de los horarios por:
     - [ ]  Imagenes (Separadas)
     - [ ]  Hoja de excel (Juntas)

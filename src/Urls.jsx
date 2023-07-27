@@ -27,7 +27,11 @@ export const Urls = createBrowserRouter([
         element: <Datos />
     },
     {
-        path: "*",
+        path: "/OrganizaTuHorario",
         element: <App />,
+    },
+    {
+        path: "/OrganizaTuHorario/ToDo",
+        element: <ToDo />,
     }
 ]);

@@ -1,4 +1,5 @@
 import {Form} from "react-bootstrap";
+import {estaCruzandoElInicioConElFinal} from "../../../../Utils/TimeUtils.js";
 
 export default function HorariosPorDia({array, numPageMaterias, numPageDescripciones, update}){
 
@@ -14,10 +15,72 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
     return array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].inicio;
   }
 
+  const obtenerHoraMaxInicio = () => {
+    const [hora, minuto] = obtenerHoraInicio().split(":").map(Number);
+    const minutoRemovido = (minuto === 0) ? 59 : minuto - 1;
+    const horaAjustada = (minuto === 0) ? hora - 1 : hora;
+    return `${horaAjustada.toString().padStart(2, "0")}:${minutoRemovido.toString().padStart(2, "0")}`;
+  }
+
   const obtenerHoraFin = () => {
     if(typeof array[numPageMaterias - 1] === "undefined") return "";
     if(typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined") return "";
     return array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].fin;
+  }
+
+  const obtenerHoraMaxFin = () => {
+    const [hora, minuto] = obtenerHoraFin().split(":").map(Number);
+    const minutoRemovido = (minuto === 0) ? 59 : minuto - 1;
+    const horaAjustada = (minuto === 0) ? hora - 1 : hora;
+    return `${horaAjustada.toString().padStart(2, "0")}:${minutoRemovido.toString().padStart(2, "0")}`;
+  }
+
+  const isNotUndefined = () => {
+    return typeof array[numPageMaterias - 1] !== "undefined" && typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] !== "undefined"
+  }
+
+  const isValidDay = () => {
+    // Curiosamente debe retornar false para que sea valido...
+    return isNotUndefined() &&
+      array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].dia === '';
+  }
+
+  const isNotEmptyStartHour = () => {
+    return isNotUndefined() &&
+      array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].inicio === '';
+  }
+
+  const isNotEmptyEndHour = () => {
+    return isNotUndefined() &&
+      array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].fin === '';
+  }
+
+  const SiNoEsMayorLaHoraDeInicioQueLaDeFin = () => {
+    if(!isNotEmptyStartHour() && !isNotEmptyEndHour())
+      return (estaCruzandoElInicioConElFinal(obtenerHoraInicio(), obtenerHoraFin()));
+    return false;
+    // Para que sea valido debe retornar false
+  }
+
+  const needsToModifyStartHour = () => {
+   /* return isNotValidStartHour(obtenerHoraInicio(), obtenerHoraFin());*/
+    return isNotEmptyStartHour() || SiNoEsMayorLaHoraDeInicioQueLaDeFin() || (obtenerHoraInicio() === obtenerHoraFin());
+  }
+
+  const invalidMessageStartHour = () => {
+    if(isNotEmptyStartHour()){
+      return "Debe ingresar una hora de inicio";
+    }
+    else if(SiNoEsMayorLaHoraDeInicioQueLaDeFin()){
+      return "La hora no puede ser mayor a la hora final";
+    }
+    else if(obtenerHoraInicio() === obtenerHoraFin())
+    {
+      return "La hora de inicio no puede ser igual a la de fin";
+    }
+    else{
+      return "Error desconocido";
+    }
   }
 
   return(
@@ -40,11 +103,7 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
         className='d-flex flex-column'
       >
         <Form
-          validated={
-            typeof array[numPageMaterias - 1] !== "undefined" &&
-            typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] !== "undefined" &&
-            array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].dia === ''
-          }
+          validated={isValidDay()}
         >
           <Form.Group
             className='p-1 mx-auto'
@@ -74,8 +133,6 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
               <option value='6' label={'Sábado'} />
               <option value='7' label={'Domingo'} />
             </Form.Control>
-            <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
-
             <Form.Control.Feedback type="invalid">
               Selecciona un día de la semana
             </Form.Control.Feedback>
@@ -90,13 +147,7 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
           className='d-flex mx-auto'
         >
           <Form
-            validated={
-              /* Salta el mensaje de error si esto es verdadero*/
-              typeof array[numPageMaterias - 1] !== "undefined" &&
-              typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] !== "undefined" &&
-              array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].inicio === ''
-              /* TODO: Checkear que la hora de inicio NO sea mayor a la de Fin */
-            }
+            validated={ needsToModifyStartHour() }
           >
             <Form.Group
               className='p-2'
@@ -114,39 +165,41 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
                   update(numPageMaterias - 1, materia);
                 }
                 }
-                max={obtenerHoraInicio()}
+                max={obtenerHoraMaxInicio()}
               />
               <Form.Control.Feedback type="invalid">
                 {
-                  typeof array[numPageMaterias - 1] !== "undefined" &&
-                  typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] !== "undefined" &&
-                  array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].inicio === ''
-                    ?
-                    "Selecciona una hora de inicio"
-                    :
-                    "La hora de inicio debe ser menor a la hora de fin"
+                  invalidMessageStartHour()
                 }
               </Form.Control.Feedback>
             </Form.Group>
           </Form>
-          <Form.Group
-            className='p-2'
+          <Form
+            validated={isNotEmptyEndHour()}
           >
-            <Form.Label>
-              Hora Fin
-            </Form.Label>
-            <Form.Control
-              type='time'
-              value={obtenerHoraFin()}
-              onChange={(e) => {
-                const materia = array[numPageMaterias - 1];
-                materia.descripciones_por_dia[numPageDescripciones - 1].fin = e.target.value;
-                update(numPageMaterias - 1, materia);
-              }
-              }
-              min={obtenerHoraInicio()}
-            />
-          </Form.Group>
+            <Form.Group
+              className='p-2'
+            >
+              <Form.Label>
+                Hora Fin
+              </Form.Label>
+              <Form.Control
+                required
+                type='time'
+                value={obtenerHoraFin()}
+                onChange={(e) => {
+                  const materia = array[numPageMaterias - 1];
+                  materia.descripciones_por_dia[numPageDescripciones - 1].fin = e.target.value;
+                  update(numPageMaterias - 1, materia);
+                }
+                }
+                min={obtenerHoraMaxFin()}
+              />
+              <Form.Control.Feedback type="invalid">
+                Ingresa una hora de fin
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Form>
         </section>
       </div>
 

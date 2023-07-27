@@ -26,6 +26,7 @@ export default function NavBarCRUDMateria({array, push, numPageMaterias, remove,
   }
 
   const deleteCurrentMateria = () => {
+    if(numPageMaterias === 0) return;
     console.log(`Eliminando materia ${numPageMaterias}...`)
     remove(numPageMaterias - 1);
 
