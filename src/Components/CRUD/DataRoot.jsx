@@ -2,7 +2,7 @@ import useToggle from "../CustomHooks/useToggle.js";
 import {ListGroups} from "./Groups/MostrarGrupos.jsx";
 import {theme} from "../../Utils/GlobalVars.js";
 import {GroupsNavBar} from "./Groups/NavBar.jsx";
-import Horarios from "../Horarios.jsx";
+import Horarios from "../Schedule/Horarios.jsx";
 
 export default function DataRoot({data}){
   const [, toggleUpdate] = useToggle(false);
