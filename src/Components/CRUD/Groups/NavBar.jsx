@@ -2,6 +2,7 @@ import {Container, Form, Navbar} from "react-bootstrap";
 import {memo} from "react";
 import {CrearGrupoModal} from "./CrearGrupoModal.jsx";
 import {DeleteAllGroups} from "./EliminarTodosLosGrupos.jsx";
+import {ExportarGrupos} from "./ExportarGrupos.jsx";
 
 function navBar({currentTheme, toggleUpdate}){
   return(
@@ -29,6 +30,7 @@ function navBar({currentTheme, toggleUpdate}){
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
 
+            <ExportarGrupos />
             <CrearGrupoModal theme={currentTheme} toggleUpdate={toggleUpdate} />
             <DeleteAllGroups theme={currentTheme} toggleUpdate={toggleUpdate} />
 

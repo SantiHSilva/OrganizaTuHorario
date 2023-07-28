@@ -4,6 +4,7 @@ import DynamicPage from "./Utils/OldComponents/DynamicPage.jsx";
 import TestPage from "./Utils/OldComponents/TestingTimestamps.jsx";
 import Datos from "./Utils/OldComponents/Datos.jsx";
 import App from "./App.jsx";
+import ImportGroupList from "./Components/Import/ImportGroupList.jsx";
 
 export const Urls = createHashRouter([
     {
@@ -13,6 +14,10 @@ export const Urls = createHashRouter([
     {
         path: "/todo",
         element: <ToDo />,
+    },
+    {
+        path: "/import",
+        element: <ImportGroupList />,
     },
     {
         path: "/:id/:name",
@@ -26,12 +31,4 @@ export const Urls = createHashRouter([
         path: "/datos",
         element: <Datos />
     },
-    {
-        path: "/OrganizaTuHorario",
-        element: <App />,
-    },
-    {
-        path: "/OrganizaTuHorario/ToDo",
-        element: <ToDo />,
-    }
 ]);

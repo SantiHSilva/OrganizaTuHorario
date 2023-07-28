@@ -29,6 +29,12 @@ function getNextIdForANewGroup(){
   return globalGroupList.length === 0 ? 1 : Math.max(...globalGroupList.map((element) => element.key)) + 1;
 }
 
+function replaceGroupList(newGroupList = []){
+  globalGroupList.splice(0, globalGroupList.length);
+  globalGroupList = newGroupList;
+  addSessionStorageGroup(globalGroupList);
+}
+
 // Modify Default Values
 
 function modifyGroupName(idGroupName = 0, newName = ""){
@@ -81,5 +87,6 @@ export {
   modifyColorName,
   globalDeleteGroups,
   modifyMaterias,
+  replaceGroupList,
   globalGroupList
 };

@@ -16,7 +16,7 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
     - [ ]  Imagenes (Separadas)
     - [ ]  Hoja de excel (Juntas)
     - [ ]  PDF (Sepadas o Juntas)
-    - [ ]  Enlace
+    - [X]  Enlace
 
 ## Usarlo localmente
 
