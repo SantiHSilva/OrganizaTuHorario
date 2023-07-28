@@ -4,6 +4,7 @@ import {memo, useEffect, useState} from "react";
 import {FaEdit, FaTrashAlt} from "react-icons/fa";
 import {adaptColorByHexColor} from "../../../Utils/Utils.js";
 import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
+import {toast} from "react-toastify";
 
 function MostrarGrupos({toggleUpdate, data, theme}){
 
@@ -33,12 +34,17 @@ function MostrarGrupos({toggleUpdate, data, theme}){
       confirmButtonText: "Sí, eliminar",
     }).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          "Operación exitosa",
-          `El grupo ${nameGroup} ha sido eliminado.`,
-          "success");
         deleteSpecifiedGroup(idGroupToErase);
         toggleUpdate();
+        toast.info(`El grupo ${nameGroup} ha sido eliminado.`,
+          {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            pauseOnHover: false,
+            closeOnClick: true, draggable: true,
+            theme: theme
+          })
       }
     });
   }
@@ -59,7 +65,7 @@ function MostrarGrupos({toggleUpdate, data, theme}){
               <span
                 className='d-inline-block m-2 text-truncate align-center mx-auto'
                 style={{
-                  maxWidth: '25ch', // 20 caracteres por línea
+                  maxWidth: '21ch', // 20 caracteres por línea
                   color: adaptColorByHexColor(group.color),
                 }}
               >
@@ -75,11 +81,10 @@ function MostrarGrupos({toggleUpdate, data, theme}){
             >
               <FaEdit
                 size={25}
-                className='editarGrupo'
+                className='editarGrupo OTHGroupBtn'
                 style={{
                   transition: 'all 0.2s ease-in-out',
                   cursor: 'pointer',
-                  fill: theme === 'dark' ? '#212121' : '#FEFBF3',
                 }}
                 onClick={() => {
                   openDashboard(group.key)
@@ -87,11 +92,10 @@ function MostrarGrupos({toggleUpdate, data, theme}){
               />
               <FaTrashAlt
                 size={25}
-                className='borrarGrupo'
+                className='borrarGrupo OTHGroupBtn'
                 style={{
                   cursor: 'pointer',
                   transition: 'all 0.2s ease-in-out',
-                  fill: theme === 'dark' ? '#212121' : '#FEFBF3',
                 }}
                 onClick={() => {
                   eliminarGrupo(group.key, group.name)
@@ -105,11 +109,10 @@ function MostrarGrupos({toggleUpdate, data, theme}){
     <aside>
       &nbsp;
       {groupCarts}
-      <SubgroupDashboard idGroup={key} openModal={showModal} onHide={() => {
+      <SubgroupDashboard idGroup={key} openModal={showModal} theme={theme} onHide={() => {
         setShowModal(false)
         setKey(-1)
-      }
-      } />
+      }} />
     </aside>
   )
 }

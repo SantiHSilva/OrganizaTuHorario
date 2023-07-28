@@ -35,7 +35,7 @@ function NavBar({currentTheme, updateTheme}){
                 data-tooltip-id = 'themeButton'
               >
                 <AiOutlineGithub
-                  className='github-icon-link'
+                  className='OTHNavBarIcon'
                   size={30}
                 />
               </button>

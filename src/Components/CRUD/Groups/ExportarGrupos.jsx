@@ -8,10 +8,10 @@ import Button from "react-bootstrap/Button";
 import {IoIosCopy} from "react-icons/io";
 import confetti from 'canvas-confetti'
 import JSONCrush from "jsoncrush";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {compressToEncodedURIComponent} from "lz-string";
 
-export const ExportarGrupos = () => {
+export const ExportarGrupos = ({theme}) => {
 
   const [openModal, setOpenModal] = useState(false);
   const [copyLink, setCopyLink] = useState("");
@@ -20,7 +20,7 @@ export const ExportarGrupos = () => {
     if(!openModal) return;
     setCopyLink(generateLink());
     console.log("Nuevo link: " + copyLink);
-  }, [openModal]);
+  }, [openModal, copyLink]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(copyLink).then(() => {
@@ -34,6 +34,7 @@ export const ExportarGrupos = () => {
           closeOnClick: true,
           draggable: true,
           progress: undefined,
+          theme: theme
         });
       confetti()
     });
@@ -47,8 +48,6 @@ export const ExportarGrupos = () => {
 
   return (
     <>
-
-      <ToastContainer />
 
       <Modal
         show={openModal}
@@ -71,7 +70,7 @@ export const ExportarGrupos = () => {
                     onClick={()=>copyToClipboard()}
             >
               <IoIosCopy size={20} className='mx-auto text-center'/>
-              <span className='mx-auto text-center p-2'>Copiar</span>
+              <span className='mx-auto text-center text-body p-2'>Copiar</span>
             </Button>
             <Form.Control
               readOnly
@@ -93,11 +92,12 @@ export const ExportarGrupos = () => {
 
       </Modal>
 
+
       <BiExport
         data-tooltip-id='copiarTodosLosGruposBtn'
         onClick={()=>setOpenModal(true)}
         size={30}
-        className='copiarTodosLosGruposBtn'
+        className='OTHBtn'
       />
 
       <Tooltip

@@ -64,7 +64,7 @@ function TestingModal({toggleUpdate, theme}){
         `Se ha creado el grupo "${name}"`,
         {
         icon: '💾',
-        position: "top-center",
+        position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -91,7 +91,7 @@ function TestingModal({toggleUpdate, theme}){
       <BiBookAdd
         data-tooltip-id='crearGrupoBtn'
         onClick={handleShow}
-        className='crearGrupoBtn'
+        className='OTHBtn'
         size={25}
       />
 

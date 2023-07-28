@@ -10,7 +10,7 @@ function ComponentThemeButton({currentTheme, updateTheme}){
   const [theme, setTheme] = useState(currentTheme);
 
   const props = {
-    className: 'icon-link iconChangeTheme',
+    className: 'icon-link OTHNavBarIcon',
     size: 30,
     style: {
     }

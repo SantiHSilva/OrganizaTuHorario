@@ -2,21 +2,18 @@ import Button from "react-bootstrap/Button";
 import {getValueById} from "../../../Utils/Utils.js";
 import {modifyColorName, modifyGroupName, modifyMaterias} from "../../Data/groupManager.js";
 import {isInvalidStartHour} from "../../../Utils/TimeUtils.js";
+import {toast} from "react-toastify";
 
-export default function FooterSubgroupDashboard({onHide, array, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal}) {
+export default function FooterSubgroupDashboard({handleClose, array, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal, theme}) {
 
   function submitChanges(){
     console.log("Guardando cambios...")
-    const name = getValueById("groupName");
-    const hexColor = getValueById("groupColor");
-    if(name !== groupListed.name) modifyGroupName(idGroup, name);
-    if(hexColor !== groupListed.color) modifyColorName(idGroup, hexColor);
+
+    let guardar = false;
+    let hayProblemas = false;
 
     if(array !== groupListed.materias) {
       console.log("Verificando datos de las materias...")
-
-      let guardar = false;
-      let hayProblemas = false;
 
       array.map((informacion, numMateria) => {
         console.log("Materia: " + numMateria)
@@ -80,17 +77,34 @@ export default function FooterSubgroupDashboard({onHide, array, idGroup, groupLi
         console.log("No se guardaron los cambios...")
         return;
       }
-
     }
-    onHide();
+
+    const name = getValueById("groupName");
+    const hexColor = getValueById("groupColor");
+    if(name !== groupListed.name) modifyGroupName(idGroup, name);
+    if(hexColor !== groupListed.color) modifyColorName(idGroup, hexColor);
+
+    handleClose();
     setNumPageDescripciones(1);
     setNumPageMaterias(0);
+
+    toast.info("Se guardaron los cambios correctamente",
+      {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: theme
+      })
   }
 
   return(
     <>
       <Button variant="danger"
-              onClick={onHide}
+              onClick={handleClose}
       >
         ❌ Cancelar cambios
       </Button>

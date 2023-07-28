@@ -29,20 +29,8 @@ aside{
     background: #555;
 }
 
-
-
-
-
-.github-icon-link:hover{
+.OTHNavBarIcon:hover{
     fill: #FFD700;
-}
-
-.iconChangeTheme:hover{
-    fill: #FFD700;
-}
-
-.borrarGrupo:hover{
-    fill: #ff1e1e;
 }
 
 .noClickBorder,
@@ -50,25 +38,46 @@ aside{
     border: none;
 }
 
-[data-bs-theme='dark'] .crearGrupoBtn{
+[data-bs-theme='dark'] .OTHBtn{
     background-color: #27374D;
     fill: white;
 }
 
-[data-bs-theme='dark'] .borrarTodosLosGruposBtn{
-    background-color: #27374D;
-    fill: white;
-}
-
-.borrarTodosLosGruposBtn:hover,
-.crearGrupoBtn:hover{
+.OTHBtn:hover{
     fill: #F1C376;
 }
 
-.borrarTodosLosGruposBtn,
-.crearGrupoBtn{
+.OTHBtn{
     background-color: #FEFBF3;
     border: none;
     cursor: pointer;
     fill: black;
+}
+
+[data-bs-theme='dark'] .OTHGroupBtn{
+    fill: #212121;
+}
+
+/* Mostrar Grupos Botónes */
+
+.OTHGroupBtn{
+    fill: #FEFBF3;
+}
+
+.OTHGroupBtn:hover{
+    fill: #F1C376;
+}
+
+/* SubgroupDashBoard */
+
+[data-bs-theme='dark'] .OTHSubGroupBtn:hover{
+    fill: #EFE1D1;
+}
+
+.OTHSubGroupBtn:hover{
+    fill: #F99417;
+}
+
+.OTHSubGroupBtn{
+    cursor: pointer;
 }

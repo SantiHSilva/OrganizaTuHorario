@@ -1,6 +1,6 @@
 import {HiFolderAdd} from "react-icons/hi";
 import {Pagination} from "react-bootstrap";
-import {TbTrashXFilled} from "react-icons/tb";
+import {AiFillDelete} from "react-icons/ai";
 
 export default function NavBarCRUDMateria({array, push, numPageMaterias, remove, setNumPageDescripciones, setNumPageMaterias}){
   const createNewMateria = () => {
@@ -55,6 +55,7 @@ export default function NavBarCRUDMateria({array, push, numPageMaterias, remove,
   return(
     <div className='d-flex border rounded p-1'>
       <HiFolderAdd
+        className='OTHSubGroupBtn'
         size={30}
         onClick={createNewMateria}
       />
@@ -74,7 +75,8 @@ export default function NavBarCRUDMateria({array, push, numPageMaterias, remove,
         />
       </Pagination>
 
-      <TbTrashXFilled
+      <AiFillDelete
+        className='OTHSubGroupBtn'
         size={30}
         onClick={deleteCurrentMateria}
       />

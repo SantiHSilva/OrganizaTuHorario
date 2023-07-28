@@ -1,7 +1,6 @@
-import {HiFolderAdd} from "react-icons/hi";
 import {Pagination} from "react-bootstrap";
-import {TbTrashXFilled} from "react-icons/tb";
-import Separator from "../../../Utils/Separator.jsx";
+import {MdAutoDelete} from "react-icons/md";
+import {AiOutlineFileAdd} from "react-icons/ai";
 
 export default function NavBarCreateDescripcionesPorDia({numPageDescripciones, array, numPageMaterias, update, setNumPageDescripciones}){
 
@@ -71,13 +70,14 @@ export default function NavBarCreateDescripcionesPorDia({numPageDescripciones, a
         Descripciones por día
       </span>
 
-      <Separator />
+      <hr style={{margin: 5}}/>
 
       <section
         className='d-flex'
       >
-        <HiFolderAdd
+        <AiOutlineFileAdd
           size={30}
+          className='OTHSubGroupBtn'
           onClick={createOptionMateria}
         />
           <Pagination
@@ -99,8 +99,9 @@ export default function NavBarCreateDescripcionesPorDia({numPageDescripciones, a
 
           </Pagination>
 
-        <TbTrashXFilled
+        <MdAutoDelete
           size={30}
+          className='OTHSubGroupBtn'
           onClick={deleteOptionMateria}
         />
       </section>

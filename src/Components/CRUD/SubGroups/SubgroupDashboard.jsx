@@ -7,7 +7,7 @@ import BodySubgroupDashboard from "./BodySubgroupDashboard.jsx";
 import HeaderSubgroupDashboard from "./HeaderSubgroupDashboard.jsx";
 import FooterSubgroupDashboard from "./FooterSubgroupDashboard.jsx";
 
-export function SubgroupDashboard({idGroup, openModal, onHide}) {
+export function SubgroupDashboard({idGroup, openModal, onHide, theme}) {
 
 	const [numPageMaterias, setNumPageMaterias] = useState(0);
 	const [numPageDescripciones, setNumPageDescripciones] = useState(1);
@@ -73,18 +73,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 		detectChanges();
 	}
 
-/*	function submitChanges(){
-		const name = getValueById("groupName");
-		const color = getValueById("groupColor");
-		if(name !== groupListed.name) modifyGroupName(idGroup, name);
-		if(color !== groupListed.color) modifyColorName(idGroup, color);
-		if(array !== groupListed.materias) {
-			console.log("Verificando datos de las materias...")
-			return;
-		}
-		onHide();
-	}*/
-
 	const handleClose = () => {
 		setNumPageMaterias(0);
 		setNumPageDescripciones(1);
@@ -130,7 +118,8 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 					array={array}
 					idGroup={idGroup}
 					groupListed={groupListed}
-					onHide={onHide}
+					theme={theme}
+					handleClose={handleClose}
 					updateGlobal={setToggleUpdate}
 				/>
 			</Modal.Footer>

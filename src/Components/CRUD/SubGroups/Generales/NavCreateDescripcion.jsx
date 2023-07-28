@@ -19,6 +19,7 @@ export default function NavCreateDescripcion({array, numPageMaterias, update}) {
           Descripciones generales
         </span>
       <BiBookAdd
+        className='OTHSubGroupBtn'
         size={30}
         onClick={() => createDescripcionGeneral(array, numPageMaterias, update)}
       />

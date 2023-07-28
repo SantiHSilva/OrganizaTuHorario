@@ -1,5 +1,6 @@
 import {Form, InputGroup} from "react-bootstrap";
 import {FaTrash} from "react-icons/fa";
+import {FaDeleteLeft} from "react-icons/fa6";
 
 export default function MostrarDescripciones({array, numPageMaterias, update}) {
 
@@ -49,9 +50,10 @@ export default function MostrarDescripciones({array, numPageMaterias, update}) {
                 />
 
                 <InputGroup.Text aria-label='Eliminar descripción de la lista'>
-                  <FaTrash
+                  <FaDeleteLeft
                     size={20}
                     onClick={() => eliminarDescripcion(index)}
+                    className='OTHSubGroupBtn'
                   />
                 </InputGroup.Text>
               </InputGroup>

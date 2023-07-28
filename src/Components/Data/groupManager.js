@@ -15,6 +15,10 @@ function globalDeleteGroups(){
   addSessionStorageGroup(globalGroupList);
 }
 
+function existGroups(){
+  return globalGroupList.length !== 0;
+}
+
 function deleteSpecifiedGroup(idGroup = 0){
   const index = globalGroupList.findIndex((element) => element.key === idGroup);
   globalGroupList.splice(index, 1);
@@ -88,5 +92,6 @@ export {
   globalDeleteGroups,
   modifyMaterias,
   replaceGroupList,
+  existGroups,
   globalGroupList
 };

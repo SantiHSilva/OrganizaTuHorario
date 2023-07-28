@@ -1,12 +1,27 @@
 import {memo} from "react";
 import {TiFolderDelete} from "react-icons/ti";
 import Swal from "sweetalert2";
-import {globalDeleteGroups} from "../../Data/groupManager.js";
+import {existGroups, globalDeleteGroups} from "../../Data/groupManager.js";
 import {Tooltip} from "react-tooltip";
+import {toast} from "react-toastify";
 
 function deleteAllGroups({theme, toggleUpdate}){
 
   const handleShow = () => {
+
+    if(!existGroups()) {
+      toast.error("No hay grupos para borrar.",
+        {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          pauseOnHover: false,
+          closeOnClick: true,
+          draggable: true,
+          theme: theme
+        });
+      return;
+    }
 
     Swal.fire(
       {
@@ -21,10 +36,17 @@ function deleteAllGroups({theme, toggleUpdate}){
       }
     ).then((result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          "Operación exitosa",
-          "Todos los grupos han sido eliminados.",
-          "success");
+        toast.info("Todos los grupos han sido eliminados.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            pauseOnHover: false,
+            closeOnClick: true,
+            draggable: true,
+            theme: theme
+          }
+          )
         globalDeleteGroups();
         toggleUpdate();
       }});
@@ -37,7 +59,7 @@ function deleteAllGroups({theme, toggleUpdate}){
         data-tooltip-id='borrarTodosLosGruposBtn'
         onClick={handleShow}
         size={30}
-        className='borrarTodosLosGruposBtn'
+        className='OTHBtn'
       />
 
       <Tooltip

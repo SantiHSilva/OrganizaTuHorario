@@ -1,6 +1,7 @@
 import {BiBookAdd} from "react-icons/bi";
 import {Form, InputGroup} from "react-bootstrap";
 import {FaTrash} from "react-icons/fa";
+import {FaDeleteLeft} from "react-icons/fa6";
 
 export default function AjustacionesPorDia({array, numPageMaterias, numPageDescripciones, update}){
   return(
@@ -14,6 +15,7 @@ export default function AjustacionesPorDia({array, numPageMaterias, numPageDescr
                             Ajustes
                           </span>
         <BiBookAdd
+          className='OTHSubGroupBtn'
           size={30}
           onClick={() => {
             if(typeof array[numPageMaterias - 1] === "undefined") return; // No materia selected
@@ -65,7 +67,8 @@ export default function AjustacionesPorDia({array, numPageMaterias, numPageDescr
                   <InputGroup.Text
                     aria-label='Eliminar descripción de la lista'
                   >
-                    <FaTrash
+                    <FaDeleteLeft
+                      className='OTHSubGroupBtn'
                       size={20}
                       onClick={() => {
                         console.log(`Eliminando descripción general ${index}...`)
