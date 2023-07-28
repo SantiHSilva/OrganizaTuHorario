@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import {getGroupById, modifyColorName, modifyGroupName} from "../../Data/groupManager.js";
+import {getGroupById} from "../../Data/groupManager.js";
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import {useEffect, useState} from "react";
 import useArray from "../../CustomHooks/useArray.js";
@@ -45,6 +45,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 
 	const groupListed = getGroupById(idGroup);
 	let hexColor = groupListed.color;
+
 	const changeHexColor = (color) => {
 		hexColor = color;
 	}
@@ -127,7 +128,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide}) {
 					setNumPageMaterias={setNumPageMaterias}
 					setNumPageDescripciones={setNumPageDescripciones}
 					array={array}
-					hexColor={hexColor}
 					idGroup={idGroup}
 					groupListed={groupListed}
 					onHide={onHide}

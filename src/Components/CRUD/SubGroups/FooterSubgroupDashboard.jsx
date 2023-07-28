@@ -3,11 +3,12 @@ import {getValueById} from "../../../Utils/Utils.js";
 import {modifyColorName, modifyGroupName, modifyMaterias} from "../../Data/groupManager.js";
 import {isInvalidStartHour} from "../../../Utils/TimeUtils.js";
 
-export default function FooterSubgroupDashboard({onHide, array, hexColor, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal}) {
+export default function FooterSubgroupDashboard({onHide, array, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal}) {
 
   function submitChanges(){
     console.log("Guardando cambios...")
     const name = getValueById("groupName");
+    const hexColor = getValueById("groupColor");
     if(name !== groupListed.name) modifyGroupName(idGroup, name);
     if(hexColor !== groupListed.color) modifyColorName(idGroup, hexColor);
 
@@ -15,6 +16,7 @@ export default function FooterSubgroupDashboard({onHide, array, hexColor, idGrou
       console.log("Verificando datos de las materias...")
 
       let guardar = false;
+      let hayProblemas = false;
 
       array.map((informacion, numMateria) => {
         console.log("Materia: " + numMateria)
@@ -41,8 +43,6 @@ export default function FooterSubgroupDashboard({onHide, array, hexColor, idGrou
           })
         })
 
-        let hayProblemas = false;
-
         // Detectar si el día no esta seleccionado y marcarlo...
 
         informacion.descripciones_por_dia.map((descripcion, index) => {
@@ -65,13 +65,19 @@ export default function FooterSubgroupDashboard({onHide, array, hexColor, idGrou
           }
         })
 
-        if(!hayProblemas) guardar = true;
+        console.log(`Hay problemas: ${hayProblemas}`)
+        console.log(`Guardar: ${guardar}`)
+
+        if(!hayProblemas) // Si NO hay problemas, guardar...
+          guardar = true;
 
       })
 
       if(guardar){
+        console.log("Guardando materias...")
         modifyMaterias(idGroup, array);
       } else {
+        console.log("No se guardaron los cambios...")
         return;
       }
 

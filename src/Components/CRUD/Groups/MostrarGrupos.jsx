@@ -51,13 +51,13 @@ function MostrarGrupos({toggleUpdate, data, theme}){
              backgroundColor: theme === 'dark' ? '#3F4E4F' : '#F2EAD3',
            }}
       >
-            <div className='flex-fill text-center rounded'
+            <div className='flex-fill text-center rounded d-flex'
                  style={{
                    backgroundColor: group.color,
                  }}
             >
               <span
-                className='d-inline-block m-2 text-truncate align-center'
+                className='d-inline-block m-2 text-truncate align-center mx-auto'
                 style={{
                   maxWidth: '25ch', // 20 caracteres por línea
                   color: adaptColorByHexColor(group.color),
@@ -98,14 +98,6 @@ function MostrarGrupos({toggleUpdate, data, theme}){
                 }}
               />
           </div>
-{/*          <h5 className="card-title text-center">
-          </h5>
-          <p className="card-text">
-          </p>
-          <div className='d-block mb-2 align-items-left'>
-            <EditGroupModal idGroup={group.key} onHide={() => toggleUpdate()} />
-            <SubgroupDashboard idGroup={group.key} />
-          </div>*/}
       </div>
   ));
 
@@ -113,7 +105,11 @@ function MostrarGrupos({toggleUpdate, data, theme}){
     <aside>
       &nbsp;
       {groupCarts}
-      <SubgroupDashboard idGroup={key} openModal={showModal} onHide={() => setShowModal(false)} />
+      <SubgroupDashboard idGroup={key} openModal={showModal} onHide={() => {
+        setShowModal(false)
+        setKey(-1)
+      }
+      } />
     </aside>
   )
 }
