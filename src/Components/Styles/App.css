@@ -81,3 +81,23 @@ aside{
 .OTHSubGroupBtn{
     cursor: pointer;
 }
+
+/* 24h button toggle */
+
+/* White Theme */
+
+.OTH24HrsActive{
+    fill: #59CE8F;
+}
+
+.OTH24HrsActive:hover{
+    fill: #FFB562;
+}
+
+.OTH24HrsDisable{
+    fill: #C21010;
+}
+
+.OTH24HrsDisable:hover{
+    fill: #FFB562;
+}

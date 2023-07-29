@@ -7,8 +7,7 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 - [x]  Alternar entre temas oscuros y claros
 - [x]  Añadir colores a los grupos
 - [X]  Añadir anotaciones a las materias
-- [ ]  Añadir Grupos de Horarios (Que uno solo sea visible ante la tabla)
-- [ ]  Soporte de horas por 24h-12h
+- [X]  Soporte de horas por 24h-12h
 - [ ]  Manual de usuario
 - [ ]  Selector de idiomas personalizables
 - [ ]  Exportación de los horarios por:

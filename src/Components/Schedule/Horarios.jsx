@@ -7,6 +7,7 @@ export default function Horarios({data, update, theme}){
 
   const [combinaciones, setCombinaciones] = useState([]);
   const [pagina, setPagina] = useState(0);
+  const [mostrarPorHorario24Horas, setMostrarPorHorario24Horas] = useState(false);
   
   useEffect(() => {
     console.clear()
@@ -23,12 +24,11 @@ export default function Horarios({data, update, theme}){
     console.log("Cambiando pagina...")
   }, [pagina]);
 
-
   return(
     <>
-      <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} />
+      <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} setMostrarPorHorario24Horas={setMostrarPorHorario24Horas} mostrarPorHorario24Horas={mostrarPorHorario24Horas}/>
       <div className='p-1'/>
-     <TablaDeHorarios combinaciones={combinaciones} numDeCombinacion={pagina} />
+      <TablaDeHorarios combinaciones={combinaciones} numDeCombinacion={pagina} mostrarPorHorario24Horas={mostrarPorHorario24Horas} />
     </>
   )
 

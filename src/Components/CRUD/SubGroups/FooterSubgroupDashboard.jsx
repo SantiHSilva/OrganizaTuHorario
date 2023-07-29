@@ -89,6 +89,17 @@ export default function FooterSubgroupDashboard({handleClose, globalUpdate, arra
         console.log("Guardando materias...")
         modifyMaterias(idGroup, array);
       } else {
+        toast.info("No se puede guardar porque hay problemas con las materias",
+          {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+            progress: undefined,
+            theme: theme
+          })
         console.log("No se guardaron los cambios...")
         return;
       }

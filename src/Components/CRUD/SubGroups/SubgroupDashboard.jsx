@@ -24,6 +24,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide, theme, globalUpda
 
 	useEffect(() => {
 		if(!openModal || idGroup === -1) return;
+		document.getElementById("modifyButtonSave").setAttribute('disabled', 'true');
 		const groupFilter = getGroupById(idGroup);
 		set(groupFilter.materias);
 		if(groupFilter.materias.length > 0)
