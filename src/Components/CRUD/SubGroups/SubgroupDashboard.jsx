@@ -7,7 +7,7 @@ import BodySubgroupDashboard from "./BodySubgroupDashboard.jsx";
 import HeaderSubgroupDashboard from "./HeaderSubgroupDashboard.jsx";
 import FooterSubgroupDashboard from "./FooterSubgroupDashboard.jsx";
 
-export function SubgroupDashboard({idGroup, openModal, onHide, theme}) {
+export function SubgroupDashboard({idGroup, openModal, onHide, theme, globalUpdate}) {
 
 	const [numPageMaterias, setNumPageMaterias] = useState(0);
 	const [numPageDescripciones, setNumPageDescripciones] = useState(1);
@@ -121,6 +121,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide, theme}) {
 					theme={theme}
 					handleClose={handleClose}
 					updateGlobal={setToggleUpdate}
+					globalUpdate={globalUpdate}
 				/>
 			</Modal.Footer>
 

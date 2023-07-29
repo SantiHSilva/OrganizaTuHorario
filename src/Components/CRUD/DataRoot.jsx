@@ -5,7 +5,7 @@ import {GroupsNavBar} from "./NavBar.jsx";
 import Horarios from "../Schedule/Horarios.jsx";
 
 export default function DataRoot({data}){
-  const [, toggleUpdate] = useToggle(false);
+  const [update, toggleUpdate] = useToggle(false);
   console.log("Updating DataRoot...");
 
   return (
@@ -13,13 +13,13 @@ export default function DataRoot({data}){
       <div className="container rounded">
         <div className="row rounded">
           <div
-            className="col d-flex justify-content-center p-4"
+            className="col"
             style={{
               backgroundColor: theme === 'dark' ? '#262c2c' : '#e5e5e5',
               transition: 'all 0.2s ease-in-out',
               }}
           >
-            <Horarios />
+            <Horarios  update={update} data={data} theme={theme} />
           </div>
           <div className="col"
             style={{

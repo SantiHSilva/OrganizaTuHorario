@@ -4,7 +4,7 @@ import {modifyColorName, modifyGroupName, modifyMaterias} from "../../Data/group
 import {isInvalidStartHour} from "../../../Utils/TimeUtils.js";
 import {toast} from "react-toastify";
 
-export default function FooterSubgroupDashboard({handleClose, array, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal, theme}) {
+export default function FooterSubgroupDashboard({handleClose, globalUpdate, array, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal, theme}) {
 
   function submitChanges(){
     console.log("Guardando cambios...")
@@ -85,6 +85,7 @@ export default function FooterSubgroupDashboard({handleClose, array, idGroup, gr
     if(hexColor !== groupListed.color) modifyColorName(idGroup, hexColor);
 
     handleClose();
+    globalUpdate();
     setNumPageDescripciones(1);
     setNumPageMaterias(0);
 

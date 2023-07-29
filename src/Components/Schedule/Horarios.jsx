@@ -1,67 +1,31 @@
-import {
-  Paper,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Table,
-  TableHead,
-  TableBody,
-} from "@mui/material";
+import {useEffect, useState} from "react";
+import {createCombinationsNoOverlap} from "./FunctionsSchedule.js";
+import {TablaDeHorarios} from "./TablaDeHorarios.jsx";
+import {NavBarHorarios} from "./NavBarHorarios.jsx";
 
 // TODO: Revisar tabla por qué parece muy lenta...
 
-export default function Horarios(){
+export default function Horarios({data, update, theme}){
 
-  const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
-  const horas = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
-
-  const maxAltura = 500;
+  const [combinaciones, setCombinaciones] = useState(createCombinationsNoOverlap(data));
+  const [pagina, setPagina] = useState(0);
+  
+  useEffect(() => {
+    console.clear()
+    console.log("Loading Horarios")
+    console.log(data)
+    if(typeof(data) === 'undefined') return;
+    console.log("Creando combinaciones...")
+    setCombinaciones(createCombinationsNoOverlap(data));
+    console.log(combinaciones)
+  }, [data, update]);
 
   return(
-    <Paper sx={{ width: `100%`, overflow: 'hidden'}}>
-      <TableContainer sx={{ height: `${maxAltura}px`}}>
-
-        <Table stickyHeader align='center'>
-          <TableHead>
-            <TableRow>
-              <TableCell align='center'
-                         style={{
-                           //backgroundColor: 'green'
-                         }}
-              > # </TableCell>
-              {
-                dias.map((dia, index) => (
-                  <TableCell key={index} align="center"> {dia} </TableCell>
-                ))
-              }
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {
-              horas.map((hora, index) => (
-                <TableRow key={index}>
-                  <TableCell align="center"> {hora} </TableCell>
-                  {
-                    dias.map((dia, index) => (
-                      <TableCell
-                        key={index}
-                        align="center"
-                        style={{
-                          // backgroundColor: 'red'
-                        }}
-                      > A
-                      </TableCell>
-                    ))
-                  }
-                </TableRow>
-              ))
-            }
-          </TableBody>
-        </Table>
-
-
-      </TableContainer>
-    </Paper>
-
+    <>
+      <NavBarHorarios />
+      <div className='p-1'/>
+     <TablaDeHorarios />
+    </>
   )
+
 }

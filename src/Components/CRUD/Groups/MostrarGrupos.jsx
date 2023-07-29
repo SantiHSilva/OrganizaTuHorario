@@ -109,7 +109,7 @@ function MostrarGrupos({toggleUpdate, data, theme}){
     <aside>
       &nbsp;
       {groupCarts}
-      <SubgroupDashboard idGroup={key} openModal={showModal} theme={theme} onHide={() => {
+      <SubgroupDashboard idGroup={key} openModal={showModal} theme={theme} globalUpdate={toggleUpdate} onHide={() => {
         setShowModal(false)
         setKey(-1)
       }} />
