@@ -1,5 +1,5 @@
 import {Form} from "react-bootstrap";
-import {estaCruzandoElInicioConElFinal} from "../../../../Utils/TimeUtils.js";
+import {estaCruzandoElInicioConElFinal, estaCruzandoLosTiemposConOtrosTiempos} from "../../../../Utils/TimeUtils.js";
 
 export default function HorariosPorDia({array, numPageMaterias, numPageDescripciones, update}){
 
@@ -62,9 +62,22 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
     // Para que sea valido debe retornar false
   }
 
+  const existeConflictoDeTiempoEntreOtrasDescripcionesPorDia = () => {
+    if(typeof array[numPageMaterias - 1] === "undefined") return false;
+    if(typeof array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1] === "undefined") return false;
+    const dia = array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].dia;
+    const inicio = array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].inicio;
+    const fin = array[numPageMaterias - 1].descripciones_por_dia[numPageDescripciones - 1].fin;
+    const descripcionesPorDia = array[numPageMaterias - 1].descripciones_por_dia;
+    console.log("descripcionesPorDia: ", descripcionesPorDia);
+    return descripcionesPorDia.some((descripcionPorDia, index) => {
+      if(index === numPageDescripciones - 1) return false; // No se compara con si mismo, solo con los demas
+      return estaCruzandoLosTiemposConOtrosTiempos(dia, inicio, fin, descripcionPorDia.dia, descripcionPorDia.inicio, descripcionPorDia.fin)
+    });
+  }
+
   const needsToModifyStartHour = () => {
-   /* return isNotValidStartHour(obtenerHoraInicio(), obtenerHoraFin());*/
-    return isNotEmptyStartHour() || SiNoEsMayorLaHoraDeInicioQueLaDeFin() || (obtenerHoraInicio() === obtenerHoraFin());
+    return isNotEmptyStartHour() || SiNoEsMayorLaHoraDeInicioQueLaDeFin() || (obtenerHoraInicio() === obtenerHoraFin()) || existeConflictoDeTiempoEntreOtrasDescripcionesPorDia();
   }
 
   const invalidMessageStartHour = () => {
@@ -77,6 +90,9 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
     else if(obtenerHoraInicio() === obtenerHoraFin())
     {
       return "La hora de inicio no puede ser igual a la de fin";
+    }
+    else if(existeConflictoDeTiempoEntreOtrasDescripcionesPorDia()){
+      return "Existe conflicto de tiempo entre descripciones por día";
     }
     else{
       return "Error desconocido";

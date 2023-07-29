@@ -51,10 +51,10 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina}) => {
                 onClick={prevPageHorario}
                 disabled={pagina === 0}
               />
-              <Pagination.Item active>{pagina + 1}</Pagination.Item>
+              <Pagination.Item active>{combinaciones.length === 0 ? 0 : pagina + 1}</Pagination.Item>
               <Pagination.Next
                 onClick={nextPageHorario}
-                disabled={pagina === (combinaciones.length - 1)}
+                disabled={pagina === (combinaciones.length - 1) || combinaciones.length === 0}
               />
 
             </Pagination>

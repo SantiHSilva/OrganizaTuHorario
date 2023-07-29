@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import {getValueById} from "../../../Utils/Utils.js";
 import {modifyColorName, modifyGroupName, modifyMaterias} from "../../Data/groupManager.js";
-import {isInvalidStartHour} from "../../../Utils/TimeUtils.js";
+import {estaCruzandoLosTiemposConOtrosTiempos, isInvalidStartHour} from "../../../Utils/TimeUtils.js";
 import {toast} from "react-toastify";
 
 export default function FooterSubgroupDashboard({handleClose, globalUpdate, array, idGroup, groupListed, setNumPageMaterias, setNumPageDescripciones, updateGlobal, theme}) {
@@ -60,6 +60,21 @@ export default function FooterSubgroupDashboard({handleClose, globalUpdate, arra
             setNumPageDescripciones(index + 1);
             hayProblemas = true;
           }
+        })
+
+        // Detectar si hay cruces de tiempo entre descripciones por día y marcarlas pasandoles dia1, inicio1, fin1, dia2, inicio2, fin2...
+
+        informacion.descripciones_por_dia.map((descripcion, index) => {
+          informacion.descripciones_por_dia.map((descripcion2, index2) => {
+            if(index !== index2){
+              if(estaCruzandoLosTiemposConOtrosTiempos(descripcion.dia, descripcion.inicio, descripcion.fin, descripcion2.dia, descripcion2.inicio, descripcion2.fin)){
+                console.log(`La descripcion ${index + 1} de la materia ${index} tiene una cruze de tiempo con la descripcion ${index2 + 1} de la materia ${index2}, marcando...`)
+                setNumPageMaterias(numMateria + 1);
+                setNumPageDescripciones(index + 1);
+                hayProblemas = true;
+              }
+            }
+          })
         })
 
         console.log(`Hay problemas: ${hayProblemas}`)

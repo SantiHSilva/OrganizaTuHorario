@@ -10,9 +10,8 @@ function createCombinationsNoOverlap(newMaterias) {
           const mt2Inicio = parseInt(mt2.inicio.replace(":", ""), 10);
           const mt2Fin = parseInt(mt2.fin.replace(":", ""), 10);
 
-          if ((mt1Inicio <= mt2Inicio && mt2Inicio < mt1Fin) || (mt2Inicio <= mt1Inicio && mt1Inicio < mt2Fin)) {
+          if ((mt1Inicio <= mt2Inicio && mt2Inicio < mt1Fin) || (mt2Inicio <= mt1Inicio && mt1Inicio < mt2Fin))
             return true; // Horarios se cruzan
-          }
         }
       }
     }

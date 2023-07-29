@@ -3,11 +3,9 @@ import {createCombinationsNoOverlap} from "./FunctionsSchedule.js";
 import {TablaDeHorarios} from "./TablaDeHorarios.jsx";
 import {NavBarHorarios} from "./NavBarHorarios.jsx";
 
-// TODO: Revisar tabla por qué parece muy lenta...
-
 export default function Horarios({data, update, theme}){
 
-  const [combinaciones, setCombinaciones] = useState(createCombinationsNoOverlap(data));
+  const [combinaciones, setCombinaciones] = useState([]);
   const [pagina, setPagina] = useState(0);
   
   useEffect(() => {
@@ -17,6 +15,7 @@ export default function Horarios({data, update, theme}){
     if(typeof(data) === 'undefined') return;
     console.log("Creando combinaciones...")
     setCombinaciones(createCombinationsNoOverlap(data));
+    setPagina(0);
     console.log(combinaciones)
   }, [data, update]);
 
@@ -29,7 +28,7 @@ export default function Horarios({data, update, theme}){
     <>
       <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} />
       <div className='p-1'/>
-     <TablaDeHorarios />
+     <TablaDeHorarios combinaciones={combinaciones} numDeCombinacion={pagina} />
     </>
   )
 
