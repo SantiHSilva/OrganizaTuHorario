@@ -7,7 +7,7 @@ import {ExportarGrupos} from "./Groups/ExportarGrupos.jsx";
 function navBar({currentTheme, toggleUpdate}){
   return(
     <div>
-      <Navbar className=" shadow-sm"
+      <Navbar className="shadow-sm"
         style={{
           backgroundColor: currentTheme === 'dark' ? '#27374D' : '#FEFBF3',
           borderRadius : "0px 0px 10px 10px",

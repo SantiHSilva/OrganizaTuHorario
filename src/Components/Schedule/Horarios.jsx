@@ -20,9 +20,14 @@ export default function Horarios({data, update, theme}){
     console.log(combinaciones)
   }, [data, update]);
 
+  useEffect(() => {
+    console.log("Cambiando pagina...")
+  }, [pagina]);
+
+
   return(
     <>
-      <NavBarHorarios />
+      <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} />
       <div className='p-1'/>
      <TablaDeHorarios />
     </>
