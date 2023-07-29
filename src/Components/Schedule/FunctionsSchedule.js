@@ -44,4 +44,43 @@ function createCombinationsNoOverlap(newMaterias) {
   return combinations;
 }
 
-export { createCombinationsNoOverlap }
+function generateHours(singleCombination, mostrarPorHorario24Horas){
+  const hours = Array.from({length: 23}, (_, i) => (`${i+1}:00`.padStart(5, '0')));
+
+  Array.prototype.insert = function ( index, item ) {
+    this.splice( index, 0, item );
+  }
+
+  if(typeof(singleCombination) !== "undefined")
+    for (const materia of singleCombination) {
+      for (const horario of materia.descripciones_por_dia) {
+        const [horaInicio, minInicio] = horario.inicio.split(':')
+        const [horaFin, minFin] = horario.fin.split(':')
+        const indexHoraInicio = hours.indexOf(`${horaInicio}:00`)
+        hours.insert(indexHoraInicio+1, `${horaInicio}:${minInicio}`)
+        const indexHoraFin = hours.indexOf(`${horaFin}:00`)
+        hours.insert(indexHoraFin+1, `${horaFin}:${minFin}`)
+      }
+    }
+
+  if(mostrarPorHorario24Horas)
+    return hours
+  else
+    return hoursTo12HFormat(hours)
+
+}
+
+function formatNumber(number){
+  //return 0{number}
+  return number.toString().padStart(2, '0')
+}
+
+function hoursTo12HFormat(hours){
+  return hours.map(hour => {
+    const [h, m] = hour.split(':')
+    return `${h%12 === 0 ? 12 : formatNumber(h%12)}:${m} ${h < 12 ? 'AM' : 'PM'}`
+  })
+}
+
+
+export { createCombinationsNoOverlap, generateHours }
