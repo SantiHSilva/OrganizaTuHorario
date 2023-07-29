@@ -54,6 +54,9 @@ function generateHours(singleCombination, mostrarPorHorario24Horas){
   if(typeof(singleCombination) !== "undefined")
     for (const materia of singleCombination) {
       for (const horario of materia.descripciones_por_dia) {
+        // Checkear si ya existe la hora en el array
+        if(hours.includes(`${horario.inicio}`) || hours.includes(`${horario.fin}`))
+          continue
         const [horaInicio, minInicio] = horario.inicio.split(':')
         const [horaFin, minFin] = horario.fin.split(':')
         const indexHoraInicio = hours.indexOf(`${horaInicio}:00`)
