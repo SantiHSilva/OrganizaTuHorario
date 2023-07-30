@@ -1,8 +1,16 @@
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
-import {generateHours} from "./FunctionsSchedule.js";
+import {generateHours, getArrayForTableCells} from "./FunctionsSchedule.js";
+import {useEffect, useState} from "react";
 // TODO: Revisar tabla por qué parece muy lenta...
 
 export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHorario24Horas}) => {
+
+  const [hours, setHours] = useState(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
+
+  useEffect(() => {
+    setHours(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
+  }, [combinaciones, numDeCombinacion, mostrarPorHorario24Horas]);
+
 
   const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 /*
@@ -10,14 +18,6 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
 */
 
   const maxAltura = 460;
-
-  function TablaPorHoras(numDeCombinacion, hora){
-/*    console.log("Creando tabla por horas...")
-    console.log("Combinaciones:", combinaciones)*/
-    return(
-      <></>
-    )
-  }
 
   return(
     <Paper sx={{ maxWidth: `800PX`, overflow: 'hidden'}}>
@@ -35,21 +35,19 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
           </TableHead>
           <TableBody>
             {
-              generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas).map((hora, index) => (
-                <>
-                  <TableRow key={index}>
-                    <TableCell align="center" className='p-2' style={{
-                      width: "2px"
-                    }}>
-                      {hora}
-                    </TableCell>
-                    {
-                      /* Aquí deberia ir las combinaciones por DÍA y hora con su rowspawn correspondiente
-                        */
-                    }
-                    <TableCell align="center" className='p-2' rowSpan={2}> test </TableCell>
-                  </TableRow>
-                </>
+              hours.map((hora, index) => (
+                <TableRow key={index}>
+                  <TableCell align="center" className='p-2'>
+                    {hora}
+                  </TableCell>
+                  {
+                    getArrayForTableCells(hora).map((cell, index) => (
+                      <TableCell key={index} align="center" className='p-2'>
+                        {cell}
+                      </TableCell>
+                    ))
+                  }
+                </TableRow>
               ))
             }
           </TableBody>

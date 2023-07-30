@@ -51,18 +51,21 @@ function generateHours(singleCombination, mostrarPorHorario24Horas){
     this.splice( index, 0, item );
   }
 
+
   if(typeof(singleCombination) !== "undefined")
     for (const materia of singleCombination) {
       for (const horario of materia.descripciones_por_dia) {
         // Checkear si ya existe la hora en el array
-        if(hours.includes(`${horario.inicio}`) || hours.includes(`${horario.fin}`))
-          continue
-        const [horaInicio, minInicio] = horario.inicio.split(':')
-        const [horaFin, minFin] = horario.fin.split(':')
-        const indexHoraInicio = hours.indexOf(`${horaInicio}:00`)
-        hours.insert(indexHoraInicio+1, `${horaInicio}:${minInicio}`)
-        const indexHoraFin = hours.indexOf(`${horaFin}:00`)
-        hours.insert(indexHoraFin+1, `${horaFin}:${minFin}`)
+        if(!hours.includes(horario.inicio)){
+          const [horaInicio, minInicio] = horario.inicio.split(':')
+          const indexHoraInicio = hours.indexOf(`${horaInicio}:00`)
+          hours.insert(indexHoraInicio+1, `${horaInicio}:${minInicio}`)
+        }
+        if(!hours.includes(horario.fin)){
+          const [horaFin, minFin] = horario.fin.split(':')
+          const indexHoraFin = hours.indexOf(`${horaFin}:00`)
+          hours.insert(indexHoraFin+1, `${horaFin}:${minFin}`)
+        }
       }
     }
 
@@ -85,5 +88,21 @@ function hoursTo12HFormat(hours){
   })
 }
 
+function getArrayForTableCells(currentHour){
 
-export { createCombinationsNoOverlap, generateHours }
+  // Del currentHour solo obtener las 5 primeras letras
+  currentHour = currentHour.slice(0, 5)
+
+  const array = []
+
+  for (let i = 0; i < 7; i++) {
+
+    const day = i+1
+
+    array.push(`Table cell N°${i+1} for hour ${currentHour} for day ${day}`)
+  }
+
+  return array
+}
+
+export { createCombinationsNoOverlap, generateHours, getArrayForTableCells }
