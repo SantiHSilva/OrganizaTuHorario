@@ -5,17 +5,16 @@ import {useEffect, useState} from "react";
 
 export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHorario24Horas}) => {
 
-  const [hours, setHours] = useState(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
+  const [hours, setHours] = useState(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas, numDeCombinacion));
 
   useEffect(() => {
-    setHours(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
+    console.log("Cambiando horas")
+    setHours(generateHours(
+      combinaciones[numDeCombinacion], mostrarPorHorario24Horas, numDeCombinacion
+      ));
   }, [combinaciones, numDeCombinacion, mostrarPorHorario24Horas]);
 
-
   const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
-/*
-  const horas = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"];
-*/
 
   const maxAltura = 460;
 
@@ -41,8 +40,8 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
                     {hora}
                   </TableCell>
                   {
-                    getArrayForTableCells(hora).map((cell, index) => (
-                      <TableCell key={index} align="center" className='p-2'>
+                    getArrayForTableCells(hora,combinaciones[numDeCombinacion], hours).map((cell, index) => (
+                      <TableCell key={index} align="center" className='p-2' rowSpan={1}>
                         {cell}
                       </TableCell>
                     ))

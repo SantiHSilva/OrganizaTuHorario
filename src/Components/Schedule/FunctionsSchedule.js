@@ -30,7 +30,7 @@ function createCombinationsNoOverlap(newMaterias) {
     for (let i = 0; i < materiasArray.length; i++) {
       const currentMateria = materiasArray[i];
       if (!currentCombination.some((m) => isTimeConflict(currentMateria, m))) {
-        currentCombination.push(currentMateria);
+        currentCombination.push(materia);
         backtrack(index + 1, currentCombination);
         currentCombination.pop();
       }
@@ -44,30 +44,30 @@ function createCombinationsNoOverlap(newMaterias) {
   return combinations;
 }
 
-function generateHours(singleCombination, mostrarPorHorario24Horas){
+function generateHours(singleCombination, mostrarPorHorario24Horas, currentPage){
   const hours = Array.from({length: 23}, (_, i) => (`${i+1}:00`.padStart(5, '0')));
 
   Array.prototype.insert = function ( index, item ) {
     this.splice( index, 0, item );
   }
 
-
-  if(typeof(singleCombination) !== "undefined")
-    for (const materia of singleCombination) {
-      for (const horario of materia.descripciones_por_dia) {
-        // Checkear si ya existe la hora en el array
-        if(!hours.includes(horario.inicio)){
-          const [horaInicio, minInicio] = horario.inicio.split(':')
+  if(typeof(singleCombination) !== "undefined"){
+    singleCombination.map(materia => {
+      const horario = materia.materias[currentPage].descripciones_por_dia
+      for(const revisar of horario){
+        if(!hours.includes(revisar.inicio)){
+          const [horaInicio, minInicio] = revisar.inicio.split(':')
           const indexHoraInicio = hours.indexOf(`${horaInicio}:00`)
           hours.insert(indexHoraInicio+1, `${horaInicio}:${minInicio}`)
         }
-        if(!hours.includes(horario.fin)){
-          const [horaFin, minFin] = horario.fin.split(':')
+        if(!hours.includes(revisar.fin)){
+          const [horaFin, minFin] = revisar.fin.split(':')
           const indexHoraFin = hours.indexOf(`${horaFin}:00`)
           hours.insert(indexHoraFin+1, `${horaFin}:${minFin}`)
         }
       }
-    }
+    })
+  }
 
   if(mostrarPorHorario24Horas)
     return hours
@@ -88,18 +88,44 @@ function hoursTo12HFormat(hours){
   })
 }
 
-function getArrayForTableCells(currentHour){
-
+function getArrayForTableCells(currentHour, singleCombination, hours){
   // Del currentHour solo obtener las 5 primeras letras
   currentHour = currentHour.slice(0, 5)
-
   const array = []
+
+  if(typeof(singleCombination) === "undefined")
+    return array
+  else
+    return array
+
+  function getRowSpanForTableCells(currentMateriaDescriptionPorDia, hours){
+    const [horaInicio, minInicio] = currentMateriaDescriptionPorDia.inicio.split(':')
+    const [horaFin, minFin] = currentMateriaDescriptionPorDia.fin.split(':')
+    const indexHoraInicio = hours.indexOf(`${horaInicio}:${minInicio}`)
+    const indexHoraFin = hours.indexOf(`${horaFin}:${minFin}`)
+    return indexHoraFin - indexHoraInicio
+  }
 
   for (let i = 0; i < 7; i++) {
 
-    const day = i+1
+    const day = i+1 // 1 = Lunes, 2 = Martes, etc
 
-    array.push(`Table cell N°${i+1} for hour ${currentHour} for day ${day}`)
+    // Buscar si hay una materia que tenga el dia actual
+
+    for(const materia of singleCombination){
+      for(const currentMateriaDescriptionPorDia of materia.descripciones_por_dia){
+        if(currentMateriaDescriptionPorDia.dia === day){
+          const rowSpan = getRowSpanForTableCells(currentMateriaDescriptionPorDia, hours)
+          if(currentMateriaDescriptionPorDia.inicio === currentHour){
+            array.push({
+              materia: materia,
+              rowSpan: rowSpan
+            })
+          }
+        }
+      }
+    }
+
   }
 
   return array

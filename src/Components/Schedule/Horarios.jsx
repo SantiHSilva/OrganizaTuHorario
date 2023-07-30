@@ -10,19 +10,13 @@ export default function Horarios({data, update, theme}){
   const [mostrarPorHorario24Horas, setMostrarPorHorario24Horas] = useState(false);
   
   useEffect(() => {
-    console.clear()
-    console.log("Loading Horarios")
-    console.log(data)
+    console.clear() // TODO: Cuando termines de configurar los horarios borralo.
     if(typeof(data) === 'undefined') return;
-    console.log("Creando combinaciones...")
     setCombinaciones(createCombinationsNoOverlap(data));
     setPagina(0);
+    console.log("Combinaciones:")
     console.log(combinaciones)
   }, [data, update]);
-
-  useEffect(() => {
-    console.log("Cambiando pagina...")
-  }, [pagina]);
 
   return(
     <>
