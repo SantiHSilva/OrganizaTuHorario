@@ -56,7 +56,13 @@ function createCombinationsBacktracking(newMaterias) {
     return combinations.filter(combination => !combinationHasTimeOverlap(combination));
   }
 
-  return filterCombinations(combinations);
+  const combinationsWithoutTimeOverlap = filterCombinations(combinations);
+
+  console.log("Combinaciones")
+  console.log(combinationsWithoutTimeOverlap)
+
+  return combinationsWithoutTimeOverlap;
+
 }
 
 function generateHours(singleCombination, mostrarPorHorario24Horas){
@@ -123,44 +129,113 @@ function hoursTo12HFormat(hours){
   })
 }
 
-function getArrayForTableCells(currentHour, singleCombination, hours){
-  // Del currentHour solo obtener las 5 primeras letras
-  currentHour = currentHour.slice(0, 5)
-  const array = []
+function getArrayForTableCells(currentHour, currentDay, singleCombination){
+  // Del currentHour detectar si el formato está en format 12H o 24H
+  // Si está en 12H, convertirlo a 24H
+  if(currentHour.includes('AM') || currentHour.includes('PM')){
+    const [hour, min] = currentHour.split(':')
+    currentHour = `${hour%12 === 0 ? 12 : formatNumber(hour%12)}:${min}`
+    if(currentHour.includes('PM'))
+      currentHour = `${parseInt(hour)+12}:${min}`
+  }
+  const array = [{
+    contenido: "",
+    rowSpan: 1
+  }]
 
   if(typeof(singleCombination) === "undefined")
     return array
-  else
-    return array
 
-  function getRowSpanForTableCells(currentMateriaDescriptionPorDia, hours){
-    const [horaInicio, minInicio] = currentMateriaDescriptionPorDia.inicio.split(':')
-    const [horaFin, minFin] = currentMateriaDescriptionPorDia.fin.split(':')
-    const indexHoraInicio = hours.indexOf(`${horaInicio}:${minInicio}`)
-    const indexHoraFin = hours.indexOf(`${horaFin}:${minFin}`)
-    return indexHoraFin - indexHoraInicio
+  function verSiLaHoraEstaDentroDelRango(horaComprobacion = "00:00", horaInicio = "00:00", horaFin = "00:00"){
+    const [horaComprobacionHoras, horaComprobacionMinutos] = horaComprobacion.split(":").map(Number)
+    const [horaInicioHoras, horaInicioMinutos] = horaInicio.split(":").map(Number)
+    const [horaFinHoras, horaFinMinutos] = horaFin.split(":").map(Number)
+
+    if(horaComprobacionHoras >= horaInicioHoras && horaComprobacionHoras <= horaFinHoras){
+      if(horaComprobacionHoras === horaInicioHoras && horaComprobacionMinutos < horaInicioMinutos){
+        return false
+      }
+      return !(horaComprobacionHoras === horaFinHoras && horaComprobacionMinutos > horaFinMinutos);
+    }
+    return false
   }
 
-  for (let i = 0; i < 7; i++) {
+  function siYaSePasoDeLaHoraDeInicio(horaActual, HoraInicio){
+    const [horaActualHoras, horaActualMinutos] = horaActual.split(":").map(Number)
+    const [HoraInicioHoras, HoraInicioMinutos] = HoraInicio.split(":").map(Number)
 
-    const day = i+1 // 1 = Lunes, 2 = Martes, etc
+    if(horaActualHoras > HoraInicioHoras){
+      return true
+    }else if(horaActualHoras === HoraInicioHoras){
+      if(horaActualMinutos >= HoraInicioMinutos){
+        return true
+      }
+    }
+    return false
+  }
 
-    // Buscar si hay una materia que tenga el dia actual
+  function detectarSiLaMateriaVaEnLaCelda(materia, currentDay, currentHour){
+    // Si dentro de la materia, en las descripciones por día hay una que tenga el día actual
+    // Y si el currentHour está entre el inicio y el fin de la descripción por día
+    // Entonces la materia va en la celda
 
-    for(const materia of singleCombination){
-      for(const currentMateriaDescriptionPorDia of materia.descripciones_por_dia){
-        if(currentMateriaDescriptionPorDia.dia === day){
-          const rowSpan = getRowSpanForTableCells(currentMateriaDescriptionPorDia, hours)
-          if(currentMateriaDescriptionPorDia.inicio === currentHour){
-            array.push({
-              materia: materia,
-              rowSpan: rowSpan
-            })
-          }
+    // Retorna undefined si no hay descripciones por día que cuadren con día y hora
+    // Retorna La materia base filtrando las descripciones por día que cuadren con día y hora
+
+
+
+
+    console.log("Materia")
+    console.log(materia)
+    console.log("Current Day")
+    console.log(currentDay)
+    console.log("Current Hour")
+    console.log(currentHour)
+
+    const horario = materia.materias[0].descripciones_por_dia
+    for(const revisar of horario){
+      console.log("Revisar")
+      console.log(revisar)
+      if(parseInt(revisar.dia) === currentDay){
+        console.log("DÍA IGUAL")
+        if(verSiLaHoraEstaDentroDelRango(currentHour, revisar.inicio, revisar.fin)){
+          const copy = {...materia}
+          copy.materias[0].descripciones_por_dia = [revisar]
+          return copy
         }
       }
     }
 
+    return undefined // No va en la celda actual
+  }
+
+  function calculateRowSpan(horario){
+    const horas = generateHours(singleCombination, true)
+
+    const inicio = horas.indexOf(horario.inicio)
+    const fin = horas.indexOf(horario.fin)
+
+    return fin - inicio + 1
+  }
+
+  for(const materia of singleCombination){
+    const materiaBase = detectarSiLaMateriaVaEnLaCelda(materia, currentDay, currentHour)
+    console.log("--------------")
+    console.log("MATERIA BASE")
+    console.log(materiaBase)
+    if(typeof(materiaBase) !== "undefined"){
+
+      if(siYaSePasoDeLaHoraDeInicio(currentHour, materiaBase.materias[0].descripciones_por_dia[0].inicio)){
+        return([{
+          contenido: "",
+          rowSpan: 1
+        }])
+      }
+      return([{
+        contenido: materiaBase,
+        rowSpan: calculateRowSpan(materiaBase.materias[0].descripciones_por_dia[0])
+      }])
+    }
   }
 
   return array

@@ -8,13 +8,14 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 - [x]  Añadir colores a los grupos
 - [X]  Añadir anotaciones a las materias
 - [X]  Soporte de horas por 24h-12h
+- [X]  Sistema de exportación de materias por enlace
+- [ ]  Estilo personalizable del cuerpo de la tabla de horarios
 - [ ]  Manual de usuario
 - [ ]  Selector de idiomas personalizables
 - [ ]  Exportación de los horarios por:
     - [ ]  Imagenes (Separadas)
     - [ ]  Hoja de excel (Juntas)
     - [ ]  PDF (Sepadas o Juntas)
-    - [X]  Enlace
 
 ## Usarlo localmente
 
