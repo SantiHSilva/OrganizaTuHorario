@@ -129,19 +129,35 @@ function hoursTo12HFormat(hours){
   })
 }
 
-function getArrayForTableCells(currentHour, currentDay, singleCombination){
-  // Del currentHour detectar si el formato está en format 12H o 24H
-  // Si está en 12H, convertirlo a 24H
-  if(currentHour.includes('AM') || currentHour.includes('PM')){
-    const [hour, min] = currentHour.split(':')
-    currentHour = `${hour%12 === 0 ? 12 : formatNumber(hour%12)}:${min}`
-    if(currentHour.includes('PM'))
-      currentHour = `${parseInt(hour)+12}:${min}`
+function reformat12HTo24h(dato){
+  function formatNumber(number){
+    return number.toString().padStart(2, "0")
   }
-  const array = [{
-    contenido: "",
+
+  // Detectar si tiene AM o PM
+
+  if(dato.includes("AM") || dato.includes("PM")){
+    const periodo = dato.slice(-2)
+    dato = dato.slice(0, -3)
+    const [horas, minutos] = dato.split(":").map(Number)
+    if(periodo === "AM")
+      return dato
+    if(periodo === "AM" && horas === 12)
+      return `00:${formatNumber(minutos)}`
+    if(periodo === "PM" && horas === 12)
+      return dato
+    return(`${horas + 12}:${formatNumber(minutos)}`)
+  }
+  return dato
+
+}
+
+function getArrayForTableCells(currentHour, currentDay, singleCombination){
+  if(currentHour === "") return {rowSpan: 0}
+  currentHour = reformat12HTo24h(currentHour)
+  const array = {
     rowSpan: 1
-  }]
+  }
 
   if(typeof(singleCombination) === "undefined")
     return array
@@ -160,20 +176,6 @@ function getArrayForTableCells(currentHour, currentDay, singleCombination){
     return false
   }
 
-  function siYaSePasoDeLaHoraDeInicio(horaActual, HoraInicio){
-    const [horaActualHoras, horaActualMinutos] = horaActual.split(":").map(Number)
-    const [HoraInicioHoras, HoraInicioMinutos] = HoraInicio.split(":").map(Number)
-
-    if(horaActualHoras > HoraInicioHoras){
-      return true
-    }else if(horaActualHoras === HoraInicioHoras){
-      if(horaActualMinutos >= HoraInicioMinutos){
-        return true
-      }
-    }
-    return false
-  }
-
   function detectarSiLaMateriaVaEnLaCelda(materia, currentDay, currentHour){
     // Si dentro de la materia, en las descripciones por día hay una que tenga el día actual
     // Y si el currentHour está entre el inicio y el fin de la descripción por día
@@ -181,25 +183,11 @@ function getArrayForTableCells(currentHour, currentDay, singleCombination){
 
     // Retorna undefined si no hay descripciones por día que cuadren con día y hora
     // Retorna La materia base filtrando las descripciones por día que cuadren con día y hora
-
-
-
-
-    console.log("Materia")
-    console.log(materia)
-    console.log("Current Day")
-    console.log(currentDay)
-    console.log("Current Hour")
-    console.log(currentHour)
-
     const horario = materia.materias[0].descripciones_por_dia
     for(const revisar of horario){
-      console.log("Revisar")
-      console.log(revisar)
       if(parseInt(revisar.dia) === currentDay){
-        console.log("DÍA IGUAL")
         if(verSiLaHoraEstaDentroDelRango(currentHour, revisar.inicio, revisar.fin)){
-          const copy = {...materia}
+          const copy = JSON.parse(JSON.stringify(materia))
           copy.materias[0].descripciones_por_dia = [revisar]
           return copy
         }
@@ -215,26 +203,20 @@ function getArrayForTableCells(currentHour, currentDay, singleCombination){
     const inicio = horas.indexOf(horario.inicio)
     const fin = horas.indexOf(horario.fin)
 
-    return fin - inicio + 1
+    return fin - inicio +1
   }
 
   for(const materia of singleCombination){
     const materiaBase = detectarSiLaMateriaVaEnLaCelda(materia, currentDay, currentHour)
-    console.log("--------------")
-    console.log("MATERIA BASE")
-    console.log(materiaBase)
     if(typeof(materiaBase) !== "undefined"){
 
-      if(siYaSePasoDeLaHoraDeInicio(currentHour, materiaBase.materias[0].descripciones_por_dia[0].inicio)){
-        return([{
-          contenido: "",
-          rowSpan: 1
-        }])
-      }
-      return([{
-        contenido: materiaBase,
+      if(materiaBase.materias[0].descripciones_por_dia[0].inicio !== currentHour && verSiLaHoraEstaDentroDelRango(currentHour, materiaBase.materias[0].descripciones_por_dia[0].inicio, materiaBase.materias[0].descripciones_por_dia[0].fin))
+        return({rowSpan: 0})
+
+      return ({
+        materiaBase,
         rowSpan: calculateRowSpan(materiaBase.materias[0].descripciones_por_dia[0])
-      }])
+      })
     }
   }
 

@@ -17,6 +17,65 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
 
   const maxAltura = 460;
 
+  function graficarCeldas(info){
+    if(info.rowSpan === 0)
+      return(
+        <></>
+      )
+    if(info.rowSpan === 1)
+      return (
+      <TableCell align="center" className='p-2' />
+      )
+
+    return(
+      <TableCell align="center" className='p-2' rowSpan={info.rowSpan}
+                 style={{
+                   border: "none",
+                   backgroundColor: info.materiaBase.color,
+                   color: adaptColorByHexColor(info.materiaBase.color)
+                 }}
+      >
+        <div
+          className='container text-center'
+        >
+          <span
+            className='fw-bold'
+          >
+            {info.materiaBase.name}
+          </span>
+
+          {/* Iterar descripciones generales */}
+
+          <section className='p-1 text-center'>
+
+            {
+              info.materiaBase.materias[0].descripciones_generales.map((descripcion, index) => (
+                descripcion.mostrar_en_tabla ?
+                <span key={index} className='fst-italic'> {descripcion.titulo} </span> : <></>
+              ))
+            }
+
+          </section>
+
+          {/* Iterar ajustes */}
+
+          <section className='p-1'>
+
+            {
+              info.materiaBase.materias[0].descripciones_por_dia[0].ajustes.map((ajuste, index) => (
+                ajuste.mostrar_en_tabla ?
+                <span key={index} className='fw-light'> {ajuste.titulo} </span> : <></>
+              ))
+            }
+
+          </section>
+
+          <br/>
+        </div>
+      </TableCell>
+    )
+  }
+
   return(
     <Paper sx={{ maxWidth: `800PX`, overflow: 'hidden'}}>
       <TableContainer sx={{ maxHeight: `${maxAltura}px`}}>
@@ -26,7 +85,10 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
               <TableCell align='center' className='text-white'> ########### </TableCell>
               {
                 dias.map((dia, index) => (
-                  <TableCell key={index} align="center" className='p-2'> {dia} </TableCell>
+                  <TableCell key={index} align="center" className='p-2'
+                  >
+                    {dia}
+                  </TableCell>
                 ))
               }
             </TableRow>
@@ -40,17 +102,7 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
                   </TableCell>
                   {
                     dias.map((dias, index) => (
-                      getArrayForTableCells(hora, (index + 1), combinaciones[numDeCombinacion]).map((cell, index) => (
-                        <TableCell key={index} align="center" className='p-2' rowSpan={cell.rowSpan}
-                          style={{
-                            backgroundColor: cell.contenido.color,
-                            border: '1px solid black',
-                            /*border: `${cell.contenido.color ? '1px solid black' : "none"}`,*/
-                          }}
-                        >
-                          {cell.contenido.name}
-                        </TableCell>
-                      ))
+                      graficarCeldas(getArrayForTableCells(hora, (index + 1), combinaciones[numDeCombinacion]))
                     ))
                   }
                 </TableRow>
