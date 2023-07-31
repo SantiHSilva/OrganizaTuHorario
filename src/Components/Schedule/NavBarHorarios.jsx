@@ -1,9 +1,8 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import {NavDropdown, Pagination} from "react-bootstrap";
+import {NavDropdown, Pagination, Form} from "react-bootstrap";
 import {TbTableExport} from "react-icons/tb";
 import {Ri24HoursLine} from "react-icons/ri";
-import {BiBookAdd} from "react-icons/bi";
 import {Tooltip} from "react-tooltip";
 
 export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHorario24Horas, setMostrarPorHorario24Horas}) => {
@@ -85,7 +84,18 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                 onClick={prevPageHorario}
                 disabled={pagina === 0}
               />
-              <Pagination.Item active>{combinaciones.length === 0 ? 0 : pagina + 1}</Pagination.Item>
+              <Form.Select
+                onChange={(e) => setPagina(parseInt(e.target.value))}
+              >
+                {
+                  combinaciones.map((combinacion, index) => (
+                    <option key={index} value={index} selected={pagina === index}
+                    >
+                      {index + 1}
+                    </option>
+                  ))
+                }
+              </Form.Select>
               <Pagination.Next
                 onClick={nextPageHorario}
                 disabled={pagina === (combinaciones.length - 1) || combinaciones.length === 0}
