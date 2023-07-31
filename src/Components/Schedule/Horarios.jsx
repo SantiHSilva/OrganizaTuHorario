@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {createCombinationsNoOverlap} from "./FunctionsSchedule.js";
+import {createCombinationsBacktracking} from "./FunctionsSchedule.js";
 import {TablaDeHorarios} from "./TablaDeHorarios.jsx";
 import {NavBarHorarios} from "./NavBarHorarios.jsx";
 
@@ -12,10 +12,8 @@ export default function Horarios({data, update, theme}){
   useEffect(() => {
     console.clear() // TODO: Cuando termines de configurar los horarios borralo.
     if(typeof(data) === 'undefined') return;
-    setCombinaciones(createCombinationsNoOverlap(data));
+    setCombinaciones(createCombinationsBacktracking(data));
     setPagina(0);
-    console.log("Combinaciones:")
-    console.log(combinaciones)
   }, [data, update]);
 
   return(

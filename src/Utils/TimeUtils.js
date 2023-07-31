@@ -23,7 +23,7 @@ const estaCruzandoLosTiemposConOtrosTiempos = (dia1 = "", inicio1 = "00:00", fin
   const [dia2InicioHora, dia2InicioMinutos] = inicio2.split(":").map(Number);
   const [dia2FinHora, dia2FinMinutos] = fin2.split(":").map(Number);
 
-  console.log(`dia1: ${dia1}, inicio1: ${inicio1}, fin1: ${fin1}, dia2: ${dia2}, inicio2: ${inicio2}, fin2: ${fin2}`)
+  //console.log(`dia1: ${dia1}, inicio1: ${inicio1}, fin1: ${fin1}, dia2: ${dia2}, inicio2: ${inicio2}, fin2: ${fin2}`)
 
   if (dia1 === dia2) {
     if (dia1FinHora < dia2InicioHora || (dia1FinHora === dia2InicioHora && dia1FinMinutos <= dia2InicioMinutos)) {

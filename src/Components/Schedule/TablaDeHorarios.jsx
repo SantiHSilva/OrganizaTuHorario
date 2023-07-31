@@ -5,13 +5,11 @@ import {useEffect, useState} from "react";
 
 export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHorario24Horas}) => {
 
-  const [hours, setHours] = useState(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas, numDeCombinacion));
+  const [hours, setHours] = useState(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
 
   useEffect(() => {
     console.log("Cambiando horas")
-    setHours(generateHours(
-      combinaciones[numDeCombinacion], mostrarPorHorario24Horas, numDeCombinacion
-      ));
+    setHours(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
   }, [combinaciones, numDeCombinacion, mostrarPorHorario24Horas]);
 
   const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];

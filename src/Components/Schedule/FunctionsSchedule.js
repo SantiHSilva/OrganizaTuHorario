@@ -1,24 +1,10 @@
-function createCombinationsNoOverlap(newMaterias) {
+import {estaCruzandoLosTiemposConOtrosTiempos} from "../../Utils/TimeUtils.js";
+
+function createCombinationsBacktracking(newMaterias) {
   const combinations = [];
+  const currentCombination = [];
 
-  function isTimeConflict(materia1, materia2) {
-    for (const mt1 of materia1.descripciones_por_dia) {
-      for (const mt2 of materia2.descripciones_por_dia) {
-        if (mt1.dia === mt2.dia) {
-          const mt1Inicio = parseInt(mt1.inicio.replace(":", ""), 10);
-          const mt1Fin = parseInt(mt1.fin.replace(":", ""), 10);
-          const mt2Inicio = parseInt(mt2.inicio.replace(":", ""), 10);
-          const mt2Fin = parseInt(mt2.fin.replace(":", ""), 10);
-
-          if ((mt1Inicio <= mt2Inicio && mt2Inicio < mt1Fin) || (mt2Inicio <= mt1Inicio && mt1Inicio < mt2Fin))
-            return true; // Horarios se cruzan
-        }
-      }
-    }
-    return false;
-  }
-
-  function backtrack(index, currentCombination) {
+  function backtrack(index) {
     if (index === newMaterias.length) {
       combinations.push([...currentCombination]);
       return;
@@ -27,24 +13,53 @@ function createCombinationsNoOverlap(newMaterias) {
     const materia = newMaterias[index];
     const materiasArray = materia.materias || [];
 
-    for (let i = 0; i < materiasArray.length; i++) {
-      const currentMateria = materiasArray[i];
-      if (!currentCombination.some((m) => isTimeConflict(currentMateria, m))) {
-        currentCombination.push(materia);
-        backtrack(index + 1, currentCombination);
-        currentCombination.pop();
+    if (materiasArray.length > 0) {
+      for (let i = 0; i < materiasArray.length; i++) {
+        const descripciones_por_dia = materiasArray[i].descripciones_por_dia || [];
+        if (descripciones_por_dia.length > 0) {
+          const copyMateria = { ...materia };
+          copyMateria.materias = [materiasArray[i]];
+          currentCombination.push(copyMateria);
+          backtrack(index + 1);
+          currentCombination.pop();
+        }
       }
+    } else {
+      backtrack(index + 1); // Omitir el grupo sin opciones y continuar con el siguiente
     }
   }
 
-  if (newMaterias && newMaterias.length > 0) {
-    backtrack(0, []);
+  backtrack(0);
+
+  function filterCombinations(combinations) {
+    function doTimeRangesOverlap(range1, range2) {
+      return estaCruzandoLosTiemposConOtrosTiempos(range1.dia, range1.inicio, range1.fin, range2.dia, range2.inicio, range2.fin)
+    }
+
+    function combinationHasTimeOverlap(combination) {
+      for (let i = 0; i < combination.length - 1; i++) {
+        for (let j = i + 1; j < combination.length; j++) {
+          const materia1 = combination[i];
+          const materia2 = combination[j];
+          for (const desc1 of materia1.materias[0].descripciones_por_dia) {
+            for (const desc2 of materia2.materias[0].descripciones_por_dia) {
+              if (doTimeRangesOverlap(desc1, desc2)) {
+                return true;
+              }
+            }
+          }
+        }
+      }
+      return false;
+    }
+
+    return combinations.filter(combination => !combinationHasTimeOverlap(combination));
   }
 
-  return combinations;
+  return filterCombinations(combinations);
 }
 
-function generateHours(singleCombination, mostrarPorHorario24Horas, currentPage){
+function generateHours(singleCombination, mostrarPorHorario24Horas){
   const hours = Array.from({length: 23}, (_, i) => (`${i+1}:00`.padStart(5, '0')));
 
   Array.prototype.insert = function ( index, item ) {
@@ -53,7 +68,7 @@ function generateHours(singleCombination, mostrarPorHorario24Horas, currentPage)
 
   if(typeof(singleCombination) !== "undefined"){
     singleCombination.map(materia => {
-      const horario = materia.materias[currentPage].descripciones_por_dia
+      const horario = materia.materias[0].descripciones_por_dia
       for(const revisar of horario){
         if(!hours.includes(revisar.inicio)){
           const [horaInicio, minInicio] = revisar.inicio.split(':')
@@ -68,6 +83,26 @@ function generateHours(singleCombination, mostrarPorHorario24Horas, currentPage)
       }
     })
   }
+
+  // Función de comparación personalizada para ordenar las horas
+  function compararHoras(hora1, hora2) {
+    // Dividimos las horas y minutos y los convertimos a números enteros
+    const [h1, m1] = hora1.split(':').map(Number);
+    const [h2, m2] = hora2.split(':').map(Number);
+
+    // Comparamos las horas primero
+    if (h1 < h2) return -1;
+    if (h1 > h2) return 1;
+
+    // Si las horas son iguales, comparamos los minutos
+    if (m1 < m2) return -1;
+    if (m1 > m2) return 1;
+
+    // Si las horas y minutos son iguales
+    return 0;
+  }
+
+  hours.sort(compararHoras);
 
   if(mostrarPorHorario24Horas)
     return hours
@@ -131,4 +166,4 @@ function getArrayForTableCells(currentHour, singleCombination, hours){
   return array
 }
 
-export { createCombinationsNoOverlap, generateHours, getArrayForTableCells }
+export { createCombinationsBacktracking, generateHours, getArrayForTableCells }
