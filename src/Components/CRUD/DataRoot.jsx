@@ -10,8 +10,8 @@ export default function DataRoot({data}){
 
   return (
     <div className='p-3'>
-      <div className="container rounded">
-        <div className="row rounded">
+      <div className="container">
+        <div className="row">
           <div
             className="col"
             style={{

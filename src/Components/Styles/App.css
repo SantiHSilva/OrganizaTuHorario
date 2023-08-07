@@ -105,3 +105,42 @@ aside{
 .dropdown-toggle::after{
     display: none; /* Oculta la flecha predeterminada */
 }
+
+/* Schedule table styles */
+
+table {
+    text-align: center;
+    white-space: nowrap;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid rgb(232, 227, 227);
+}
+
+table td,
+table th {
+    border: 1px solid black;
+}
+table thead th {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white;
+}
+table td {
+    background: #fff;
+    padding: 4px 5px;
+    text-align: center;
+}
+
+table thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+}
+table tbody th {
+    position: sticky;
+    left: 0;
+    background: white;
+    z-index: 1;
+}

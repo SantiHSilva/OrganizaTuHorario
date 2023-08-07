@@ -2,7 +2,6 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import {Pagination, Form, Dropdown} from "react-bootstrap";
 import {Ri24HoursLine} from "react-icons/ri";
-import {Tooltip} from "react-tooltip";
 import {HiEllipsisVertical} from "react-icons/hi2";
 import {SiMicrosoftexcel} from "react-icons/si";
 import {BsFiletypePng} from "react-icons/bs";
@@ -25,14 +24,14 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
       <Navbar className="shadow-sm rounded">
         <Container fluid>
 
-            <h
+            <div
               className='fs-5'
               style={{
                 color: theme === 'dark' ? '#ffffff' : '#000000',
               }}
             >
               Horarios
-            </h>
+            </div>
 
             <Pagination
               className='m-0'
@@ -73,14 +72,15 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
           <div className='d-flex'>
 
 
-            <h
+            <div
+
               style={{
                 /*Ocultar*/
                 visibility: 'hidden',
               }}
             >
               1234
-            </h>
+            </div>
 
             <Dropdown>
               <Dropdown.Toggle className={'p-0'}
