@@ -38,11 +38,12 @@ function ComponentThemeButton({currentTheme, updateTheme}){
       <Tooltip
         id="themeButton"
         noArrow
-        place={'bottom'}
+        place={'top'}
         border={'1px solid #ffffff'}
         style={{
           userSelect: 'none',
           borderRadius: '20px',
+          zIndex: 1000,
       }} // No seleccionar el texto del tooltip
       >
         Cambiar tema

@@ -57,51 +57,51 @@ function MostrarGrupos({toggleUpdate, data, theme}){
              backgroundColor: theme === 'dark' ? '#3F4E4F' : '#F2EAD3',
            }}
       >
-            <div className='flex-fill text-center rounded d-flex'
-                 style={{
-                   backgroundColor: group.color,
-                 }}
-            >
-              <span
-                className='d-inline-block m-2 text-truncate align-center mx-auto'
-                style={{
-                  maxWidth: '21ch', // 20 caracteres por línea
-                  color: adaptColorByHexColor(group.color),
-                }}
-              >
-                {group.name}
-              </span>
-            </div>
 
-            <div className= 'p-2 rounded m-1 shadow-lg'
-              style={{
-                transition: 'all 0.2s ease-in-out',
-                backgroundColor: theme === 'dark' ? '#FEFBF3' : '#212121',
-              }}
-            >
-              <FaEdit
-                size={25}
-                className='editarGrupo OTHGroupBtn'
-                style={{
-                  transition: 'all 0.2s ease-in-out',
-                  cursor: 'pointer',
-                }}
-                onClick={() => {
-                  openDashboard(group.key)
-                }}
-              />
-              <FaTrashAlt
-                size={25}
-                className='borrarGrupo OTHGroupBtn'
-                style={{
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease-in-out',
-                }}
-                onClick={() => {
-                  eliminarGrupo(group.key, group.name)
-                }}
-              />
-          </div>
+        <div className='flex-fill rounded text-center m-1 p-2'
+             style={{
+               backgroundColor: group.color,
+             }}
+        >
+          <span
+            className='d-inline-block text-truncate'
+            style={{
+              maxWidth: '21ch', // 21 caracteres por línea
+                  color: adaptColorByHexColor(group.color),
+            }}
+          >
+            {group.name}
+          </span>
+        </div>
+        <div className= 'p-2 rounded m-1 shadow-lg'
+             style={{
+               transition: 'all 0.2s ease-in-out',
+               backgroundColor: theme === 'dark' ? '#FEFBF3' : '#212121',
+             }}
+        >
+          <FaEdit
+            size={25}
+            className='editarGrupo OTHGroupBtn'
+            style={{
+              transition: 'all 0.2s ease-in-out',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              openDashboard(group.key)
+            }}
+          />
+          <FaTrashAlt
+            size={25}
+            className='borrarGrupo OTHGroupBtn'
+            style={{
+              cursor: 'pointer',
+              transition: 'all 0.2s ease-in-out',
+            }}
+            onClick={() => {
+              eliminarGrupo(group.key, group.name)
+            }}
+          />
+        </div>
       </div>
   ));
 

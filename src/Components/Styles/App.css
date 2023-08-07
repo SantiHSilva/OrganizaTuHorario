@@ -101,3 +101,7 @@ aside{
 .OTH24HrsDisable:hover{
     fill: #FFB562;
 }
+
+.dropdown-toggle::after{
+    display: none; /* Oculta la flecha predeterminada */
+}

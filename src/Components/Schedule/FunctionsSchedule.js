@@ -61,8 +61,8 @@ function createCombinationsBacktracking(newMaterias) {
   console.log("Combinaciones")
   console.log(combinationsWithoutTimeOverlap)
 
-  return combinationsWithoutTimeOverlap;
-
+  // remover arrays vacios por ejemplo [[]] -> []
+  return combinationsWithoutTimeOverlap.filter(combination => combination.length > 0);
 }
 
 function generateHours(singleCombination, mostrarPorHorario24Horas){

@@ -10,7 +10,6 @@ export default function Horarios({data, update, theme}){
   const [mostrarPorHorario24Horas, setMostrarPorHorario24Horas] = useState(false);
   
   useEffect(() => {
-    console.clear() // TODO: Cuando termines de configurar los horarios borralo.
     if(typeof(data) === 'undefined') return;
     setCombinaciones(createCombinationsBacktracking(data));
     setPagina(0);
@@ -18,7 +17,7 @@ export default function Horarios({data, update, theme}){
 
   return(
     <>
-      <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} setMostrarPorHorario24Horas={setMostrarPorHorario24Horas} mostrarPorHorario24Horas={mostrarPorHorario24Horas}/>
+      <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} setMostrarPorHorario24Horas={setMostrarPorHorario24Horas} mostrarPorHorario24Horas={mostrarPorHorario24Horas} theme={theme}/>
       <div className='p-1'/>
       <TablaDeHorarios combinaciones={combinaciones} numDeCombinacion={pagina} mostrarPorHorario24Horas={mostrarPorHorario24Horas} />
     </>

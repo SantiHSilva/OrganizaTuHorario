@@ -55,8 +55,8 @@ function NavBar({currentTheme, updateTheme}){
           userSelect: 'none',
           borderRadius: '20px',
           transition: 'all 0.2s ease-in-out',
-        }
-      } // No seleccionar el texto del tooltip
+          zIndex: 1000,
+        }}
       >
         Código fuente
       </Tooltip>

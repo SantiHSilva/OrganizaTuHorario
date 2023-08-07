@@ -1,12 +1,12 @@
-import {Container, Form, Navbar} from "react-bootstrap";
+import {Container, Navbar} from "react-bootstrap";
 import {memo} from "react";
 import {CrearGrupoModal} from "./Groups/CrearGrupoModal.jsx";
 import {DeleteAllGroups} from "./Groups/EliminarTodosLosGrupos.jsx";
 import {ExportarGrupos} from "./Groups/ExportarGrupos.jsx";
+import {BiSolidBookOpen} from "react-icons/bi";
 
 function navBar({currentTheme, toggleUpdate}){
   return(
-    <div>
       <Navbar className="shadow-sm"
         style={{
           backgroundColor: currentTheme === 'dark' ? '#27374D' : '#FEFBF3',
@@ -16,19 +16,18 @@ function navBar({currentTheme, toggleUpdate}){
         <Container fluid>
           <Navbar.Brand>
 
-            <Form className="d-flex ">
-              <Form.Control
-                type="search"
-                placeholder="Buscar grupo"
-                className="mr-2"
-                aria-label="Search"
-              />
-            </Form>
+            <BiSolidBookOpen
+              size={30}
+            />
+
+            <span className='p-2'>
+              Asignaturas
+            </span>
 
           </Navbar.Brand>
 
           <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">
+          <Navbar.Collapse className="justify-content-end p-2">
 
             <ExportarGrupos theme={currentTheme} />
             <CrearGrupoModal theme={currentTheme} toggleUpdate={toggleUpdate} />
@@ -38,7 +37,6 @@ function navBar({currentTheme, toggleUpdate}){
 
         </Container>
       </Navbar>
-    </div>
   )
 }
 
