@@ -4,6 +4,9 @@ import {Pagination, Form, Dropdown} from "react-bootstrap";
 import {Ri24HoursLine} from "react-icons/ri";
 import {Tooltip} from "react-tooltip";
 import {HiEllipsisVertical} from "react-icons/hi2";
+import {SiMicrosoftexcel} from "react-icons/si";
+import {BsFiletypePng} from "react-icons/bs";
+import {VscFilePdf} from "react-icons/vsc";
 
 export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHorario24Horas, setMostrarPorHorario24Horas, theme}) => {
 
@@ -99,7 +102,45 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                 <Dropdown.Item
                   onClick={() => setMostrarPorHorario24Horas(!mostrarPorHorario24Horas)}
                 >
-                  Cambiar formato de las horas a {mostrarPorHorario24Horas ? "12 horas" : "24 horas"}
+                  <Ri24HoursLine
+                    size={20}
+                    className='me-2'
+                  />
+                  Cambiar formato de las horas a
+                  <h className='fw-bold'>
+                  {mostrarPorHorario24Horas ?
+                    " 12 horas"
+                    :
+                    " 24 horas"}
+                  </h>
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  onClick={() => alert("Jaja cree que ya programe esto pero aún no capo")}
+                >
+                  <BsFiletypePng
+                    size={20}
+                    className='me-2'
+                  />
+                  Exportar por PNG
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => alert("Jaja cree que ya programe esto pero aún no capo")}
+                >
+                  <SiMicrosoftexcel
+                    size={20}
+                    className='me-2'
+                  />
+                  Exportar por Excel
+                </Dropdown.Item>
+                <Dropdown.Item
+                  onClick={() => alert("Jaja cree que ya programe esto pero aún no capo")}
+                >
+                  <VscFilePdf
+                    size={20}
+                    className='me-2'
+                  />
+                  Exportar por PDF
                 </Dropdown.Item>
 
                 {/* TODO: Exportación de imagenes  */}
