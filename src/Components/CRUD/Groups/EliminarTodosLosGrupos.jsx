@@ -12,7 +12,7 @@ function deleteAllGroups({theme, toggleUpdate}){
     if(!existGroups()) {
       toast.error("No hay grupos para borrar.",
         {
-          position: "top-right",
+          position: "top-left",
           autoClose: 3000,
           hideProgressBar: false,
           pauseOnHover: false,
@@ -38,7 +38,7 @@ function deleteAllGroups({theme, toggleUpdate}){
       if (result.isConfirmed) {
         toast.info("Todos los grupos han sido eliminados.",
           {
-            position: "top-right",
+            position: "top-left",
             autoClose: 3000,
             hideProgressBar: false,
             pauseOnHover: false,

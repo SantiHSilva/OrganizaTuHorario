@@ -91,7 +91,7 @@ export default function FooterSubgroupDashboard({handleClose, globalUpdate, arra
       } else {
         toast.info("No se puede guardar porque hay problemas con las materias",
           {
-            position: "top-right",
+            position: "top-left",
             autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,

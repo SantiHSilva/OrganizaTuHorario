@@ -28,7 +28,7 @@ export const ExportarGrupos = ({theme}) => {
         `Se ha copiado en enlace correctamente`,
         {
           icon: '💾',
-          position: "top-center",
+          position: "top-left",
           autoClose: 750,
           hideProgressBar: false,
           closeOnClick: true,

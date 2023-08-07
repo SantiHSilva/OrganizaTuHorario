@@ -66,7 +66,7 @@ function MostrarGrupos({toggleUpdate, data, theme}){
           <span
             className='d-inline-block text-truncate'
             style={{
-              maxWidth: '21ch', // 21 caracteres por línea
+              maxWidth: '20ch', // 20 caracteres por línea
                   color: adaptColorByHexColor(group.color),
             }}
           >

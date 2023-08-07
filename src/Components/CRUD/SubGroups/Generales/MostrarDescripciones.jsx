@@ -1,6 +1,7 @@
 import {Form, InputGroup} from "react-bootstrap";
 import {FaTrash} from "react-icons/fa";
 import {FaDeleteLeft} from "react-icons/fa6";
+import {Tooltip} from "react-tooltip";
 
 export default function MostrarDescripciones({array, numPageMaterias, update}) {
 
@@ -38,13 +39,14 @@ export default function MostrarDescripciones({array, numPageMaterias, update}) {
               <InputGroup className="p-1 col-6" style={{width: '50%'}} key={index} id={`${index}`}>
 
                 <InputGroup.Checkbox
+                  data-tooltip-id='tooltip-mostrar-en-tabla'
                   aria-label="Añadir en tabla"
                   checked={descripcion.mostrar_en_tabla}
                   onChange={() => toggleViewOnTable(index)}
                 />
 
                 <Form.Control aria-label="Valor a mostrar"
-                              placeholder='key'
+                              placeholder='Descripción'
                               value={descripcion.titulo}
                               onChange={(e) => updateDescripcion(e,index)}
                 />
@@ -60,6 +62,15 @@ export default function MostrarDescripciones({array, numPageMaterias, update}) {
             ))
         }
       </div>
+
+      <Tooltip
+        id='tooltip-mostrar-en-tabla'
+        place='top'
+        effect='solid'
+        delayShow={700}
+      >
+        Elige si la descripción se mostrará en la tabla de horarios
+      </Tooltip>
 
     </div>
   )

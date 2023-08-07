@@ -16,20 +16,19 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
   const maxAltura = 460;
 
   function adaptTitle(title){
-    // Adaptar titulo a solo 2 palabras por línea
-    let words = title.split(" ");
-    let newTitle = "";
-    let counter = 0;
-    for(let word of words){
-      if(counter === 2){
-        newTitle += "\n";
-        counter = 0;
+    const words = title.split(" ");
+    let titleAdapted = [];
+    let line = "";
+    for(let i = 0; i < words.length; i++){
+      if(line.length + words[i].length > 10){
+        titleAdapted.push(line);
+        line = "";
       }
-      newTitle += word + " ";
-      counter++;
+      line += words[i] + " ";
     }
-    console.log(newTitle)
-    return newTitle;
+    titleAdapted.push(line);
+
+    return titleAdapted;
   }
 
   function graficarCeldas(info){
@@ -55,7 +54,11 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
           <span
             className='fw-bold align-self-start col'
           >
-            {adaptTitle(info.materiaBase.name)}
+            {
+              adaptTitle(info.materiaBase.name).map(titulo => (
+                <section key={titulo} className='fst-italic'> {titulo} </section>
+              ))
+            }
           </span>
 
           {/* Iterar descripciones generales */}

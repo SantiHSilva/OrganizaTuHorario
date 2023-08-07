@@ -64,7 +64,7 @@ function TestingModal({toggleUpdate, theme}){
         `Se ha creado el grupo "${name}"`,
         {
         icon: '💾',
-        position: "top-right",
+        position: "top-left",
         autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
