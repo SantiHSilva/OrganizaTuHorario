@@ -98,6 +98,7 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
       style={{
         maxHeight: `${maxAltura}px`, maxWidth: `800PX`, overflow: 'auto', color: "black"
       }}
+      id={"scrollTableDiv"}
     >
       <table
         id={"exportScheduleClassTable"}

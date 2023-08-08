@@ -58,36 +58,48 @@ function createCombinationsBacktracking(newMaterias) {
 
   const combinationsWithoutTimeOverlap = filterCombinations(combinations);
 
-  console.log("Combinaciones")
-  console.log(combinationsWithoutTimeOverlap)
-
   // remover arrays vacios por ejemplo [[]] -> []
   return combinationsWithoutTimeOverlap.filter(combination => combination.length > 0);
 }
 
 function generateHours(singleCombination, mostrarPorHorario24Horas){
-  const hours = Array.from({length: 23}, (_, i) => (`${i+1}:00`.padStart(5, '0')));
 
-  Array.prototype.insert = function ( index, item ) {
-    this.splice( index, 0, item );
-  }
+  if(typeof(singleCombination) === "undefined")
+    return Array.from({length: 23}, (_, i) => (`${i+1}:00`.padStart(5, '0')));
+
+  const hours = [];
 
   if(typeof(singleCombination) !== "undefined"){
     singleCombination.map(materia => {
       const horario = materia.materias[0].descripciones_por_dia
       for(const revisar of horario){
-        if(!hours.includes(revisar.inicio)){
-          const [horaInicio, minInicio] = revisar.inicio.split(':')
-          const indexHoraInicio = hours.indexOf(`${horaInicio}:00`)
-          hours.insert(indexHoraInicio+1, `${horaInicio}:${minInicio}`)
-        }
-        if(!hours.includes(revisar.fin)){
-          const [horaFin, minFin] = revisar.fin.split(':')
-          const indexHoraFin = hours.indexOf(`${horaFin}:00`)
-          hours.insert(indexHoraFin+1, `${horaFin}:${minFin}`)
-        }
+        if(!hours.includes(revisar.inicio))
+          hours.push(revisar.inicio)
+        if(!hours.includes(revisar.fin))
+          hours.push(revisar.fin)
       }
     })
+  }
+
+  function adjustHours(originalHours) {
+    const horasFaltantes = [];
+    const min = Math.min(...originalHours.map(hora => {
+      const [h,] = hora.split(":");
+      return h;
+    }));
+
+    const max = Math.max(...originalHours.map(hora => {
+      const [h,] = hora.split(":");
+      return h;
+    }));
+
+    for(let i = min; i <= max; i++) {
+      i = i < 10 ? `0${i}` : i;
+      if(!originalHours.includes(`${i}:00`)) horasFaltantes.push(`${i}:00`);
+    }
+
+    return [...originalHours, ...horasFaltantes];
+
   }
 
   // Función de comparación personalizada para ordenar las horas
@@ -108,12 +120,12 @@ function generateHours(singleCombination, mostrarPorHorario24Horas){
     return 0;
   }
 
-  hours.sort(compararHoras);
+  const horitas = adjustHours(hours).sort(compararHoras);
 
   if(mostrarPorHorario24Horas)
-    return hours
+    return horitas
   else
-    return hoursTo12HFormat(hours)
+    return hoursTo12HFormat(horitas)
 
 }
 
