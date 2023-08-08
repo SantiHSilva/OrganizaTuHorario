@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
 import adjustPage from "./Utils.js";
 
-export default function ExportPNG(tableID) {
+export default function ExportPNG(tableID, html2canvas) {
 
     const table = document.getElementById(tableID);
 

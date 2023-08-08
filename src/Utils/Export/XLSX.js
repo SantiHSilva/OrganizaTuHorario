@@ -1,11 +1,11 @@
-import * as XLSX from "xlsx";
 import adjustPage from "./Utils.js";
+import {writeFile, utils} from "xlsx";
 
-export default function ExportExcel(tableID){
+export default function ExportExcel(tableID, writeFile, table_to_book){
   const table = document.getElementById(tableID);
 
   adjustPage();
 
-  const wb = XLSX.utils.table_to_book(table, {sheet: "Horario"});
-  XLSX.writeFile(wb, "horario.xlsx");
+  const wb = table_to_book(table, {sheet: "Horario"});
+  writeFile(wb, "horario.xlsx");
 }

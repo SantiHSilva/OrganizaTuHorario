@@ -1,8 +1,7 @@
 import jsPDF from 'jspdf'
-import html2canvas from "html2canvas";
 import adjustPage from "./Utils.js";
 
-export default function exportPDF(tableID){
+export default function exportPDF(tableID, html2canvas){
 
   const table = document.getElementById(tableID)
 
