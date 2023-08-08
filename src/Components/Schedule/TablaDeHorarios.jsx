@@ -38,7 +38,7 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
       )
     if(info.rowSpan === 1)
       return (
-      <td align="center" className='p-2' />
+      <td align="center" className='p-2'/>
       )
 
     return(
@@ -105,10 +105,17 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
       >
         <thead>
         <tr>
-          <th>Hora/Día</th>
+          <th
+            style={{
+              backgroundColor: "#e0e0e0",
+            }}
+          >Hora/Día</th>
           {
             dias.map((dia, index) => (
               <th key={index} align="center" className='p-2'
+                  style={{
+                    backgroundColor: "#e0e0e0",
+                  }}
               >
                 {dia}
               </th>
@@ -121,7 +128,11 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
         {
           hours.map((hora, index) => (
             <tr key={index}>
-              <th align="center" className='p-2'>
+              <th align="center" className='p-2'
+                style={{
+                  backgroundColor: "#e0e0e0",
+                }}
+              >
                 {hora}
               </th>
               {
