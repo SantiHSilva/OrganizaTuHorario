@@ -6,6 +6,9 @@ import {HiEllipsisVertical} from "react-icons/hi2";
 import {SiMicrosoftexcel} from "react-icons/si";
 import {BsFiletypePng} from "react-icons/bs";
 import {VscFilePdf} from "react-icons/vsc";
+import exportPDF from "../../Utils/Export/PDF.js";
+import ExportPNG from "../../Utils/Export/PNG.js";
+import ExportExcel from "../../Utils/Export/XLSX.js";
 
 export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHorario24Horas, setMostrarPorHorario24Horas, theme}) => {
 
@@ -116,7 +119,9 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                 </Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item
-                  onClick={() => alert("Jaja cree que ya programe esto pero aún no capo")}
+                  onClick={() => {
+                    ExportPNG("exportScheduleClassTable")
+                  }}
                 >
                   <BsFiletypePng
                     size={20}
@@ -125,7 +130,7 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                   Exportar por PNG
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => alert("Jaja cree que ya programe esto pero aún no capo")}
+                  onClick={() => ExportExcel("exportScheduleClassTable")}
                 >
                   <SiMicrosoftexcel
                     size={20}
@@ -134,7 +139,9 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                   Exportar por Excel
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => alert("Jaja cree que ya programe esto pero aún no capo")}
+                  onClick={() => {
+                    exportPDF("exportScheduleClassTable")
+                  }}
                 >
                   <VscFilePdf
                     size={20}

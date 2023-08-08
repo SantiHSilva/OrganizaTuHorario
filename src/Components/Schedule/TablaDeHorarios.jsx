@@ -99,7 +99,9 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHora
         maxHeight: `${maxAltura}px`, maxWidth: `800PX`, overflow: 'auto', color: "black"
       }}
     >
-      <table>
+      <table
+        id={"exportScheduleClassTable"}
+      >
         <thead>
         <tr>
           <th>Hora/Día</th>
