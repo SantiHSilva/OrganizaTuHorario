@@ -1,15 +1,7 @@
-import {generateHours, getArrayForTableCells} from "./FunctionsSchedule.js";
-import {useEffect, useState} from "react";
+import {getArrayForTableCells} from "./FunctionsSchedule.js";
 import {adaptColorByHexColor} from "../../Utils/Utils.js";
 
-export const TablaDeHorarios = ({combinaciones, numDeCombinacion, mostrarPorHorario24Horas}) => {
-
-  const [hours, setHours] = useState(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
-
-  useEffect(() => {
-    console.log("Cambiando horas")
-    setHours(generateHours(combinaciones[numDeCombinacion], mostrarPorHorario24Horas));
-  }, [combinaciones, numDeCombinacion, mostrarPorHorario24Horas]);
+export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}) => {
 
   const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 

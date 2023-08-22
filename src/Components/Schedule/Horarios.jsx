@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {createCombinationsBacktracking} from "./FunctionsSchedule.js";
+import {createCombinationsBacktracking, generateHours} from "./FunctionsSchedule.js";
 import {TablaDeHorarios} from "./TablaDeHorarios.jsx";
 import {NavBarHorarios} from "./NavBarHorarios.jsx";
 
@@ -19,7 +19,11 @@ export default function Horarios({data, update, theme}){
     <>
       <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} setMostrarPorHorario24Horas={setMostrarPorHorario24Horas} mostrarPorHorario24Horas={mostrarPorHorario24Horas} theme={theme}/>
       <div className='p-1'/>
-      <TablaDeHorarios combinaciones={combinaciones} numDeCombinacion={pagina} mostrarPorHorario24Horas={mostrarPorHorario24Horas} />
+      <TablaDeHorarios
+        combinaciones={combinaciones}
+        numDeCombinacion={pagina}
+        hours={generateHours(combinaciones[pagina], mostrarPorHorario24Horas)}
+      />
     </>
   )
 

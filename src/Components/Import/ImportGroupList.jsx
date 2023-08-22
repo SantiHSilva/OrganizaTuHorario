@@ -1,5 +1,5 @@
 import {useSearchParams} from "react-router-dom";
-import {replaceGroupList} from "../Data/groupManager.js";
+import {replaceGroupList} from "../../Data/groupManager.js";
 import JSONCrush from "jsoncrush";
 import {decompressFromEncodedURIComponent} from "lz-string";
 

@@ -1,9 +1,9 @@
 import {memo} from "react";
-import {Container, Navbar, NavLink} from "react-bootstrap";
+import {Container, Dropdown, Navbar} from "react-bootstrap";
 import {ThemeButton} from "./themeButton.jsx";
 import {RxCalendar} from "react-icons/rx";
-import {AiOutlineGithub} from "react-icons/ai";
 import {Tooltip} from "react-tooltip";
+import {MdLanguage} from "react-icons/md";
 
 function NavBar({currentTheme, updateTheme}){
   return(
@@ -27,29 +27,38 @@ function NavBar({currentTheme, updateTheme}){
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-            <NavLink href="https://github.com/MetTheCarrot/OrganizaTuHorario" className='m-2' data-tooltip-id={'srcCode'}>
 
-              <button
-                className='btn noClickBorder'
-                color='transparent'
-                data-tooltip-id = 'themeButton'
+            <Dropdown>
+              <Dropdown.Toggle className={'p-0'}
+                               style={{
+                                 backgroundColor: 'transparent',
+                                 border: 'none',
+                               }}
               >
-                <AiOutlineGithub
-                  className='OTHNavBarIcon'
-                  size={30}
-                />
-              </button>
 
-            </NavLink>
+                <MdLanguage
+                  size={30}
+                  className='OTHNavBarIcon m-2'
+                  data-tooltip-id="selectLang"
+                />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  xd
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+
             <ThemeButton currentTheme={currentTheme} updateTheme={updateTheme} />
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
       <Tooltip
-        id="srcCode"
+        id="selectLang"
         noArrow
-        place={'bottom'}
+        place={'left'}
         border={'1px solid #ffffff'}
         style={{
           userSelect: 'none',
@@ -58,7 +67,7 @@ function NavBar({currentTheme, updateTheme}){
           zIndex: 1000,
         }}
       >
-        Código fuente
+        Cambiar idioma
       </Tooltip>
     </div>
   )

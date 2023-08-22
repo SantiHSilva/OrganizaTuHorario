@@ -2,7 +2,7 @@ import {Tooltip} from "react-tooltip";
 import {BiExport} from "react-icons/bi";
 import {useEffect, useState} from "react";
 import Modal from "react-bootstrap/Modal";
-import {getGroupList} from "../../Data/groupManager.js";
+import {getGroupList} from "../../../Data/groupManager.js";
 import {Form, InputGroup} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import {IoIosCopy} from "react-icons/io";

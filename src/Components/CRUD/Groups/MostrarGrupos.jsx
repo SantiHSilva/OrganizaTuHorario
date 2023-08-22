@@ -1,4 +1,4 @@
-import {deleteSpecifiedGroup} from "../../Data/groupManager.js";
+import {deleteSpecifiedGroup} from "../../../Data/groupManager.js";
 import Swal from "sweetalert2";
 import {memo, useEffect, useState} from "react";
 import {FaEdit, FaTrashAlt} from "react-icons/fa";

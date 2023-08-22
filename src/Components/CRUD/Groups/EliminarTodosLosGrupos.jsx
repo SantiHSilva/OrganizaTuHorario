@@ -1,7 +1,7 @@
 import {memo} from "react";
 import {TiFolderDelete} from "react-icons/ti";
 import Swal from "sweetalert2";
-import {existGroups, globalDeleteGroups} from "../../Data/groupManager.js";
+import {existGroups, globalDeleteGroups} from "../../../Data/groupManager.js";
 import {Tooltip} from "react-tooltip";
 import {toast} from "react-toastify";
 

@@ -2,7 +2,7 @@ import {useState, useEffect, memo} from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Form } from 'react-bootstrap';
 import {adaptColorByHexColor, getValueById, randomHexColor} from '../../../Utils/Utils.js'
-import { saveValues, getGroupList } from "../../Data/groupManager.js";
+import { saveValues, getGroupList } from "../../../Data/groupManager.js";
 import {toast, ToastContainer} from "react-toastify";
 import {BiBookAdd} from "react-icons/bi";
 import {Tooltip} from "react-tooltip";

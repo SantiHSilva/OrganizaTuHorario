@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import {RouterProvider} from "react-router-dom";
 import {Urls} from "./Urls.jsx";
-import { theme } from './Utils/GlobalVars.js';
+import { theme } from './Data/GlobalVars.js';
 
 document.documentElement.setAttribute('data-bs-theme', theme) // Bootstrap 5
 

@@ -12,10 +12,10 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 - [ ]  Estilo personalizable del cuerpo de la tabla de horarios
 - [ ]  Manual de usuario
 - [ ]  Selector de idiomas personalizables
-- [ ]  Exportación de los horarios por:
-    - [ ]  Imagenes (Separadas)
-    - [ ]  Hoja de excel (Juntas)
-    - [ ]  PDF (Sepadas o Juntas)
+- [X]  Exportación de los horarios por:
+    - [X]  Imagenes (Separadas)
+    - [X]  Hoja de excel (Separadas o Juntas)
+    - [X]  PDF (Separadas o Juntas)
 
 ## Usarlo localmente
 

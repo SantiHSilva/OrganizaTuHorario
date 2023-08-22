@@ -1,5 +1,5 @@
 import Modal from "react-bootstrap/Modal";
-import {getGroupById} from "../../Data/groupManager.js";
+import {getGroupById} from "../../../Data/groupManager.js";
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import {useEffect, useState} from "react";
 import useArray from "../../CustomHooks/useArray.js";

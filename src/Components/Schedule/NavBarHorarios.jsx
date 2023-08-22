@@ -6,14 +6,15 @@ import {HiEllipsisVertical} from "react-icons/hi2";
 import {SiMicrosoftexcel} from "react-icons/si";
 import {BsFiletypePng} from "react-icons/bs";
 import {VscFilePdf} from "react-icons/vsc";
-import exportPDF from "../../Utils/Export/PDF.js";
+import {exportPDF, exportCombinationsPDF} from "../../Utils/Export/PDF.js";
 import ExportPNG from "../../Utils/Export/PNG.js";
-import ExportExcel from "../../Utils/Export/XLSX.js";
+import {ExportExcel, exportCombinationsExcel} from "../../Utils/Export/XLSX.js";
 import html2canvas from "html2canvas";
-import {writeFile, utils} from "xlsx";
-
+import {useState} from "react";
 
 export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHorario24Horas, setMostrarPorHorario24Horas, theme}) => {
+
+  const [bloquear, setBloquear] = useState(false);
 
   function prevPageHorario(){
     if(pagina === 0) return;
@@ -44,9 +45,10 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
             >
               <Pagination.Prev
                 onClick={prevPageHorario}
-                disabled={pagina === 0}
+                disabled={pagina === 0 || bloquear}
               />
               <Form.Select
+                disabled={bloquear}
                 style={{
                   border: 'none',
                   borderRadius: '0px',
@@ -69,7 +71,7 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
               </Form.Select>
               <Pagination.Next
                 onClick={nextPageHorario}
-                disabled={pagina === (combinaciones.length - 1) || combinaciones.length === 0}
+                disabled={pagina === (combinaciones.length - 1) || combinaciones.length === 0 || bloquear}
               />
 
             </Pagination>
@@ -81,7 +83,6 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
             <div
 
               style={{
-                /*Ocultar*/
                 visibility: 'hidden',
               }}
             >
@@ -113,14 +114,26 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                     className='me-2'
                   />
                   Cambiar formato de las horas a
-                  <h className='fw-bold'>
+                  <span className='fw-bold'>
                   {mostrarPorHorario24Horas ?
                     " 12 horas"
                     :
                     " 24 horas"}
-                  </h>
+                  </span>
                 </Dropdown.Item>
                 <Dropdown.Divider />
+
+                <Dropdown.ItemText
+                  className='fw-bold text-center'
+                  style={{
+                    userSelect: 'none',
+                  }}
+                >
+                  Exportar individualmente
+                </Dropdown.ItemText>
+
+                {/* Exportar por PNG individual */}
+
                 <Dropdown.Item
                   onClick={() => {
                     ExportPNG("exportScheduleClassTable", html2canvas)
@@ -128,18 +141,17 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                 >
                   <BsFiletypePng
                     size={20}
-                    className='me-2'
-                  />
-                  Exportar por PNG
+                    className='me-2'/>
+                  PNG
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => ExportExcel("exportScheduleClassTable", writeFile, utils.table_to_book)}
+                  onClick={() => ExportExcel("exportScheduleClassTable")}
                 >
                   <SiMicrosoftexcel
                     size={20}
                     className='me-2'
                   />
-                  Exportar por Excel
+                  Excel
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
@@ -150,10 +162,52 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                     size={20}
                     className='me-2'
                   />
-                  Exportar por PDF
+                  PDF
                 </Dropdown.Item>
 
-                {/* TODO: Exportación de imagenes  */}
+                {/* Exportación grupal */}
+
+                <Dropdown.Divider />
+
+                <Dropdown.ItemText
+                  className='fw-bold text-center'
+                  style={{
+                    userSelect: 'none',
+                  }}
+                >
+                  Exportar grupalemente
+                </Dropdown.ItemText>
+
+                <Dropdown.Item
+                  onClick={() => {
+                    setBloquear(true)
+                    exportCombinationsPDF(combinaciones, html2canvas, setPagina).then(() => {
+                      setBloquear(false)
+                    })
+                  }}
+                >
+                  <VscFilePdf
+                    size={20}
+                    className='me-2'
+                  />
+                  PDF
+                </Dropdown.Item>
+
+                <Dropdown.Item
+                  onClick={() => {
+                    setBloquear(true)
+                    exportCombinationsExcel(combinaciones, setPagina).then(() => {
+                      setBloquear(false)
+                    })
+                  }}
+                >
+                  <SiMicrosoftexcel
+                    size={20}
+                    className='me-2'
+                  />
+                  Excel
+                </Dropdown.Item>
+
               </Dropdown.Menu>
             </Dropdown>
 

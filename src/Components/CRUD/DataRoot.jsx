@@ -1,6 +1,6 @@
 import useToggle from "../CustomHooks/useToggle.js";
 import {ListGroups} from "./Groups/MostrarGrupos.jsx";
-import {theme} from "../../Utils/GlobalVars.js";
+import {theme} from "../../Data/GlobalVars.js";
 import {GroupsNavBar} from "./NavBar.jsx";
 import Horarios from "../Schedule/Horarios.jsx";
 

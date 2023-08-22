@@ -1,4 +1,4 @@
-import {toggleTheme} from "./Data/themeManager.js";
+import {toggleTheme} from "../Data/themeManager.js";
 import {memo, useMemo, useState} from "react";
 import {HiSun, HiMoon} from "react-icons/hi2";
 

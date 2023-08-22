@@ -1,6 +1,6 @@
 import Button from "react-bootstrap/Button";
 import {getValueById} from "../../../Utils/Utils.js";
-import {modifyColorName, modifyGroupName, modifyMaterias} from "../../Data/groupManager.js";
+import {modifyColorName, modifyGroupName, modifyMaterias} from "../../../Data/groupManager.js";
 import {estaCruzandoLosTiemposConOtrosTiempos, isInvalidStartHour} from "../../../Utils/TimeUtils.js";
 import {toast} from "react-toastify";
 

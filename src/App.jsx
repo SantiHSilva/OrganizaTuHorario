@@ -1,5 +1,5 @@
 import DataRoot from "./Components/CRUD/DataRoot.jsx";
-import { globalGroupList, theme } from "./Utils/GlobalVars.js";
+import { globalGroupList, theme } from "./Data/GlobalVars.js";
 import {NavBarMenu} from "./Components/NavBar.jsx";
 import {useEffect, useState} from "react";
 
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <>
-      <NavBarMenu currentTheme={currentTheme} updateTheme={updateTheme}  />
+      <NavBarMenu currentTheme={currentTheme} updateTheme={updateTheme}/>
       <DataRoot data={globalGroupList} updateTheme={updateTheme} />
     </>
   )
