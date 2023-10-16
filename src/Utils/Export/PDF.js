@@ -1,5 +1,5 @@
 import jsPDF from 'jspdf'
-import adjustPage from "./Utils.js";
+import {adjustPage, waitForElm} from "./Utils.js";
 
 function exportPDF(tableID, html2canvas){
 
@@ -7,13 +7,15 @@ function exportPDF(tableID, html2canvas){
 
   adjustPage();
 
-  const w = table.offsetWidth
-  const h = table.offsetHeight
   html2canvas(table, {
     dpi: 300,
     scale: 3,
   }).then(canvas => {
     var img = canvas.toDataURL("image/jpeg", 1);
+
+    const w = table.offsetWidth
+    const h = table.offsetHeight
+
     var doc = new jsPDF({
         orientation: "l",
         unit: "px",
@@ -27,7 +29,7 @@ function exportPDF(tableID, html2canvas){
 async function exportCombinationsPDF(combinations, html2canvas, setPage) {
   // Si no hay combinaciones, exportar el horario normal
   if (combinations.length === 0) {
-    exportPDF("exportScheduleClassTable", html2canvas);
+    exportPDF("exportScheduleClassTable0", html2canvas);
     return;
   }
 
@@ -45,12 +47,9 @@ async function exportCombinationsPDF(combinations, html2canvas, setPage) {
 
     await setPage(numDeCombinacion);
 
-    const table = await document.getElementById("exportScheduleClassTable")
+    let table = await waitForElm("#exportScheduleClassTable" + numDeCombinacion);
 
     await adjustPage();
-
-    const w = table.offsetWidth;
-    const h = table.offsetHeight;
 
     await html2canvas(table, {
       dpi: 300,
@@ -58,12 +57,15 @@ async function exportCombinationsPDF(combinations, html2canvas, setPage) {
     }).then(canvas => {
       const img = canvas.toDataURL("image/jpeg", 0.6); // 0.6 es la calidad de la imagen
 
+      const w = table.offsetWidth;
+      const h = table.offsetHeight;
+
       pdf.addPage(
         [w,h],
         "l"
         );
 
-      pdf.addImage(img, 'JPEG', 0, 0, w, h);
+      pdf.addImage(img, 'jpeg', 0, 0, w, h);
     });
   }
 

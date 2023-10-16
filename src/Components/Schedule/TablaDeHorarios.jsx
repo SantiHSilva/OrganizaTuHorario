@@ -93,7 +93,12 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}) => {
       id={"scrollTableDiv"}
     >
       <table
-        id={"exportScheduleClassTable"}
+        className={"exportScheduleClassTable" + numDeCombinacion}
+        id={"exportScheduleClassTable" + numDeCombinacion}
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
       >
         <thead>
         <tr>

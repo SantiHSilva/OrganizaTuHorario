@@ -118,7 +118,7 @@ table {
 
 table td,
 table th {
-    border: 1px solid black;
+    border: 1px solid #363636;
 }
 table thead th {
     width: 100%;

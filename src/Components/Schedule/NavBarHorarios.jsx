@@ -136,7 +136,7 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
 
                 <Dropdown.Item
                   onClick={() => {
-                    ExportPNG("exportScheduleClassTable", html2canvas)
+                    ExportPNG("exportScheduleClassTable" + pagina, html2canvas)
                   }}
                 >
                   <BsFiletypePng
@@ -145,7 +145,7 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                   PNG
                 </Dropdown.Item>
                 <Dropdown.Item
-                  onClick={() => ExportExcel("exportScheduleClassTable")}
+                  onClick={() => ExportExcel("exportScheduleClassTable" + pagina)}
                 >
                   <SiMicrosoftexcel
                     size={20}
@@ -155,7 +155,7 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                 </Dropdown.Item>
                 <Dropdown.Item
                   onClick={() => {
-                    exportPDF("exportScheduleClassTable", html2canvas)
+                    exportPDF("exportScheduleClassTable" + pagina, html2canvas)
                   }}
                 >
                   <VscFilePdf

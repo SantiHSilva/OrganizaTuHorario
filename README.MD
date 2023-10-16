@@ -22,7 +22,7 @@ La idea de este proyecto es automatizar una cantidad de opciones disponibles par
 Clona el projecto
 
 ```bash
-  git clone https://github.com/MetTheCarrot/OrganizaTuHorario.git
+  git clone https://github.com/SantiHSilva/OrganizaTuHorario.git
 ```
 
 Ve al directorio del proyecto

@@ -1,4 +1,4 @@
-import adjustPage from "./Utils.js";
+import {adjustPage, waitForElm} from "./Utils.js";
 import {writeFile, utils} from "xlsx";
 
 function ExportExcel(tableId){
@@ -12,7 +12,7 @@ function ExportExcel(tableId){
 
 async function exportCombinationsExcel(combinations, setPage){
   if(combinations.length === 0){
-    ExportExcel("exportScheduleClassTable", writeFile, utils.table_to_book);
+    ExportExcel("exportScheduleClassTable0", writeFile, utils.table_to_book);
     return;
   }
 
@@ -23,7 +23,7 @@ async function exportCombinationsExcel(combinations, setPage){
     console.log(`Generando Excel de la combinación ${numDeCombinacion}`);
 
     await setPage(numDeCombinacion);
-    const table = await document.getElementById("exportScheduleClassTable");
+    const table = await document.getElementById("exportScheduleClassTable" + numDeCombinacion);
     await adjustPage();
     const tempTable =  await utils.table_to_sheet(table, {sheet: `Horario #${numDeCombinacion + 1}`});
 

@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "https://metthecarrot.github.io/OrganizaTuHorario/",
+  base: "https://santihsilva.github.io/OrganizaTuHorario/",
 })

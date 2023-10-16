@@ -1,9 +1,9 @@
 import {memo} from "react";
-import {Container, Dropdown, Navbar} from "react-bootstrap";
+import {Container, Navbar} from "react-bootstrap";
 import {ThemeButton} from "./themeButton.jsx";
 import {RxCalendar} from "react-icons/rx";
 import {Tooltip} from "react-tooltip";
-import {MdLanguage} from "react-icons/md";
+import {LanguageBar} from "./Lang/Language.jsx";
 
 function NavBar({currentTheme, updateTheme}){
   return(
@@ -28,27 +28,7 @@ function NavBar({currentTheme, updateTheme}){
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
 
-            <Dropdown>
-              <Dropdown.Toggle className={'p-0'}
-                               style={{
-                                 backgroundColor: 'transparent',
-                                 border: 'none',
-                               }}
-              >
-
-                <MdLanguage
-                  size={30}
-                  className='OTHNavBarIcon m-2'
-                  data-tooltip-id="selectLang"
-                />
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  xd
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+            <LanguageBar />
 
             <ThemeButton currentTheme={currentTheme} updateTheme={updateTheme} />
           </Navbar.Collapse>
