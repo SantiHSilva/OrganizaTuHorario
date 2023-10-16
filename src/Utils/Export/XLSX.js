@@ -23,7 +23,7 @@ async function exportCombinationsExcel(combinations, setPage){
     console.log(`Generando Excel de la combinación ${numDeCombinacion}`);
 
     await setPage(numDeCombinacion);
-    const table = await document.getElementById("exportScheduleClassTable" + numDeCombinacion);
+    const table = await waitForElm("#exportScheduleClassTable" + numDeCombinacion);
     await adjustPage();
     const tempTable =  await utils.table_to_sheet(table, {sheet: `Horario #${numDeCombinacion + 1}`});
 
