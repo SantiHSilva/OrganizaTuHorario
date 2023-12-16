@@ -33,7 +33,9 @@ function createCombinationsBacktracking(newMaterias) {
 
   function filterCombinations(combinations) {
     function doTimeRangesOverlap(range1, range2) {
-      return estaCruzandoLosTiemposConOtrosTiempos(range1.dia, range1.inicio, range1.fin, range2.dia, range2.inicio, range2.fin)
+      const cruza = estaCruzandoLosTiemposConOtrosTiempos(range1.dia, range1.inicio, range1.fin, range2.dia, range2.inicio, range2.fin)
+      console.log(`doTimeRangesOverlap: ${cruza}`)
+      return cruza
     }
 
     function combinationHasTimeOverlap(combination) {
@@ -64,8 +66,13 @@ function createCombinationsBacktracking(newMaterias) {
 
 function generateHours(singleCombination, mostrarPorHorario24Horas){
 
-  if(typeof(singleCombination) === "undefined")
-    return Array.from({length: 23}, (_, i) => (`${i+1}:00`.padStart(5, '0')));
+  if(typeof(singleCombination) === "undefined"){
+    const horas = Array.from({length: 24}, (_, i) => (`${i}:00`.padStart(5, '0')));
+    if(mostrarPorHorario24Horas)
+      return horas
+    else
+      return hoursTo12HFormat(horas)
+  }
 
   const hours = [];
 
@@ -152,10 +159,10 @@ function reformat12HTo24h(dato){
     const periodo = dato.slice(-2)
     dato = dato.slice(0, -3)
     const [horas, minutos] = dato.split(":").map(Number)
-    if(periodo === "AM")
-      return dato
     if(periodo === "AM" && horas === 12)
       return `00:${formatNumber(minutos)}`
+    if(periodo === "AM")
+      return dato
     if(periodo === "PM" && horas === 12)
       return dato
     return(`${horas + 12}:${formatNumber(minutos)}`)

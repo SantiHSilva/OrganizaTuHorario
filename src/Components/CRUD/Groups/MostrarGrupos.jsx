@@ -6,7 +6,7 @@ import {adaptColorByHexColor} from "../../../Utils/Utils.js";
 import {SubgroupDashboard} from "../SubGroups/SubgroupDashboard.jsx";
 import {toast} from "react-toastify";
 
-function MostrarGrupos({toggleUpdate, data, theme}){
+function MostrarGrupos({toggleUpdate, data, theme, messages}){
 
   const [key, setKey] = useState(-1)
   const [showModal, setShowModal] = useState(false)
@@ -22,21 +22,26 @@ function MostrarGrupos({toggleUpdate, data, theme}){
     console.log(theme)
   }, []);
 
+  function replaceStr(str, nameGroup){
+    return str.replace("{nameGroup}", nameGroup)
+  }
+
   function eliminarGrupo(idGroupToErase, nameGroup) {
     Swal.fire({
-      title: `¿Estás seguro de eliminar el grupo ${nameGroup}?`,
-      text: "No podrás revertir esta acción",
+      title: replaceStr(messages.deleteModalNotificacionTitle, nameGroup),
+      text: messages.deleteModalNotificacionText,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      cancelButtonText: "Cancelar",
-      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: messages.cancelButtonText,
+      confirmButtonText: messages.confirmButtonText,
     }).then((result) => {
       if (result.isConfirmed) {
         deleteSpecifiedGroup(idGroupToErase);
         toggleUpdate();
-        toast.info(`El grupo ${nameGroup} ha sido eliminado.`,
+        toast.info(
+          replaceStr(messages.confirmDeleteMessage, nameGroup),
           {
             position: "top-right",
             autoClose: 3000,

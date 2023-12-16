@@ -4,7 +4,7 @@ import {theme} from "../../Data/GlobalVars.js";
 import {GroupsNavBar} from "./NavBar.jsx";
 import Horarios from "../Schedule/Horarios.jsx";
 
-export default function DataRoot({data}){
+export default function DataRoot({data, dias, linkCopySuccess, messages}){
   const [update, toggleUpdate] = useToggle(false);
   console.log("Updating DataRoot...");
 
@@ -19,7 +19,7 @@ export default function DataRoot({data}){
               transition: 'all 0.2s ease-in-out',
               }}
           >
-            <Horarios  update={update} data={data} theme={theme} />
+            <Horarios  update={update} data={data} theme={theme} dias={dias}/>
           </div>
           <div className="col"
             style={{
@@ -27,9 +27,9 @@ export default function DataRoot({data}){
               transition: 'all 0.2s ease-in-out',
             }}
           >
-            <GroupsNavBar currentTheme={theme} data={data} toggleUpdate={toggleUpdate} />
+            <GroupsNavBar linkCopySuccess={linkCopySuccess} currentTheme={theme} data={data} toggleUpdate={toggleUpdate} messages={messages} />
             {/* Listar Grupos */}
-            <ListGroups toggleUpdate={toggleUpdate} data={data} theme={theme} />
+            <ListGroups toggleUpdate={toggleUpdate} data={data} theme={theme} messages={messages} />
           </div>
         </div>
       </div>

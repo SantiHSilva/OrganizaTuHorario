@@ -5,12 +5,12 @@ import {existGroups, globalDeleteGroups} from "../../../Data/groupManager.js";
 import {Tooltip} from "react-tooltip";
 import {toast} from "react-toastify";
 
-function deleteAllGroups({theme, toggleUpdate}){
+function deleteAllGroups({theme, toggleUpdate, messages}){
 
   const handleShow = () => {
 
     if(!existGroups()) {
-      toast.error("No hay grupos para borrar.",
+      toast.error(messages.noGroupsToEraseError,
         {
           position: "top-left",
           autoClose: 3000,
@@ -25,18 +25,18 @@ function deleteAllGroups({theme, toggleUpdate}){
 
     Swal.fire(
       {
-        title: '¿Estás seguro de eliminar todos los grupos?',
-        text: "No podrás revertir esta acción",
+        title: messages.eraseAllGroupsModalTitle,
+        text: messages.eraseAllGroupsModalText,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        cancelButtonText: "Cancelar",
-        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: messages.eraseAllGroupsModalCancelButtonText,
+        confirmButtonText: messages.eraseAllGroupsModalConfirmButtonText,
       }
     ).then((result) => {
       if (result.isConfirmed) {
-        toast.info("Todos los grupos han sido eliminados.",
+        toast.info(messages.eraseAllGroupsModalConfirmDeleteMessage,
           {
             position: "top-left",
             autoClose: 3000,
@@ -72,7 +72,7 @@ function deleteAllGroups({theme, toggleUpdate}){
           borderRadius: '20px',
         }}
       >
-        Borrar todos los grupos
+        {messages.eraseAllGroupsTooltip}
       </Tooltip>
 
     </div>

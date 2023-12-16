@@ -5,16 +5,17 @@ import {decompressFromEncodedURIComponent} from "lz-string";
 
 export default function ImportGroupList(){
 
-
   const [ params ] = useSearchParams();
 
   try{
-    const groupList = JSON.parse((JSONCrush.uncrush(decompressFromEncodedURIComponent(params.get("groupList")))))
+    const searchGroup = params.get("groupList")
+    const groupList = JSON.parse((JSONCrush.uncrush(decompressFromEncodedURIComponent(searchGroup))))
     console.log("Decodificada: ")
     console.log(groupList)
+
     replaceGroupList(groupList);
   } catch(e){
-    alert("La lista de grupos no es válida.")
+    alert("Error importing groups")
     console.log("Error: ")
     console.log(e)
     return;
@@ -37,24 +38,6 @@ export default function ImportGroupList(){
     /*console.log("Redirigiendo a: " + url)*/
     return url;
   }
-
-/*  useEffect(() => {
-    console.log("Importing groupList: " + groupList)
-
-    try{
-      const groupListDecoded = JSON.parse(decodeURIComponent(JSONCrush.uncrush(groupList)))
-      console.log("Decodificada: ")
-      console.log(groupListDecoded)
-      replaceGroupList(groupListDecoded);
-    } catch(e){
-      alert("La lista de grupos no es válida.")
-      console.log("Error: " + e)
-      return;
-    }
-
-    window.location.href = getRedirectURL();
-
-  }, [groupList])*/
 
   return(
     <>

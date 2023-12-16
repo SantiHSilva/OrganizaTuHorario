@@ -12,6 +12,12 @@ export default function FooterSubgroupDashboard({handleClose, globalUpdate, arra
     let guardar = false;
     let hayProblemas = false;
 
+    // Si los cambios actuales no tienen nada, es decir que no hay materias.
+    if(array.length === 0) {
+      console.log("No hay materias, guardando...")
+      guardar = true;
+    }
+
     if(array !== groupListed.materias) {
       console.log("Verificando datos de las materias...")
 

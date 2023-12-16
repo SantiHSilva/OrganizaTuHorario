@@ -29,6 +29,11 @@ aside{
     background: #555;
 }
 
+.OTHNavBarIcon{
+    /*Click*/
+    cursor: pointer;
+}
+
 .OTHNavBarIcon:hover{
     fill: #FFD700;
 }

@@ -10,8 +10,9 @@ import confetti from 'canvas-confetti'
 import JSONCrush from "jsoncrush";
 import {toast} from "react-toastify";
 import {compressToEncodedURIComponent} from "lz-string";
+import {FormattedMessage} from "react-intl";
 
-export const ExportarGrupos = ({theme}) => {
+export const ExportarGrupos = ({theme, linkCopySuccess, }) => {
 
   const [openModal, setOpenModal] = useState(false);
   const [copyLink, setCopyLink] = useState("");
@@ -25,7 +26,7 @@ export const ExportarGrupos = ({theme}) => {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(copyLink).then(() => {
       toast.info(
-        `Se ha copiado en enlace correctamente`,
+        linkCopySuccess,
         {
           icon: '💾',
           position: "top-left",
@@ -59,7 +60,7 @@ export const ExportarGrupos = ({theme}) => {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            📡 ¡Copia el enlace y compartelo!
+            <FormattedMessage id={"linkModalTitle"} />
           </Modal.Title>
         </Modal.Header>
 
@@ -70,14 +71,14 @@ export const ExportarGrupos = ({theme}) => {
                     onClick={()=>copyToClipboard()}
             >
               <IoIosCopy size={20} className='mx-auto text-center'/>
-              <span className='mx-auto text-center text-body p-2'>Copiar</span>
+              <span className='mx-auto text-center text-body p-2'>
+                <FormattedMessage id={"linkModalButtonCopy"} />
+              </span>
             </Button>
             <Form.Control
               readOnly
               value={copyLink}
               onClick={()=>copyToClipboard()}
-              aria-label="Example text with button addon"
-              aria-describedby="basic-addon1"
             />
           </InputGroup>
 
@@ -86,7 +87,7 @@ export const ExportarGrupos = ({theme}) => {
         {/* Footer */}
         <Modal.Footer>
           <button className='btn bg-danger text-white' onClick={()=>setOpenModal(false)}>
-            Cerrar
+            <FormattedMessage id={"linkModalButtonClose"} />
           </button>
         </Modal.Footer>
 
@@ -110,7 +111,7 @@ export const ExportarGrupos = ({theme}) => {
           borderRadius: '20px',
         }}
       >
-        Exporta los grupos a un enlace...
+        <FormattedMessage id={"linkTooltip"} />
       </Tooltip>
 
     </>

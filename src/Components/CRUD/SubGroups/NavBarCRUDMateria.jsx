@@ -19,8 +19,8 @@ export default function NavBarCRUDMateria({array, push, numPageMaterias, remove,
     push(newData);
 
     // After Create Materia
-
-    setNumPageMaterias(numPageMaterias + 1);
+//    setNumPageMaterias(numPageMaterias + 1);
+    setNumPageMaterias(array.length + 1);
     setNumPageDescripciones(1)
 
   }

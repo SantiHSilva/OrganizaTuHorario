@@ -7,7 +7,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {BiBookAdd} from "react-icons/bi";
 import {Tooltip} from "react-tooltip";
 
-function TestingModal({toggleUpdate, theme}){
+function CreateGroupModal({toggleUpdate, theme, messages}){
 
   const [show, setShow] = useState(false);
 
@@ -105,7 +105,7 @@ function TestingModal({toggleUpdate, theme}){
           borderRadius: '20px',
         }}
       >
-        Crear un nuevo grupo
+        {messages.createGroupTooltip}
       </Tooltip>
 
       <Modal
@@ -120,7 +120,7 @@ function TestingModal({toggleUpdate, theme}){
         {/* Header */}
         <Modal.Header closeButton>
           <Modal.Title>
-          ✍️ Crear nuevo grupo 
+            {messages.createGroupModalTitle}
           </Modal.Title>
         </Modal.Header>
         
@@ -132,14 +132,14 @@ function TestingModal({toggleUpdate, theme}){
             >
                 <Form.Group>
                     <Form.Label>
-                        Ingresa el nombre del grupo y escoge un color
+                      {messages.createGroupModalFormDescription}
                     </Form.Label>
                     <div className='d-flex flex-row bd-highlight'>
-                      <Form.Control id="groupName" onChange={detectChanges} type="text" placeholder="Nombre del grupo" className='shadow-sm bg-body rounded' />
+                      <Form.Control id="groupName" onChange={detectChanges} type="text" placeholder={messages.createGroupModalPlaceholderNameGroup} className='shadow-sm bg-body rounded' />
                       <Form.Control
                       type="color" 
                       defaultValue={hexColor}
-                      title='Selecciona un color para el grupo'
+                      title={messages.createGroupModalTitleColorPicker}
                       className='shadow-sm bg-body rounded'
                       id='groupColor'
                       />
@@ -152,10 +152,10 @@ function TestingModal({toggleUpdate, theme}){
         {/* Footer */}
         <Modal.Footer>
           <button className='btn bg-danger' onClick={handleSave}>
-          ❌ Cancelar
+            {messages.createGroupModalButtonCancel}
           </button>
           <button className='btn' onClick={saveChanges} id='modifyButtonSave'>
-          💾 Crear 
+            {messages.createGroupModalButtonCreate}
           </button>
         </Modal.Footer>
 
@@ -164,4 +164,4 @@ function TestingModal({toggleUpdate, theme}){
   );
 }
 
-export const CrearGrupoModal = memo(TestingModal);
+export const CrearGrupoModal = memo(CreateGroupModal);

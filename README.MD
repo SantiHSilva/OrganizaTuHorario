@@ -1,4 +1,8 @@
+<img align='right' alt="Horario" src='https://cdn-icons-png.flaticon.com/512/856/856765.png' width='20%'>
+
 # Proyecto de creación de opciones de horario personalizadas
+
+
 
 La idea de este proyecto es automatizar una cantidad de opciones disponibles para la generación de horarios con la finalidad de facilitar la creación de multiples horarios disminuyendo el esfuerzo requerido.
 

@@ -1,11 +1,13 @@
 import {getArrayForTableCells} from "./FunctionsSchedule.js";
 import {adaptColorByHexColor} from "../../Utils/Utils.js";
+import {FormattedMessage} from "react-intl";
 
-export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}) => {
+export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours, dias}) => {
 
-  const dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
+  //let dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 
   const maxAltura = 460;
+  const styleScheduleTop = {backgroundColor: "#e0e0e0"}
 
   function adaptTitle(title){
     const words = title.split(" ");
@@ -102,17 +104,13 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}) => {
       >
         <thead>
         <tr>
-          <th
-            style={{
-              backgroundColor: "#e0e0e0",
-            }}
-          >Hora/Día</th>
+          <th style={styleScheduleTop}>
+            <FormattedMessage id={"scheduleInfo"} />
+          </th>
           {
             dias.map((dia, index) => (
               <th key={index} align="center" className='p-2'
-                  style={{
-                    backgroundColor: "#e0e0e0",
-                  }}
+                  style={styleScheduleTop}
               >
                 {dia}
               </th>

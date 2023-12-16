@@ -1,16 +1,18 @@
-import {toggleTheme} from "../Data/themeManager.js";
+import {toggleTheme} from "../../Data/themeManager.js";
 import {memo, useMemo, useState} from "react";
 import {HiSun, HiMoon} from "react-icons/hi2";
 
 // TODO: Cambiar el tooltip por rendimiento
 import {Tooltip} from 'react-tooltip';
+import {FormattedMessage} from "react-intl";
 
 function ComponentThemeButton({currentTheme, updateTheme}){
 
   const [theme, setTheme] = useState(currentTheme);
 
   const props = {
-    className: 'icon-link OTHNavBarIcon',
+    onClick: changeThemeButton,
+    className: 'OTHNavBarIcon icon-link m-2',
     size: 30,
     style: {
     }
@@ -25,7 +27,7 @@ function ComponentThemeButton({currentTheme, updateTheme}){
     }, [theme]);
 
   function getIcon(props){
-    return theme === "dark" ? <HiMoon {...props}/> : <HiSun {...props}/>;
+    return theme === "dark" ? <HiMoon {...props} data-tooltip-id = 'themeButton'/> : <HiSun {...props} data-tooltip-id = 'themeButton'/>;
   }
 
   function changeThemeButton(){
@@ -46,17 +48,9 @@ function ComponentThemeButton({currentTheme, updateTheme}){
           zIndex: 1000,
       }} // No seleccionar el texto del tooltip
       >
-        Cambiar tema
+        <FormattedMessage id={"tooltipChangeTheme"} />
       </Tooltip>
-      <button
-        onClick={changeThemeButton}
-        className='btn noClickBorder'
-        color='transparent'
-        data-tooltip-id = 'themeButton'
-      >
-        {SetIcon}
-      </button>
-
+      {SetIcon}
     </div>
   )
 }

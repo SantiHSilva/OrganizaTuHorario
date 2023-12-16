@@ -3,7 +3,7 @@ import {createCombinationsBacktracking, generateHours} from "./FunctionsSchedule
 import {TablaDeHorarios} from "./TablaDeHorarios.jsx";
 import {NavBarHorarios} from "./NavBarHorarios.jsx";
 
-export default function Horarios({data, update, theme}){
+export default function Horarios({data, update, theme, dias}){
 
   const [combinaciones, setCombinaciones] = useState([]);
   const [pagina, setPagina] = useState(0);
@@ -20,6 +20,7 @@ export default function Horarios({data, update, theme}){
       <NavBarHorarios combinaciones={combinaciones} pagina={pagina} setPagina={setPagina} setMostrarPorHorario24Horas={setMostrarPorHorario24Horas} mostrarPorHorario24Horas={mostrarPorHorario24Horas} theme={theme}/>
       <div className='p-1'/>
       <TablaDeHorarios
+        dias={dias}
         combinaciones={combinaciones}
         numDeCombinacion={pagina}
         hours={generateHours(combinaciones[pagina], mostrarPorHorario24Horas)}

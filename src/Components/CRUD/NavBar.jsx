@@ -4,8 +4,9 @@ import {CrearGrupoModal} from "./Groups/CrearGrupoModal.jsx";
 import {DeleteAllGroups} from "./Groups/EliminarTodosLosGrupos.jsx";
 import {ExportarGrupos} from "./Groups/ExportarGrupos.jsx";
 import {BiSolidBookOpen} from "react-icons/bi";
+import {FormattedMessage} from "react-intl";
 
-function navBar({currentTheme, toggleUpdate}){
+function navBar({currentTheme, toggleUpdate, linkCopySuccess, messages}){
   return(
       <Navbar className="shadow-sm"
         style={{
@@ -21,7 +22,7 @@ function navBar({currentTheme, toggleUpdate}){
             />
 
             <span className='p-2'>
-              Asignaturas
+              <FormattedMessage id={"titleGroupSection"} />
             </span>
 
           </Navbar.Brand>
@@ -29,9 +30,9 @@ function navBar({currentTheme, toggleUpdate}){
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end p-2">
 
-            <ExportarGrupos theme={currentTheme} />
-            <CrearGrupoModal theme={currentTheme} toggleUpdate={toggleUpdate} />
-            <DeleteAllGroups theme={currentTheme} toggleUpdate={toggleUpdate} />
+            <ExportarGrupos linkCopySuccess={linkCopySuccess} theme={currentTheme} />
+            <CrearGrupoModal messages={messages} theme={currentTheme} toggleUpdate={toggleUpdate} />
+            <DeleteAllGroups theme={currentTheme} toggleUpdate={toggleUpdate} messages={messages}/>
 
           </Navbar.Collapse>
 

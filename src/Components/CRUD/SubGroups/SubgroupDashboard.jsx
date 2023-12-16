@@ -20,6 +20,11 @@ export function SubgroupDashboard({idGroup, openModal, onHide, theme, globalUpda
 		setToggleUpdate(false);
 	}, [toggleUpdate]);
 
+	useEffect(() => {
+		if(numPageMaterias === 0 && openModal)
+			detectChanges();
+	}, [numPageMaterias]);
+
 	const { array, set, push, remove, update } = useArray([]);
 
 	useEffect(() => {

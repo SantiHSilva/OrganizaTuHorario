@@ -2,10 +2,12 @@ import {memo} from "react";
 import {Container, Navbar} from "react-bootstrap";
 import {ThemeButton} from "./themeButton.jsx";
 import {RxCalendar} from "react-icons/rx";
-import {Tooltip} from "react-tooltip";
-import {LanguageBar} from "./Lang/Language.jsx";
+import {LanguageBar} from "./Language.jsx";
+import {FormattedMessage} from "react-intl";
+import Info from "./Info.jsx";
 
-function NavBar({currentTheme, updateTheme}){
+function NavBar({currentTheme, updateTheme, currentLang, setLang}){
+
   return(
     <div>
       <Navbar className="bg-body-tertiary shadow"
@@ -23,32 +25,17 @@ function NavBar({currentTheme, updateTheme}){
             < RxCalendar
               size={30}
             />
-            &nbsp; Organiza Tu Horario
+            &nbsp;
+            <FormattedMessage id={"appName"} />
           </Navbar.Brand>
           <Navbar.Toggle />
           <Navbar.Collapse className="justify-content-end">
-
-            <LanguageBar />
-
-            <ThemeButton currentTheme={currentTheme} updateTheme={updateTheme} />
+            <Info/>
+            {/*<LanguageBar currentLang={currentLang} setLang={setLang} />
+            */}<ThemeButton currentTheme={currentTheme} updateTheme={updateTheme} />
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      <Tooltip
-        id="selectLang"
-        noArrow
-        place={'left'}
-        border={'1px solid #ffffff'}
-        style={{
-          userSelect: 'none',
-          borderRadius: '20px',
-          transition: 'all 0.2s ease-in-out',
-          zIndex: 1000,
-        }}
-      >
-        Cambiar idioma
-      </Tooltip>
     </div>
   )
 }

@@ -26,9 +26,16 @@ const estaCruzandoLosTiemposConOtrosTiempos = (dia1 = "", inicio1 = "00:00", fin
   //console.log(`dia1: ${dia1}, inicio1: ${inicio1}, fin1: ${fin1}, dia2: ${dia2}, inicio2: ${inicio2}, fin2: ${fin2}`)
 
   if (dia1 === dia2) {
+
+    if((dia1FinHora === dia2InicioHora && dia1FinMinutos === dia2InicioMinutos) || (dia1FinHora === dia2FinHora && dia1FinMinutos === dia2FinMinutos)){
+      return true;
+    }
+
     if (dia1FinHora < dia2InicioHora || (dia1FinHora === dia2InicioHora && dia1FinMinutos <= dia2InicioMinutos)) {
       return false;
     }
+
+
 
     return !(dia2FinHora < dia1InicioHora || (dia2FinHora === dia1InicioHora && dia2FinMinutos <= dia1InicioMinutos));
 

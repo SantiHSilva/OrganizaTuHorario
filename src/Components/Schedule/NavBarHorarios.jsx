@@ -1,6 +1,6 @@
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
-import {Pagination, Form, Dropdown} from "react-bootstrap";
+import {Pagination, Form, Dropdown, ButtonGroup} from "react-bootstrap";
 import {Ri24HoursLine} from "react-icons/ri";
 import {HiEllipsisVertical} from "react-icons/hi2";
 import {SiMicrosoftexcel} from "react-icons/si";
@@ -11,6 +11,8 @@ import ExportPNG from "../../Utils/Export/PNG.js";
 import {ExportExcel, exportCombinationsExcel} from "../../Utils/Export/XLSX.js";
 import html2canvas from "html2canvas";
 import {useState} from "react";
+import {FormattedMessage} from "react-intl";
+import Button from "react-bootstrap/Button";
 
 export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHorario24Horas, setMostrarPorHorario24Horas, theme}) => {
 
@@ -26,6 +28,10 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
     setPagina(pagina + 1);
   }
 
+  function getActualFormat(){
+    return !mostrarPorHorario24Horas ? "24" : "12";
+  }
+
   return (
     <>
       <Navbar className="shadow-sm rounded">
@@ -37,7 +43,7 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                 color: theme === 'dark' ? '#ffffff' : '#000000',
               }}
             >
-              Horarios
+              <FormattedMessage id={"scheduleTitle"} />
             </div>
 
             <Pagination
@@ -81,7 +87,6 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
 
 
             <div
-
               style={{
                 visibility: 'hidden',
               }}
@@ -113,15 +118,11 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                     size={20}
                     className='me-2'
                   />
-                  Cambiar formato de las horas a
-                  <span className='fw-bold'>
-                  {mostrarPorHorario24Horas ?
-                    " 12 horas"
-                    :
-                    " 24 horas"}
-                  </span>
+                  <FormattedMessage id={"scheduleChangeTimeFormat"} values={{format: `${getActualFormat()}`}}/>
                 </Dropdown.Item>
                 <Dropdown.Divider />
+
+                {/* Exportar horarios individualmente */}
 
                 <Dropdown.ItemText
                   className='fw-bold text-center'
@@ -129,41 +130,55 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                     userSelect: 'none',
                   }}
                 >
-                  Exportar individualmente
+                  <FormattedMessage id={"scheduleExportIndividual"} /> ({pagina + 1})
                 </Dropdown.ItemText>
 
-                {/* Exportar por PNG individual */}
+                <ButtonGroup
+                  className='d-flex m-2'
+                >
 
-                <Dropdown.Item
-                  onClick={() => {
-                    ExportPNG("exportScheduleClassTable" + pagina, html2canvas)
-                  }}
-                >
-                  <BsFiletypePng
-                    size={20}
-                    className='me-2'/>
-                  PNG
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => ExportExcel("exportScheduleClassTable" + pagina)}
-                >
-                  <SiMicrosoftexcel
-                    size={20}
-                    className='me-2'
-                  />
-                  Excel
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => {
-                    exportPDF("exportScheduleClassTable" + pagina, html2canvas)
-                  }}
-                >
-                  <VscFilePdf
-                    size={20}
-                    className='me-2'
-                  />
-                  PDF
-                </Dropdown.Item>
+                  {/* PNG*/}
+
+                  <Button
+                    variant='warning'
+                    onClick={() => {
+                      ExportPNG("exportScheduleClassTable" + pagina, html2canvas)
+                    }}
+                  >
+                    <BsFiletypePng
+                      size={20}
+                      className='me-2'/>
+                    PNG
+                  </Button>
+
+                  {/* Excel */}
+
+                  <Button
+                    variant='success'
+                    onClick={() => ExportExcel("exportScheduleClassTable" + pagina)}
+                  >
+                    <SiMicrosoftexcel
+                      size={20}
+                      className='me-2'
+                    />
+                    Excel
+                  </Button>
+
+                  {/* PDF*/}
+
+                  <Button
+                    variant='danger'
+                    onClick={() => {
+                      exportPDF("exportScheduleClassTable" + pagina, html2canvas)
+                    }}
+                  >
+                    <VscFilePdf
+                      size={20}
+                      className='me-2'
+                    />
+                    PDF
+                  </Button>
+                </ButtonGroup>
 
                 {/* Exportación grupal */}
 
@@ -175,38 +190,48 @@ export const NavBarHorarios = ({combinaciones, pagina, setPagina, mostrarPorHora
                     userSelect: 'none',
                   }}
                 >
-                  Exportar grupalemente
+                  <FormattedMessage id={"scheduleExportAll"}/>
                 </Dropdown.ItemText>
 
-                <Dropdown.Item
-                  onClick={() => {
-                    setBloquear(true)
-                    exportCombinationsPDF(combinaciones, html2canvas, setPagina).then(() => {
-                      setBloquear(false)
-                    })
-                  }}
-                >
-                  <VscFilePdf
-                    size={20}
-                    className='me-2'
-                  />
-                  PDF
-                </Dropdown.Item>
+                  <ButtonGroup
+                    className='d-flex m-2'
+                  >
 
-                <Dropdown.Item
-                  onClick={() => {
-                    setBloquear(true)
-                    exportCombinationsExcel(combinaciones, setPagina).then(() => {
-                      setBloquear(false)
-                    })
-                  }}
-                >
-                  <SiMicrosoftexcel
-                    size={20}
-                    className='me-2'
-                  />
-                  Excel
-                </Dropdown.Item>
+                    {/*PDF Grupal*/}
+
+                    <Button
+                      onClick={() => {
+                        setBloquear(true)
+                        exportCombinationsPDF(combinaciones, html2canvas, setPagina).then(() => {
+                          setBloquear(false)
+                        })
+                      }}
+                      variant='danger'
+                    >
+                      <VscFilePdf
+                        size={20}
+                        className='me-2'
+                      /> PDF
+                    </Button>
+
+                    {/* Excel grupal */}
+
+                    <Button
+                      variant='success'
+                      onClick={() => {
+                        setBloquear(true)
+                        exportCombinationsExcel(combinaciones, setPagina).then(() => {
+                          setBloquear(false)
+                        })
+                      }}
+                    >
+                      <SiMicrosoftexcel
+                        size={20}
+                        className='me-2'
+                      />
+                      Excel
+                    </Button>
+                  </ButtonGroup>
 
               </Dropdown.Menu>
             </Dropdown>
