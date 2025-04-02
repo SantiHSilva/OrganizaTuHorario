@@ -7,6 +7,12 @@
     <title>Vite + React + TS</title>
   </head>
   <body>
+    <script>
+      const darkMode = localStorage.getItem('darkMode');
+      if (darkMode === 'true') {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

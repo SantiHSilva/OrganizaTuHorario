@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+.max-w-screen-xl { max-width: 1280px; }
