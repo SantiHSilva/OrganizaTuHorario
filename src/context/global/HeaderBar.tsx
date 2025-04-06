@@ -1,7 +1,7 @@
 import { router } from "../../router/router";
+import AuthController from "../auth/AuthController";
 import DropdownMenu from "./DropdownMenu";
 import ThemeToggle from "./ThemeMode";
-import { FaUserAlt } from "react-icons/fa";
 import { IoChevronDown } from "react-icons/io5";
 
 const menuItems = [
@@ -28,7 +28,7 @@ export default function HeaderBar() {
   return (
     <div className="bg-gray-100 dark:bg-[#1f2128] shadow-lg rounded-b-4xl  p-4 px-20">
       <section className="max-w-screen-xl w-full mx-auto flex justify-between items-center">
-        <a href="/" className="px-2 flex flex-row items-center gap-2.5">
+        <a className="px-2 flex flex-row items-center gap-2.5">
           <img src="/icon.png" className="w-10 h-auto" alt="" />
           <section className="flex flex-row gap-3 items-center">
             <h1 className="text-2xl text-gray-800 dark:text-white hidden md:block">
@@ -42,6 +42,7 @@ export default function HeaderBar() {
             </p>
             {/* Dropdown */}
             <DropdownMenu
+              openOnHover
               items={menuItems}
             >
               <button className="rounded-full cursor-pointer flex flex-row gap-2 items-center">
@@ -54,9 +55,7 @@ export default function HeaderBar() {
           </section>
         </a>
         <section className="flex flex-row items-center gap-3">
-          <a href="/account" className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
-            <FaUserAlt className="text-2xl text-gray-800 dark:text-white" />
-          </a>
+          <AuthController />
           <ThemeToggle />
         </section>
       </section>

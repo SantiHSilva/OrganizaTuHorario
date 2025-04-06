@@ -1,7 +1,7 @@
 import {
   createBrowserRouter,
 } from "react-router";
-import Welcome from "../context/Welcome";
+import Welcome from "../pages/Welcome";
 import Login from "../context/auth/Login";
 import Register from "../context/auth/Register";
 

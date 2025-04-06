@@ -13,13 +13,15 @@ interface DropdownMenuProps {
   direction?: DropdownDirection;
   children: React.ReactNode;
   hoverDelay?: number;
+  openOnHover?: boolean;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
   items,
   direction = 'left',
   children,
-  hoverDelay = 200
+  hoverDelay = 200,
+  openOnHover = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
@@ -65,13 +67,20 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     <div
       className={`relative inline-block ${direction === 'right' ? 'text-right' : 'text-left'}`}
       ref={dropdownRef}
-      onMouseEnter={openDropdown}
-      onMouseLeave={closeDropdown}
+      onMouseEnter={openOnHover ? openDropdown : undefined}
+      onMouseLeave={openOnHover ? closeDropdown : undefined}
     >
       <div
         className="cursor-pointer"
         aria-haspopup="true"
         aria-expanded={isOpen}
+        onClick={() => {
+          if (openOnHover) return;
+          setIsOpen((prev) => !prev);
+        }}
+        onMouseEnter={() => {
+          if (openOnHover) openDropdown();
+        }}
       >
         {children}
       </div>
