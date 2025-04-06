@@ -31,13 +31,13 @@ export default function HeaderBar() {
         <a href="/" className="px-2 flex flex-row items-center gap-2.5">
           <img src="/icon.png" className="w-10 h-auto" alt="" />
           <section className="flex flex-row gap-3 items-center">
-            <h1 className="text-2xl font-mono text-gray-800 dark:text-white hidden md:block">
+            <h1 className="text-2xl text-gray-800 dark:text-white hidden md:block">
               Organiza Tu Horario
             </h1>
-            <h1 className="text-2xl font-mono text-gray-800 dark:text-white md:hidden">
+            <h1 className="text-2xl text-gray-800 dark:text-white md:hidden">
               OTH
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 font-mono   text-2xl">
+            <p className="text-gray-500 dark:text-gray-400   text-2xl">
               /
             </p>
             {/* Dropdown */}
