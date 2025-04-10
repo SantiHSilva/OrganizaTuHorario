@@ -5,6 +5,8 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { authService } from "../../api/api";
 import { useAuth } from "../../stores/useAuth";
+import MyProfile from "./MyProfile";
+import { FcGoogle } from "react-icons/fc";
 
 export default function AuthController(){
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,17 +37,32 @@ export default function AuthController(){
 
   return (
     <>
-      <button className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-        onClick={() => setIsModalOpen(true)}
-      >
-        <FaUserAlt className="text-2xl text-gray-800 dark:text-white" />
-      </button>
+      {
+        auth.isLogged && auth.profile ? (
+          <MyProfile />
+        ) : (
+          <button 
+            className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <FaUserAlt className="text-2xl text-gray-800 dark:text-white" />
+          </button>
+        )
+      }
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <div className="p-6">
-          <div className="flex justify-between items-start">
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              🎨 Iniciar Sesión
+          <div className="flex justify-between items-center">
+            <button
+              className="invisible"
+            >
+              <span className="sr-only">Cerrar</span>
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Iniciar Sesión
             </h3>
             <button
               onClick={() => setIsModalOpen(false)}
@@ -57,7 +74,27 @@ export default function AuthController(){
               </svg>
             </button>
           </div>
-          <hr className="my-4 dark:border-[#3c434d]" />
+          <div className="flex justify-center items-center dark:text-gray-400 mt-2">
+            ¿No tienes cuenta?
+            <button
+              className="text-blue-500 hover:text-blue-700 ml-1 font-semibold cursor-pointer"
+            >
+              Registrate
+            </button>
+          </div>
+          <section className="flex justify-center items-center gap-2">
+            <button className="w-full flex items-center justify-center gap-2 mt-5 py-1 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-100 dark:bg-[#0b0c10] dark:border-[#3c434d] dark:text-white dark:hover:bg-[#1f2833] transition cursor-pointer">
+              <FcGoogle className="w-8 h-8" />
+              <p className="text-gray-800 dark:text-white">
+                Iniciar sesión con Google
+              </p>
+            </button>
+          </section>
+          <section className="flex items-center justify-center mt-4 gap-2">
+            <hr className="my-4 w-full border-gray-400 dark:border-[#3c434d]" />
+            <p className="text-gray-500 dark:text-gray-400">O</p>
+            <hr className="my-4 w-full border-gray-400 dark:border-[#3c434d]" />
+          </section>
           <div className="mt-4">
             <section>
               <label htmlFor="email" className="block text-base font-medium text-gray-700 dark:text-gray-300 required">

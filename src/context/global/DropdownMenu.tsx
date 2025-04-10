@@ -14,6 +14,7 @@ interface DropdownMenuProps {
   children: React.ReactNode;
   hoverDelay?: number;
   openOnHover?: boolean;
+  title?: string;
 }
 
 const DropdownMenu: React.FC<DropdownMenuProps> = ({
@@ -22,6 +23,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   children,
   hoverDelay = 200,
   openOnHover = false,
+  title = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null);
@@ -94,6 +96,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
           }}
           onMouseLeave={closeDropdown}
         >
+          {title && (
+            <p className='dark:text-white text-right w-full justify-start items-start flex px-4 pt-3 text-base'>
+              {title}
+            </p>
+          )}
           <div className="py-1">
             {items.map((item, index) => (
               <div

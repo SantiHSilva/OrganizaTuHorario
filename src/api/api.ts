@@ -128,7 +128,10 @@ class AuthService {
 
   async logout() {
     try {
-      const response = await this.API.post('auth/logout');
+      const response = await this.API.post('auth/logout', {
+        "refreshToken": localStorage.getItem(storage_refresh_token) || "",
+        "accessToken": localStorage.getItem(storage_access_token) || ""
+      });
       const data = response.data;
 
       if (!data) {

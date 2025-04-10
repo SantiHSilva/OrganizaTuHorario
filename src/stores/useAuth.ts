@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { authService } from '../api/api';
 import { storage_access_token, storage_refresh_token } from '../api/constants';
+import { Profile } from '../interfaces/account';
 
 interface AuthStore {
   checkedLogin: boolean;
@@ -10,9 +11,11 @@ interface AuthStore {
   checkLoginStatus: () => Promise<void>;
   setTokens: (access: string, refresh: string) => void;
   clearAuth: () => void;
+  profile: Profile | null;
 }
 
 export const useAuth = create<AuthStore>()((set, get) => ({
+  profile: null,
   checkedLogin: false,
   isLogged: false,
   access_token: localStorage.getItem(storage_access_token) || '',
@@ -34,8 +37,8 @@ export const useAuth = create<AuthStore>()((set, get) => ({
 
     try {
       // Verificar si el token es válido
-      await authService.getProfile();
-      set({ isLogged: true });
+      const account: Profile = await authService.getProfile();
+      set({ isLogged: true, profile: account });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       set({ 
@@ -48,24 +51,29 @@ export const useAuth = create<AuthStore>()((set, get) => ({
     }
   },
 
-  setTokens: (access: string, refresh: string) => {
+  setTokens: async (access: string, refresh: string) => {
     localStorage.setItem(storage_access_token, access);
     localStorage.setItem(storage_refresh_token, refresh);
+    const account: Profile = await authService.getProfile();
+
     set({ 
       access_token: access,
       refresh_token: refresh,
-      isLogged: true 
+      isLogged: true,
+      profile: account
     });
   },
 
-  clearAuth: () => {
+  clearAuth: async () => {
+    await authService.logout();
     localStorage.removeItem(storage_access_token);
     localStorage.removeItem(storage_refresh_token);
     set({
       access_token: '',
       refresh_token: '',
       isLogged: false,
-      checkedLogin: true
+      checkedLogin: true,
+      profile: null,
     });
   }
 }));

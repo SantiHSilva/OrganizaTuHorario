@@ -26,7 +26,7 @@ const menuItems = [
 
 export default function HeaderBar() {
   return (
-    <div className="bg-gray-100 dark:bg-[#1f2128] shadow-lg rounded-b-4xl  p-4 px-20">
+    <div className="bg-gray-100 dark:bg-[#1f2128] shadow-lg rounded-b-4xl p-4 md:px-20">
       <section className="max-w-screen-xl w-full mx-auto flex justify-between items-center">
         <a className="px-2 flex flex-row items-center gap-2.5">
           <img src="/icon.png" className="w-10 h-auto" alt="" />
@@ -54,7 +54,7 @@ export default function HeaderBar() {
             </DropdownMenu>
           </section>
         </a>
-        <section className="flex flex-row items-center gap-3">
+        <section className="flex flex-row items-center md:gap-3">
           <AuthController />
           <ThemeToggle />
         </section>

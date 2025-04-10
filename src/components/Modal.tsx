@@ -50,7 +50,7 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
       <div className="flex items-center justify-center min-h-screen p-4">
         <div 
           ref={modalRef}
-          className="bg-white dark:bg-[#010409] rounded-lg shadow-xl transform transition-all max-w-lg w-full"
+          className="bg-white dark:bg-[#010409] rounded-lg shadow-xl transform transition-all max-w-sm w-full"
         >
           {children}
         </div>
