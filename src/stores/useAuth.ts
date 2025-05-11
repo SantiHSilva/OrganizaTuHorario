@@ -5,6 +5,7 @@ import { Profile } from '../interfaces/account';
 
 interface AuthStore {
   checkedLogin: boolean;
+  forceToLogin: boolean;
   isLogged: boolean;
   access_token: string;
   refresh_token: string;
@@ -18,6 +19,7 @@ export const useAuth = create<AuthStore>()((set, get) => ({
   profile: null,
   checkedLogin: false,
   isLogged: false,
+  forceToLogin: false,
   access_token: localStorage.getItem(storage_access_token) || '',
   refresh_token: localStorage.getItem(storage_refresh_token) || '',
 
@@ -38,7 +40,7 @@ export const useAuth = create<AuthStore>()((set, get) => ({
     try {
       // Verificar si el token es válido
       const account: Profile = await authService.getProfile();
-      set({ isLogged: true, profile: account });
+      set({ isLogged: true, profile: account, forceToLogin: false });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       set({ 

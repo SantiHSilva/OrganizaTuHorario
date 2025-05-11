@@ -8,3 +8,7 @@
   content: " *";
   color: red;
 }
+
+.fondo{
+  background-image: url('/public/bg-grid.png');
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { Modal } from "../../components/Modal";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -14,8 +14,17 @@ export default function AuthController(){
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const auth = useAuth()
+  const [ignoreAuth, setIgnoreAuth] = useState(false) // Si la autentificación es obligatoria o no
 
   auth.checkLoginStatus()
+
+  useEffect(() => {
+    console.log("forceToLogin", auth.forceToLogin)
+    if(auth.forceToLogin && !auth.isLogged){
+      setIgnoreAuth(true)
+      setIsModalOpen(true);
+    }
+  }, [auth.forceToLogin, auth.isLogged])
 
   async function handleLogin(){
     
@@ -50,29 +59,27 @@ export default function AuthController(){
         )
       }
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+      <Modal isOpen={isModalOpen} onClose={() => {
+        if(!ignoreAuth) setIsModalOpen(false)
+      }}>
         <div className="p-6">
           <div className="flex justify-between items-center">
-            <button
-              className="invisible"
-            >
-              <span className="sr-only">Cerrar</span>
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
               Iniciar Sesión
             </h3>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="text-gray-400 hover:text-red-500 cursor-pointer"
-            >
-              <span className="sr-only">Cerrar</span>
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            {
+              !ignoreAuth && (
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="text-gray-400 hover:text-red-500 cursor-pointer"
+                >
+                  <span className="sr-only">Cerrar</span>
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              ) 
+            }
           </div>
           <div className="flex justify-center items-center dark:text-gray-400 mt-2">
             ¿No tienes cuenta?
@@ -140,12 +147,16 @@ export default function AuthController(){
             </section>
           </div>
           <div className="mt-6 flex justify-end space-x-3">
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition cursor-pointer"
-            >
-              Cancelar
-            </button>
+            {
+              !ignoreAuth && (
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition cursor-pointer"
+                >
+                  Cancelar
+                </button>
+              )
+            }
             <button
               onClick={handleLogin}
               className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition cursor-pointer"
