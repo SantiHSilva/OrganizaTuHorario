@@ -5,6 +5,7 @@ import {
 import Welcome from "../pages/Welcome";
 import ProtectedRoute from "../components/ProtectedRoute";
 import ViewMySchedules from "../pages/ViewMySchedules";
+import ScheduleDetails from "../pages/ScheduleDetails";
 
 type RouteMiddleware = RouteObject & {
   middleware?: boolean;
@@ -19,6 +20,11 @@ const routes : RouteMiddleware[] = [
   {
     path: "schedules",
     Component: ViewMySchedules,
+    middleware: true,
+  },
+  {
+    path: "schedules/:id",
+    Component: ScheduleDetails,
     middleware: true,
   }
 ]

@@ -1,7 +1,6 @@
 import { GoProjectSymlink } from "react-icons/go";
 import { API } from "../api/api";
 import HeaderBar from "../context/global/HeaderBar";
-import { IoLink } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { Modal } from "../components/Modal";
 import { toast } from "react-toastify";
@@ -97,21 +96,25 @@ export default function ViewMySchedules(){
       return;
     }
 
-    const response = await API.post(`/HorariosUsuarios/share`, {
+    await API.post(`/HorariosUsuarios/share`, {
       url: url,
       horario_id: showModalShareSchedule,
-    });
+    })
+    .then((response) => {
+      if (response.status === 201) {
+        toast.success("Horario compartido con éxito.");
+        setShowModalShareSchedule(0);
+        setUrl("");
+        getSchedules();
+      } else {
+        toast.error("Error al compartir el horario.");
+      }
+    })
+    .catch((error) => {
+      console.log(error)
+      toast.error(error?.response?.data?.message || "Error al compartir el horario.");
+    })
 
-    console.log(response)
-
-    if (response.status === 201) {
-      toast.success("Horario compartido con éxito.");
-      setShowModalShareSchedule(0);
-      setUrl("");
-      getSchedules();
-    } else {
-      toast.error("Error al compartir el horario.");
-    }
   }
 
   async function getSchedules(){
@@ -143,7 +146,7 @@ export default function ViewMySchedules(){
             </p>
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-5 mt-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mt-5">
           {
             schedules.map((schedule, index) => (
               <article key={index} className="flex flex-row gap-5 justify-between bg-white dark:bg-[#0b0c10] border border-gray-300 dark:border-[#3c434d] rounded-lg shadow-sm p-4">
@@ -160,12 +163,14 @@ export default function ViewMySchedules(){
                   {/* botón para compartir horario */}
                   {
                     schedule.CompartirHorario ? (
-                      <a href={getRedirectSharedURL(schedule.CompartirHorario)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline flex flex-row gap-2 items-center">
-                        <IoLink className="text-x"/>
-                        <p>
+                      <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline flex flex-row gap-2 items-center">
+                        <CiEdit className="text-xl" 
+                          onClick={() => setShowModalShareSchedule(schedule.id)}
+                        />
+                        <a href={getRedirectSharedURL(schedule.CompartirHorario)} >
                           {getRedirectSharedURL(schedule.CompartirHorario)}
-                        </p>
-                      </a> 
+                        </a>
+                      </p> 
                     ) : (
                       <button onClick={() => setShowModalShareSchedule(schedule.id)} className="flex flex-row gap-2 items-center">
                         <p className="font-medium text-blue-600 dark:text-blue-500 hover:underline">
@@ -176,8 +181,7 @@ export default function ViewMySchedules(){
                   }
                 </div>
                 <div className="flex flex-col gap-2.5 items-center">
-                  {/* Modify */}
-                  <a className="cursor-pointer hover:scale-125 transition duration-200 ease-in-out">
+                  <a href={`schedules/${schedule.id}`} className="cursor-pointer hover:scale-125 transition duration-200 ease-in-out">
                     <GoProjectSymlink className="text-3xl animate-pulse text-gray-800 dark:text-white" />
                   </a>
                   {/* Delete */}
