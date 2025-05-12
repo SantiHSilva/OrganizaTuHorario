@@ -16,15 +16,21 @@ export default function AuthController(){
   const auth = useAuth()
   const [ignoreAuth, setIgnoreAuth] = useState(false) // Si la autentificación es obligatoria o no
 
-  auth.checkLoginStatus()
+  useEffect(() => {
+    if(auth.checkedLogin) {
+      auth.checkLoginStatus()
+    }
+  }, [auth.checkedLogin, auth])
 
   useEffect(() => {
-    console.log("forceToLogin", auth.forceToLogin)
-    if(auth.forceToLogin && !auth.isLogged){
+    if(auth.forceToLogin && !auth.isLogged && auth.checkedLogin){
       setIgnoreAuth(true)
       setIsModalOpen(true);
+    } else {
+      setIgnoreAuth(false)
+      setIsModalOpen(false);
     }
-  }, [auth.forceToLogin, auth.isLogged])
+  }, [auth.forceToLogin, auth.isLogged, auth.checkedLogin])
 
   async function handleLogin(){
     

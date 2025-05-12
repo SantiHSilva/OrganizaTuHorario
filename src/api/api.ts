@@ -21,14 +21,16 @@ interface SigupParams {
   password: string;
 }
 
+export const API = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  }
+});
+
 class AuthService {
-  private API = axios.create({
-    baseURL: API_URL,
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*'
-    }
-  });
+  private API = API
 
   constructor() {
     // Configurar el interceptor para agregar el token de acceso a las solicitudes

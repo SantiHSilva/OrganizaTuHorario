@@ -27,8 +27,6 @@ export const useAuth = create<AuthStore>()((set, get) => ({
     // Evitar múltiples verificaciones si ya se hizo
     if (get().checkedLogin) return;
 
-    set({ checkedLogin: true });
-
     const { access_token, refresh_token } = get();
     
     // Si no hay tokens, no está logueado
@@ -51,6 +49,8 @@ export const useAuth = create<AuthStore>()((set, get) => ({
       localStorage.removeItem(storage_access_token);
       localStorage.removeItem('refresh_token');
     }
+
+    set({ checkedLogin: true });
   },
 
   setTokens: async (access: string, refresh: string) => {

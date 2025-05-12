@@ -4,6 +4,7 @@ import {
 } from "react-router";
 import Welcome from "../pages/Welcome";
 import ProtectedRoute from "../components/ProtectedRoute";
+import ViewMySchedules from "../pages/ViewMySchedules";
 
 type RouteMiddleware = RouteObject & {
   middleware?: boolean;
@@ -13,8 +14,13 @@ const routes : RouteMiddleware[] = [
   {
     path: "/",
     Component: Welcome,
-    middleware: true,
+    middleware: false,
   },
+  {
+    path: "schedules",
+    Component: ViewMySchedules,
+    middleware: true,
+  }
 ]
 
 export const router = createBrowserRouter(routes.map((route) => {

@@ -13,6 +13,12 @@ export default function MyProfile(){
     {
       label: '👋 Cerrar sesión',
       action: () => auth.clearAuth()
+    },
+    {
+      label: "Copy access Token",
+      action: () => {
+        navigator.clipboard.writeText(auth.access_token)
+      }
     }
   ];
 
