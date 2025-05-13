@@ -133,6 +133,7 @@ export default function ViewMySchedules(){
   return (
     <div className='bg-white dark:bg-[#101218] flex flex-col md:h-screen'>
       <HeaderBar />
+      {/*  */}
       <section className='px-10 md:px-20 mt-10 md:gap-10 gap-5 grow h-full w-full max-w-screen-xl mx-auto'>
         <div className="flex flex-row justify-between items-center">
           <p className='text-2xl text-gray-800 dark:text-white font-semibold'>

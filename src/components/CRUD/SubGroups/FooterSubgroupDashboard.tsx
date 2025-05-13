@@ -1,4 +1,3 @@
-import Button from "react-bootstrap/Button";
 import {getValueById} from "../../../Utils/Utils.js";
 import {Horario, modifyColorName, modifyGroupName, modifyMaterias} from "../../../Data/groupManager.js";
 import {estaCruzandoLosTiemposConOtrosTiempos, isInvalidStartHour} from "../../../Utils/TimeUtils.js";
@@ -149,15 +148,17 @@ export default function FooterSubgroupDashboard({handleClose, globalUpdate, arra
   }
 
   return(
-    <>
-      <Button variant="danger"
+    <div className="mt-5 flex flex-row gap-4 justify-end">
+      <button className="cursor-pointer bg-red-600 hover:bg-red-700 text-white p-2 px-4 rounded-lg"
               onClick={handleClose}
       >
         ❌ Cancelar cambios
-      </Button>
-      <Button onClick={submitChanges} id='modifyButtonSave'>
+      </button>
+      <button onClick={submitChanges} id='modifyButtonSave'
+      className="cursor-pointer text-white p-2 px-4 rounded-lg disabled:grayscale"
+      >
         💾 Guardar cambios
-      </Button>
-    </>
+      </button>
+    </div>
   )
 }

@@ -21,12 +21,12 @@ export default function NavCreateDescripcion({array, numPageMaterias, update}: p
   }
 
   return(
-    <div className='d-flex  p-1'>
-        <span className='m-auto'>
-          Descripciones generales
-        </span>
+    <div className='flex p-1 border rounded dark:border-b-white'>
+      <span className='m-auto dark:text-white'>
+        Descripciones generales
+      </span>
       <BiBookAdd
-        className='OTHSubGroupBtn'
+        className='dark:text-white cursor-pointer'
         size={30}
         onClick={() => createDescripcionGeneral(array, numPageMaterias, update)}
       />

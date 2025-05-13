@@ -11,7 +11,7 @@ function ExportExcel(tableId: string, write: typeof writeFile, table_to_book: ty
   write(wb, "horario.xlsx");
 }
 
-async function exportCombinationsExcel(combinations: Horario[][], setPage: (numDeCombinacion: number) => Promise<void>) {
+async function exportCombinationsExcel(combinations: Horario[][], setPage: (numDeCombinacion: number) => void) {
   if(combinations.length === 0){
     ExportExcel("exportScheduleClassTable0", writeFile, utils.table_to_book);
     return;

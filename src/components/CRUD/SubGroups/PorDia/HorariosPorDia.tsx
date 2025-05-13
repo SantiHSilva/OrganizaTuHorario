@@ -1,4 +1,4 @@
-import {Form} from "react-bootstrap";
+import React from "react"; // Added React import
 import {estaCruzandoElInicioConElFinal, estaCruzandoLosTiemposConOtrosTiempos} from "../../../../Utils/TimeUtils.js";
 import { Horario } from "../../../../Data/groupManager.js";
 
@@ -109,37 +109,35 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
 
   return(
     <div
-      className='border rounded m-2'
+      className='border rounded m-2 p-4 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700' // Reemplazo de 'border rounded m-2' y añade bg/dark-bg
     >
       <div
-        className='d-flex'
+        className='flex justify-center mb-2' // Reemplazo de 'd-flex' y añade margen inferior
       >
-            <span className='mx-auto'>
+            <span className='mx-auto text-gray-800 dark:text-gray-200 font-semibold text-lg'> {/* Reemplazo de 'mx-auto' y añade estilos de texto */}
               Horarios
             </span>
       </div>
 
       <hr
-        style={{margin: '3px'}}
+        className='my-2 border-gray-300 dark:border-gray-700' // Reemplazo de 'style={{margin: '3px'}}' y añade estilos de hr/dark-hr
       />
 
       <div
-        className='d-flex flex-column'
+        className='flex flex-col' // Reemplazo de 'd-flex flex-column'
       >
-        <Form
-          validated={isValidDay()}
-        >
-          <Form.Group
-            className='p-1 mx-auto'
-            style={{
-              width: '90%',
-            }}
+        {/* Reemplazo de Form */}
+        <div className="w-full"> {/* Wrapper for Form.Group */}
+          {/* Reemplazo de Form.Group */}
+          <div
+            className='p-1 mx-auto w-11/12 md:w-4/5 lg:w-3/4 xl:w-2/3' // Adapta 'p-1 mx-auto' y 'width: '90%'' para ser responsive
           >
-            <Form.Label>
+            {/* Reemplazo de Form.Label */}
+            <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
               Día de la semana
-            </Form.Label>
-            <Form.Control
-              as="select"
+            </label>
+            {/* Reemplazo de Form.Control as="select" */}
+            <select
               value={obtenerDiaDeLaSemana()}
               onChange={(e) => {
                 const materia = array[numPageMaterias - 1];
@@ -147,8 +145,12 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
                 update(numPageMaterias - 1, materia);
               }}
               required
+              className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+                         bg-white text-gray-900 border-gray-300
+                         dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:focus:ring-indigo-400 dark:focus:border-indigo-400
+                         ${isValidDay() ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'}`} // Conditional validation styling
             >
-              <option	value='' label={'Selecciona un día'}/>
+              <option value='' label={'Selecciona un día'}/>
               <option value='1' label={'Lunes'} />
               <option value='2' label={'Martes'} />
               <option value='3' label={'Miércoles'} />
@@ -156,30 +158,35 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
               <option value='5' label={'Viernes'} />
               <option value='6' label={'Sábado'} />
               <option value='7' label={'Domingo'} />
-            </Form.Control>
-            <Form.Control.Feedback type="invalid">
-              Selecciona un día de la semana
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Form>
+            </select>
+            {/* Reemplazo de Form.Control.Feedback */}
+            {isValidDay() && ( // Show feedback only if invalid
+              <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                Selecciona un día de la semana
+              </p>
+            )}
+          </div>
+        </div>
 
         <hr
-          style={{margin: '3px'}}
+          className='my-2 border-gray-300 dark:border-gray-700' // Reemplazo de 'style={{margin: '3px'}}' y añade estilos de hr/dark-hr
         />
 
         <section
-          className='d-flex mx-auto'
+          className='flex justify-center mx-auto w-full' // Reemplazo de 'd-flex mx-auto'
         >
-          <Form
-            validated={ needsToModifyStartHour() }
-          >
-            <Form.Group
+          {/* Reemplazo de Form */}
+          <div className="w-1/2 px-2"> {/* Wrapper for Form.Group, adjust width as needed */}
+            {/* Reemplazo de Form.Group */}
+            <div
               className='p-2'
             >
-              <Form.Label>
+              {/* Reemplazo de Form.Label */}
+              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
                 Hora inicio
-              </Form.Label>
-              <Form.Control
+              </label>
+              {/* Reemplazo de Form.Control */}
+              <input
                 required
                 type='time'
                 value={obtenerHoraInicio()}
@@ -187,27 +194,33 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
                   const materia = array[numPageMaterias - 1];
                   materia.descripciones_por_dia[numPageDescripciones - 1].inicio = e.target.value;
                   update(numPageMaterias - 1, materia);
-                }
-                }
+                }}
                 max={obtenerHoraMaxInicio()}
+                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+                           bg-white text-gray-900 border-gray-300
+                           dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:focus:ring-indigo-400 dark:focus:border-indigo-400
+                           ${needsToModifyStartHour() ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'}`} // Conditional validation styling
               />
-              <Form.Control.Feedback type="invalid">
-                {
-                  invalidMessageStartHour()
-                }
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
-          <Form
-            validated={isNotEmptyEndHour()}
-          >
-            <Form.Group
+              {/* Reemplazo de Form.Control.Feedback */}
+              {needsToModifyStartHour() && ( // Show feedback only if invalid
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  {invalidMessageStartHour()}
+                </p>
+              )}
+            </div>
+          </div>
+          {/* Reemplazo de Form */}
+          <div className="w-1/2 px-2"> {/* Wrapper for Form.Group, adjust width as needed */}
+            {/* Reemplazo de Form.Group */}
+            <div
               className='p-2'
             >
-              <Form.Label>
+              {/* Reemplazo de Form.Label */}
+              <label className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1'>
                 Hora Fin
-              </Form.Label>
-              <Form.Control
+              </label>
+              {/* Reemplazo de Form.Control */}
+              <input
                 required
                 type='time'
                 value={obtenerHoraFin()}
@@ -215,18 +228,23 @@ export default function HorariosPorDia({array, numPageMaterias, numPageDescripci
                   const materia = array[numPageMaterias - 1];
                   materia.descripciones_por_dia[numPageDescripciones - 1].fin = e.target.value;
                   update(numPageMaterias - 1, materia);
-                }
-                }
+                }}
                 min={obtenerHoraMaxFin()}
+                className={`block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
+                           bg-white text-gray-900 border-gray-300
+                           dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:focus:ring-indigo-400 dark:focus:border-indigo-400
+                           ${isNotEmptyEndHour() ? 'border-red-500 dark:border-red-500' : 'border-gray-300 dark:border-gray-600'}`} // Conditional validation styling
               />
-              <Form.Control.Feedback type="invalid">
-                Ingresa una hora de fin
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Form>
+              {/* Reemplazo de Form.Control.Feedback */}
+              {isNotEmptyEndHour() && ( // Show feedback only if invalid
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                  Ingresa una hora de fin
+                </p>
+              )}
+            </div>
+          </div>
         </section>
       </div>
-
     </div>
   )
 }

@@ -1,11 +1,10 @@
 import {useState, useEffect, memo} from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { Form } from 'react-bootstrap';
 import { saveValues, getGroupList } from "../../../Data/groupManager.js";
 import {toast, ToastContainer} from "react-toastify";
 import {BiBookAdd} from "react-icons/bi";
 import {Tooltip} from "react-tooltip";
 import { adaptColorByHexColor, getValueById, randomHexColor } from '../../../Utils/Utils.js';
+import { Modal } from '../../Modal.js';
 
 function CreateGroupModal({toggleUpdate}: {toggleUpdate: (value?: boolean) => void;}) {
 
@@ -30,8 +29,6 @@ function CreateGroupModal({toggleUpdate}: {toggleUpdate: (value?: boolean) => vo
       console.error("Element with id groupColor not found");
       return;
     }
-
-    document.getElementsByClassName('modal-content')[0].setAttribute('style', `box-shadow: 0px 5px 15px  ${hexColor}; border-color: ${hexColor}`);
 
     const element = document.getElementById("modifyButtonSave");
 
@@ -142,58 +139,56 @@ function CreateGroupModal({toggleUpdate}: {toggleUpdate: (value?: boolean) => vo
         Crear nuevo grupo
       </Tooltip>
 
-      <Modal
-       show={show}
-       onShow={createNewColor}
-       onHide={() => {handleSave(); createNewColor();}}
-       size='lg'
-       aria-labelledby="contained-modal-title-vcenter"
-       centered
-      >
-        
+      <Modal isOpen={show} onClose={() => {
+        handleSave(); createNewColor();
+      }}>
+        <section className='p-4 flex flex-col gap-4'>
+          <div className='text-gray-200 text-left font-semibold text-xl'>
+            ✍️ Crear nuevo grupo
+          </div>
+
+          {/* Body */}
+
+              <form
+              onSubmit={formSubmit}
+              >
+                <div className='text-gray-400 text-left font-semibold text-sm mb-2'>
+                  Ingresa el nombre del grupo y escoge un color
+                </div>
+                <div className='flex flex-row'>
+                  <input 
+                    id="groupName" 
+                    onChange={detectChanges} 
+                    type="text" 
+                    placeholder='Matematica' 
+                    className='shadow-sm border-2 px-2 border-gray-700 w-full placeholder:text-gray-600 text-gray-400 rounded-l-xl outline-none'
+                  />
+                  <input
+                    type="color" 
+                    defaultValue={hexColor}
+                    title='Color del grupo'
+                    className='shadow-sm bg-body rounded'
+                    id='groupColor'
+                  />
+                </div>
+              </form>
+          {/* Footer */}
+          <div className='flex flex-row justify-end items-center gap-2'>
+            <button className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow cursor-pointer'
+            onClick={handleSave}>
+              Cancelar
+            </button>
+            <button className='bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow cursor-pointer disabled:grayscale'
+            onClick={saveChanges} id='modifyButtonSave'>
+              Crear
+            </button>
+          </div>
+        </section>
         {/* Header */}
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Crear nuevo grupo
-          </Modal.Title>
-        </Modal.Header>
-        
-        {/* Body */}
-        <Modal.Body>
-
-            <Form
-             onSubmit={formSubmit}
-            >
-                <Form.Group>
-                    <Form.Label>
-                      Nombre del grupo
-                    </Form.Label>
-                    <div className='d-flex flex-row bd-highlight'>
-                      <Form.Control id="groupName" onChange={detectChanges} type="text" placeholder='Matematica' className='shadow-sm bg-body rounded' />
-                      <Form.Control
-                        type="color" 
-                        defaultValue={hexColor}
-                        title='Color del grupo'
-                        className='shadow-sm bg-body rounded'
-                        id='groupColor'
-                      />
-                      </div>
-                </Form.Group>
-            </Form>
-
-        </Modal.Body>
-
-        {/* Footer */}
-        <Modal.Footer>
-          <button className='btn bg-danger' onClick={handleSave}>
-            Cancelar
-          </button>
-          <button className='btn' onClick={saveChanges} id='modifyButtonSave'>
-            Crear
-          </button>
-        </Modal.Footer>
-
       </Modal>
+
+        
+
     </div>
   );
 }

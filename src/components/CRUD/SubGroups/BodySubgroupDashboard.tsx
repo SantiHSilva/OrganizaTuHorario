@@ -17,7 +17,7 @@ interface props {
 export default function BodySubgroupDashboard({array, push, remove ,numPageMaterias, setNumPageMaterias, numPageDescripciones, setNumPageDescripciones, update}: props) {
   return(
     <div
-      className='border rounded'
+      className='border-2 border-gray-400 rounded'
     >
 
       <NavBarCRUDMateria
@@ -33,8 +33,8 @@ export default function BodySubgroupDashboard({array, push, remove ,numPageMater
 
       {
         numPageMaterias === 0 ?
-          <div className='d-flex p-3' >
-								<span	className='m-auto'>
+          <div className='flex p-3' >
+								<span	className='dark:text-white'>
 									Crea una nueva materia para personalizar...
 								</span>
           </div>

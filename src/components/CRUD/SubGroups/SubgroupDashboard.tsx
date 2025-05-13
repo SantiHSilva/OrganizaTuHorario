@@ -1,4 +1,3 @@
-import Modal from "react-bootstrap/Modal";
 import {getGroupById} from "../../../Data/groupManager.js";
 import {adaptColorByHexColor, getValueById} from "../../../Utils/Utils.js";
 import {useEffect, useState} from "react";
@@ -6,6 +5,7 @@ import useArray from "../../../hooks/useArray.js";
 import HeaderSubgroupDashboard from "./HeaderSubgroupDashboard.js";
 import BodySubgroupDashboard from "./BodySubgroupDashboard.js";
 import FooterSubgroupDashboard from "./FooterSubgroupDashboard.js";
+import { Modal } from "../../Modal.js";
 
 interface props {
 	idGroup: number;
@@ -82,7 +82,6 @@ export function SubgroupDashboard({idGroup, openModal, onHide, globalUpdate}: pr
 	}
 
 	function modifyModal(){
-		document.getElementsByClassName('modal-content')[0].setAttribute('style', `box-shadow: 0px 5px 15px ${hexColor}; border-color: ${hexColor}`);
 		const buttonSave = document.getElementById("modifyButtonSave");
 
 		if(!buttonSave) {
@@ -131,14 +130,12 @@ export function SubgroupDashboard({idGroup, openModal, onHide, globalUpdate}: pr
 
 	return (
 		<Modal
-			show={openModal}
-			onHide={handleClose}
-			onShow={handleOpen}
-			aria-labelledby="contained-modal-title-vcenter"
-			centered
+			size="xl"
+			isOpen={openModal}
+			onClose={handleClose}
+			onOpen={handleOpen}
 		>
-
-			<Modal.Header closeButton>
+			<section className="p-4">
 				<HeaderSubgroupDashboard
 					groupListed={groupListed}
 					detectChanges={detectChanges}
@@ -146,9 +143,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide, globalUpdate}: pr
 					hexColor={hexColor}
 					setColor={changeHexColor}
 				/>
-			</Modal.Header>
 
-			<Modal.Body>
 				<BodySubgroupDashboard
 					// @ts-expect-error quiero moverme a Vue
 					array={array}
@@ -161,9 +156,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide, globalUpdate}: pr
 					// @ts-expect-error quiero moverme a Vue
 					update={update}
 				/>
-			</Modal.Body>
 
-			<Modal.Footer>
 				<FooterSubgroupDashboard
 					setNumPageMaterias={setNumPageMaterias}
 					setNumPageDescripciones={setNumPageDescripciones}
@@ -175,7 +168,7 @@ export function SubgroupDashboard({idGroup, openModal, onHide, globalUpdate}: pr
 					updateGlobal={setToggleUpdate}
 					globalUpdate={globalUpdate}
 				/>
-			</Modal.Footer>
+			</section>
 
 		</Modal>
 	)

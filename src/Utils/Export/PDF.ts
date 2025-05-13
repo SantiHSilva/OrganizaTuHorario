@@ -59,7 +59,7 @@ function exportPDF(tableID: string, html2canvas: typeof canva) {
 }
 
 // async function exportCombinationsPDF(combinations, html2canvas, setPage) {
-async function exportCombinationsPDF(combinations: Horario[][], html2canvas: typeof canva, setPage: (numDeCombinacion: number) => Promise<void>) {
+async function exportCombinationsPDF(combinations: Horario[][], html2canvas: typeof canva, setPage: (numDeCombinacion: number) => void) {
   // Si no hay combinaciones, exportar el horario normal
   if (combinations.length === 0) {
     exportPDF("exportScheduleClassTable0", html2canvas);

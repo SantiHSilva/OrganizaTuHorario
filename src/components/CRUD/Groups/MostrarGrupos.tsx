@@ -67,29 +67,31 @@ function MostrarGrupos({toggleUpdate, data}: {toggleUpdate: () => void, data: Ho
   }
 
   const groupCarts = data.map((group) => (
-      <div className="d-flex mb-2 rounded p-1 shadow dark:bg-[#3F4E4F] bg-[#F2EAD3]"
+      <div className="flex mb-2 rounded p-1 shadow dark:bg-[#3F4E4F] bg-[#F2EAD3] mx-5"
            key={group.key}
            style={{
              transition: 'all 0.2s ease-in-out',
            }}
       >
 
-        <div className='flex-fill rounded text-center m-1 p-2'
+        <div className='grow rounded text-center m-1 p-2'
              style={{
                backgroundColor: group.color,
              }}
         >
           <span
-            className='d-inline-block text-truncate'
+            className="block text-center"
             style={{
-              maxWidth: '20ch', // 20 caracteres por línea
-                  color: adaptColorByHexColor(group.color),
+              maxWidth: '20ch',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              color: adaptColorByHexColor(group.color),
             }}
           >
             {group.name}
           </span>
         </div>
-        <div className= 'p-2 rounded m-1 shadow-lg bg-[#FEFBF3] dark:bg-[#212121]'
+        <div className= 'p-2 rounded m-1 shadow-lg bg-[#FEFBF3] dark:bg-[#212121] flex fle-row'
              style={{
                transition: 'all 0.2s ease-in-out',
              }}

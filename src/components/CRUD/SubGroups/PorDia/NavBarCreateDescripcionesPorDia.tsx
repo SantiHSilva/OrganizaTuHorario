@@ -1,4 +1,3 @@
-import {Pagination} from "react-bootstrap";
 import {MdAutoDelete} from "react-icons/md";
 import {AiOutlineFileAdd} from "react-icons/ai";
 import { Materia } from "../../../../Data/groupManager";
@@ -73,44 +72,42 @@ export default function NavBarCreateDescripcionesPorDia({numPageDescripciones, a
   }
 
   return(
-    <div className='border rounded p-1 d-flex flex-column'>
+    <div className='border border-white rounded p-1 flex flex-col'>
 
-      <span className='text-center'>
+      <span className='text-center dark:text-white w-full'>
         Descripciones por día
       </span>
 
-      <hr style={{margin: 5}}/>
-
       <section
-        className='d-flex'
+        className='flex flex-row justify-between'
       >
         <AiOutlineFileAdd
           size={30}
-          className='OTHSubGroupBtn'
+          className='text-gray-400'
           onClick={createOptionMateria}
         />
-          <Pagination
-            size='sm'
-            className='m-auto'
-          >
 
-            <Pagination.Prev
-              onClick={prevPageDescripciones}
-              disabled={canMoveToBackPageOption()}
-            />
-
-            <Pagination.Item active>{numPageDescripciones}</Pagination.Item>
-
-            <Pagination.Next
-              onClick={nextPageDescripciones}
-              disabled={canMoveToNextPageOption()}
-            />
-
-          </Pagination>
+        <section className="flex">
+          <button 
+            onClick={prevPageDescripciones}
+            disabled={canMoveToBackPageOption()}
+            className="h-full p-[0.48rem] border-1 border-gray-500 disabled:border-gray-600 cursor-pointer disabled:cursor-not-allowed hover:border-gray-500 bg-[#212529] disabled:bg-[#343a40] rounded-l-lg text-white disabled:text-gray-500">
+            &lt;
+          </button>
+          <p className="bg-[#212529] text-white text-lg font-medium px-4 flex items-center">
+            {numPageDescripciones}
+          </p>
+          <button 
+            onClick={nextPageDescripciones}
+            disabled={canMoveToNextPageOption()}
+            className="h-full p-[0.48rem] border-1 border-gray-500 disabled:border-gray-600 cursor-pointer disabled:cursor-not-allowed hover:border-gray-500 bg-[#212529] disabled:bg-[#343a40] rounded-r-lg text-white disabled:text-gray-500">
+            &gt;
+          </button>
+        </section>
 
         <MdAutoDelete
           size={30}
-          className='OTHSubGroupBtn'
+          className='text-gray-400'
           onClick={deleteOptionMateria}
         />
       </section>

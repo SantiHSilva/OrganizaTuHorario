@@ -63,30 +63,33 @@ export default function NavBarCRUDMateria({array, push, numPageMaterias, remove,
 
 
   return(
-    <div className='d-flex border rounded p-1'>
+    <div className='flex flex-row justify-between items-center border border-b-white p-2'>
       <HiFolderAdd
-        className='OTHSubGroupBtn'
+        className='text-gray-400'
         size={30}
         onClick={createNewMateria}
       />
 
-      <Pagination
-        size='sm'
-        className='m-auto'
-      >
-        <Pagination.Prev
+      <section className="flex">
+        <button 
           onClick={prevPageGlobal}
           disabled={numPageMaterias === 1 || array.length === 0}
-        />
-        <Pagination.Item active>{numPageMaterias}</Pagination.Item>
-        <Pagination.Next
+          className="h-full p-[0.48rem] border-1 border-gray-500 disabled:border-gray-600 cursor-pointer disabled:cursor-not-allowed hover:border-gray-500 bg-[#212529] disabled:bg-[#343a40] rounded-l-lg text-white disabled:text-gray-500">
+          &lt;
+        </button>
+        <p className="bg-[#212529] text-white text-lg font-medium px-4 flex items-center">
+          {numPageMaterias}
+        </p>
+        <button 
           onClick={nextPageGlobal}
           disabled={numPageMaterias === array.length || array.length === 0}
-        />
-      </Pagination>
+          className="h-full p-[0.48rem] border-1 border-gray-500 disabled:border-gray-600 cursor-pointer disabled:cursor-not-allowed hover:border-gray-500 bg-[#212529] disabled:bg-[#343a40] rounded-r-lg text-white disabled:text-gray-500">
+          &gt;
+        </button>
+      </section>
 
       <AiFillDelete
-        className='OTHSubGroupBtn'
+        className='text-gray-400'
         size={30}
         onClick={deleteCurrentMateria}
       />

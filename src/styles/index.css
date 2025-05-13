@@ -6,7 +6,7 @@
 
 .required::after{
   content: " *";
-  color: red;
+  fill: red;
 }
 
 .fondo{
@@ -14,7 +14,7 @@
 }
 
 aside{
-    height: 480px;
+    height: 465px;
     overflow: auto;
 }
 
@@ -58,7 +58,7 @@ aside{
     border: none;
 }
 
-[data-bs-theme='dark'] .OTHBtn{
+html.dark .OTHBtn{
     background-color: #27374D;
     fill: white;
 }
@@ -68,14 +68,9 @@ aside{
 }
 
 .OTHBtn{
-    background-color: #FEFBF3;
     border: none;
     cursor: pointer;
-    fill: black;
-}
-
-[data-bs-theme='dark'] .OTHGroupBtn{
-    fill: #212121;
+    fill: white;
 }
 
 /* Mostrar Grupos Botónes */
@@ -90,7 +85,7 @@ aside{
 
 /* SubgroupDashBoard */
 
-[data-bs-theme='dark'] .OTHSubGroupBtn:hover{
+html.dark .OTHSubGroupBtn:hover{
     fill: #EFE1D1;
 }
 

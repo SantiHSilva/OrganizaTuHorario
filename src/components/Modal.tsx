@@ -4,9 +4,11 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  onOpen?: () => void;
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 };
 
-export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+export const Modal = ({ isOpen, onClose, children, onOpen, size = 'sm' }: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   // Cerrar modal al hacer clic fuera
@@ -39,7 +41,33 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
     };
   }, [isOpen]);
 
+  // al abrir el modal, ejecutar la función onOpen si está definida
+  useEffect(() => {
+    if (isOpen && onOpen) {
+      onOpen();
+    }
+  }, [isOpen, onOpen]);
+
   if (!isOpen) return null;
+
+  let modalSizeClass = '';
+
+  switch (size) {
+    case 'sm':
+      modalSizeClass = 'max-w-sm';
+      break;
+    case 'md':
+      modalSizeClass = 'max-w-md';
+      break;
+    case 'lg':
+      modalSizeClass = 'max-w-lg';
+      break;
+    case 'xl':
+      modalSizeClass = 'max-w-xl';
+      break;
+    default:
+      modalSizeClass = 'max-w-md';
+  }
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -50,7 +78,7 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
       <div className="flex items-center justify-center min-h-screen p-4">
         <div 
           ref={modalRef}
-          className="bg-white dark:bg-[#010409] rounded-lg shadow-xl transform transition-all max-w-sm w-full"
+          className={`bg-white dark:bg-[#212529] rounded-lg shadow-xl transform transition-all ${modalSizeClass} w-full`}
         >
           {children}
         </div>
