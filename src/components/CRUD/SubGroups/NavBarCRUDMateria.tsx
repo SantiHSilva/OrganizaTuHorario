@@ -1,0 +1,95 @@
+import {HiFolderAdd} from "react-icons/hi";
+import {Pagination} from "react-bootstrap";
+import {AiFillDelete} from "react-icons/ai";
+import { Horario, Materia } from "../../../Data/groupManager";
+
+interface props {
+  array: Horario["materias"];
+  push: (materia: Horario["materias"][0]) => void;
+  numPageMaterias: number;
+  remove: (index: number) => void;
+  setNumPageDescripciones: (num: number) => void;
+  setNumPageMaterias: (num: number) => void;
+}
+
+export default function NavBarCRUDMateria({array, push, numPageMaterias, remove, setNumPageDescripciones, setNumPageMaterias}: props) {
+  const createNewMateria = () => {
+    console.log("Creando nueva materia...")
+    const newData: Materia = {
+      descripciones_generales: [],
+      descripciones_por_dia: [
+        {
+          dia: "",
+          inicio: "",
+          fin: "",
+          ajustes: [],
+        }
+      ],
+    }
+    push(newData);
+
+    // After Create Materia
+//    setNumPageMaterias(numPageMaterias + 1);
+    setNumPageMaterias(array.length + 1);
+    setNumPageDescripciones(1)
+
+  }
+
+  const deleteCurrentMateria = () => {
+    if(numPageMaterias === 0) return;
+    console.log(`Eliminando materia ${numPageMaterias}...`)
+    remove(numPageMaterias - 1);
+
+    // After Delete Materia
+
+    if(numPageMaterias !== 1)
+      setNumPageMaterias(numPageMaterias - 1);
+
+    if(array.length === 1)
+      setNumPageMaterias(0);
+
+    setNumPageDescripciones(1);
+  }
+
+  const prevPageGlobal = () => {
+    if (numPageMaterias > 1) setNumPageMaterias(numPageMaterias - 1);
+    setNumPageDescripciones(1)
+  }
+
+  const nextPageGlobal = () => {
+    if (numPageMaterias < array.length) setNumPageMaterias(numPageMaterias + 1);
+    setNumPageDescripciones(1)
+  }
+
+
+  return(
+    <div className='d-flex border rounded p-1'>
+      <HiFolderAdd
+        className='OTHSubGroupBtn'
+        size={30}
+        onClick={createNewMateria}
+      />
+
+      <Pagination
+        size='sm'
+        className='m-auto'
+      >
+        <Pagination.Prev
+          onClick={prevPageGlobal}
+          disabled={numPageMaterias === 1 || array.length === 0}
+        />
+        <Pagination.Item active>{numPageMaterias}</Pagination.Item>
+        <Pagination.Next
+          onClick={nextPageGlobal}
+          disabled={numPageMaterias === array.length || array.length === 0}
+        />
+      </Pagination>
+
+      <AiFillDelete
+        className='OTHSubGroupBtn'
+        size={30}
+        onClick={deleteCurrentMateria}
+      />
+    </div>
+  )
+}
