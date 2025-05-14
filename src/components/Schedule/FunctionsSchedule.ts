@@ -1,11 +1,12 @@
-import { DescripcionesPorDia, Horario } from "../../Data/groupManager";
-import { estaCruzandoLosTiemposConOtrosTiempos } from "../../Utils/TimeUtils";
+// Ignorar todo typescript
+// @ts-nocheck yo que se xd
+import {estaCruzandoLosTiemposConOtrosTiempos} from "../../Utils/TimeUtils.js";
 
-function createCombinationsBacktracking(newMaterias: Horario[]){
-  const combinations: Horario[][] = [];
-  const currentCombination: Horario[] = [];
+function createCombinationsBacktracking(newMaterias) {
+  const combinations = [];
+  const currentCombination = [];
 
-  function backtrack(index: number) {
+  function backtrack(index) {
     if (index === newMaterias.length) {
       combinations.push([...currentCombination]);
       return;
@@ -32,14 +33,14 @@ function createCombinationsBacktracking(newMaterias: Horario[]){
 
   backtrack(0);
 
-  function filterCombinations(combinations: Horario[][]) {
-    function doTimeRangesOverlap(range1: DescripcionesPorDia, range2: DescripcionesPorDia) {
+  function filterCombinations(combinations) {
+    function doTimeRangesOverlap(range1, range2) {
       const cruza = estaCruzandoLosTiemposConOtrosTiempos(range1.dia, range1.inicio, range1.fin, range2.dia, range2.inicio, range2.fin)
       console.log(`doTimeRangesOverlap: ${cruza}`)
       return cruza
     }
 
-    function combinationHasTimeOverlap(combination: Horario[]) {
+    function combinationHasTimeOverlap(combination) {
       for (let i = 0; i < combination.length - 1; i++) {
         for (let j = i + 1; j < combination.length; j++) {
           const materia1 = combination[i];
@@ -65,7 +66,7 @@ function createCombinationsBacktracking(newMaterias: Horario[]){
   return combinationsWithoutTimeOverlap.filter(combination => combination.length > 0);
 }
 
-function generateHours(singleCombination: Horario[] | undefined, mostrarPorHorario24Horas: boolean = false){
+function generateHours(singleCombination, mostrarPorHorario24Horas){
 
   if(typeof(singleCombination) === "undefined"){
     const horas = Array.from({length: 24}, (_, i) => (`${i}:00`.padStart(5, '0')));
@@ -75,7 +76,7 @@ function generateHours(singleCombination: Horario[] | undefined, mostrarPorHorar
       return hoursTo12HFormat(horas)
   }
 
-  const hours: string[] = [];
+  const hours = [];
 
   if(typeof(singleCombination) !== "undefined"){
     singleCombination.map(materia => {
@@ -89,20 +90,19 @@ function generateHours(singleCombination: Horario[] | undefined, mostrarPorHorar
     })
   }
 
-  function adjustHours(originalHours: string[]) {
+  function adjustHours(originalHours) {
     const horasFaltantes = [];
     const min = Math.min(...originalHours.map(hora => {
       const [h,] = hora.split(":");
-      return Number(h);
+      return h;
     }));
 
     const max = Math.max(...originalHours.map(hora => {
       const [h,] = hora.split(":");
-      return Number(h);
+      return h;
     }));
 
     for(let i = min; i <= max; i++) {
-      // @ts-expect-error quien sabe
       i = i < 10 ? `0${i}` : i;
       if(!originalHours.includes(`${i}:00`)) horasFaltantes.push(`${i}:00`);
     }
@@ -112,7 +112,7 @@ function generateHours(singleCombination: Horario[] | undefined, mostrarPorHorar
   }
 
   // Función de comparación personalizada para ordenar las horas
-  function compararHoras(hora1: string, hora2: string) {
+  function compararHoras(hora1, hora2) {
     // Dividimos las horas y minutos y los convertimos a números enteros
     const [h1, m1] = hora1.split(':').map(Number);
     const [h2, m2] = hora2.split(':').map(Number);
@@ -138,20 +138,20 @@ function generateHours(singleCombination: Horario[] | undefined, mostrarPorHorar
 
 }
 
-function formatNumber(number: number){
+function formatNumber(number){
   //return 0{number}
   return number.toString().padStart(2, '0')
 }
 
-function hoursTo12HFormat(hours: string[]){
+function hoursTo12HFormat(hours){
   return hours.map(hour => {
-    const [h, m] = hour.split(':').map(Number)
+    const [h, m] = hour.split(':')
     return `${h%12 === 0 ? 12 : formatNumber(h%12)}:${m} ${h < 12 ? 'AM' : 'PM'}`
   })
 }
 
-function reformat12HTo24h(dato: string){
-  function formatNumber(number: number){
+function reformat12HTo24h(dato){
+  function formatNumber(number){
     return number.toString().padStart(2, "0")
   }
 
@@ -173,7 +173,7 @@ function reformat12HTo24h(dato: string){
 
 }
 
-function getArrayForTableCells(currentHour: string, currentDay: number, singleCombination: Horario[] | undefined){
+function getArrayForTableCells(currentHour, currentDay, singleCombination){
   if(currentHour === "") return {rowSpan: 0}
   currentHour = reformat12HTo24h(currentHour)
   const array = {
@@ -197,7 +197,7 @@ function getArrayForTableCells(currentHour: string, currentDay: number, singleCo
     return false
   }
 
-  function detectarSiLaMateriaVaEnLaCelda(materia: Horario, currentDay: number, currentHour: string){
+  function detectarSiLaMateriaVaEnLaCelda(materia, currentDay, currentHour){
     // Si dentro de la materia, en las descripciones por día hay una que tenga el día actual
     // Y si el currentHour está entre el inicio y el fin de la descripción por día
     // Entonces la materia va en la celda
@@ -218,7 +218,7 @@ function getArrayForTableCells(currentHour: string, currentDay: number, singleCo
     return undefined // No va en la celda actual
   }
 
-  function calculateRowSpan(horario: DescripcionesPorDia){
+  function calculateRowSpan(horario){
     const horas = generateHours(singleCombination, true)
 
     const inicio = horas.indexOf(horario.inicio)
