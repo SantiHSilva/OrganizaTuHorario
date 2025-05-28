@@ -10,3 +10,8 @@ export function getRedirectSharedURL(path: string){
   const redirectURL = `${baseURL}/view/${path}`
   return redirectURL;
 }
+
+export function isURL(texto: string){
+  const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+  return urlRegex.test(texto);
+}

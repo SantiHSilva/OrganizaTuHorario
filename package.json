@@ -12,6 +12,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.17",
     "axios": "^1.8.4",
+    "highcharts-react-official": "^3.2.2",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "react": "^19.0.0",

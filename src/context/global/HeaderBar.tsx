@@ -10,6 +10,10 @@ const menuItems = [
     action: () => router.navigate('/schedules')
   },
   {
+    label: '📺 Scrapping Youtube',
+    action: () => router.navigate('/scrapping')
+  },
+  {
     label: '🔰 Administración',
     items: [
       {
