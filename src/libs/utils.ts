@@ -15,3 +15,9 @@ export function isURL(texto: string){
   const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
   return urlRegex.test(texto);
 }
+
+export function parseStringTOHTML(text: string){
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(text, 'text/html');
+  return doc.body;
+}

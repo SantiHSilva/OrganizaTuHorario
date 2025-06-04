@@ -4,9 +4,9 @@ import { storage_access_token, storage_refresh_token } from '../api/constants';
 import { Profile } from '../interfaces/account';
 
 interface AuthStore {
-  checkedLogin: boolean;
-  forceToLogin: boolean;
-  isLogged: boolean;
+  checkedLogin: boolean; // Si ya se reviso que hay un perfil
+  forceToLogin: boolean; // Si la ruta requiere un forzado a login
+  isLogged: boolean; // Si el usuario está logueado
   access_token: string;
   refresh_token: string;
   checkLoginStatus: () => Promise<void>;
@@ -38,7 +38,7 @@ export const useAuth = create<AuthStore>()((set, get) => ({
     try {
       // Verificar si el token es válido
       const account: Profile = await authService.getProfile();
-      set({ isLogged: true, profile: account, forceToLogin: false });
+      set({ isLogged: true, profile: account });
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       set({ 

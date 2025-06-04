@@ -1,6 +1,6 @@
 import { useState } from "react";
 import HeaderBar from "../context/global/HeaderBar";
-import { isURL } from "../libs/utils";
+import { isURL, parseStringTOHTML } from "../libs/utils";
 import { toast } from "react-toastify";
 import { TypeAnimation } from "react-type-animation";
 import axios from "axios";
@@ -16,8 +16,10 @@ export interface Welcome {
     palabras_repetidas:  PalabrasRepetida[];
     polaridad_detallada: { [key: string]: { [key: string]: string }; }[];
     polaridad_resumido:  PolaridadResumido;
-    conteos_tesauros:    ConteosTesauros;
+    conteos_tesauros:    { [key: string]: { [key: string]: number; }; };
     conceptos_open_alex: ConceptosOpenAlex[];
+    iframe_relacionados: string;
+    iframe_no_relacionados: string;
 }
 
 export interface ConceptosOpenAlex {
@@ -25,19 +27,6 @@ export interface ConceptosOpenAlex {
     display_name: string;
     level:        number;
     score:        number;
-}
-
-export interface ConteosTesauros {
-    "Tecnología de la información": { [key: string]: number };
-    "Diseño de sistemas":           { [key: string]: number };
-    "Investigación y desarrollo":   { [key: string]: number };
-    "Horario Escolar":              { [key: string]: number };
-    "Gestión educacional":          { [key: string]: number };
-    Algoritmo:                      { [key: string]: number };
-    "Usuario de información":       { [key: string]: number };
-    "Enseñanza superior":           { [key: string]: number };
-    "Toma de decisiones":           { [key: string]: number };
-    "Tendencia educacional":        { [key: string]: number };
 }
 
 export interface TomaDeDecisiones {
@@ -364,6 +353,8 @@ export default function ScrappingYoutube(){
               <h1 className="text-4xl text-gray-800 dark:text-white text-center">
                 Análisis de Tesauros
               </h1>
+              <section className="md:grid md:grid-cols-2 gap-5 flex flex-col">
+
               {
                 Object.keys(data.conteos_tesauros).map((key, index) => (
                   <section>
@@ -416,7 +407,8 @@ export default function ScrappingYoutube(){
                                           color:
                                             '#' +
                                             Math.floor(Math.random() * 16777215).toString(16),
-                                      })),
+                                      }))// ordenar ascendente
+                                      .sort((a, b) => b.y - a.y)
                                 },
                             ],
                           }}
@@ -430,6 +422,18 @@ export default function ScrappingYoutube(){
                   </section>
                 ))
               }
+              </section>
+
+              {/* No relacionados */}
+              <div dangerouslySetInnerHTML={{
+                __html: data.iframe_no_relacionados
+              }} /> 
+
+              {/* No relacionados */}
+              <div dangerouslySetInnerHTML={{
+                __html: data.iframe_relacionados
+              }} /> 
+
             </div>
           )
         }

@@ -23,6 +23,7 @@ export default function AuthController(){
   }, [auth.checkedLogin, auth])
 
   useEffect(() => {
+    console.log(auth.forceToLogin, auth.isLogged, auth.checkedLogin)
     if(auth.forceToLogin && !auth.isLogged && auth.checkedLogin){
       setIgnoreAuth(true)
       setIsModalOpen(true);
