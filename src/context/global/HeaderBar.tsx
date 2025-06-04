@@ -14,6 +14,10 @@ const menuItems = [
     action: () => router.navigate('/scrapping')
   },
   {
+    label: '🎵 Scrapping WAV',
+    action: () => router.navigate('/scrapping-wav')
+  },
+  {
     label: '🔰 Administración',
     items: [
       {

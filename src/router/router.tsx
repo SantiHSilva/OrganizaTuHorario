@@ -7,6 +7,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import ViewMySchedules from "../pages/ViewMySchedules";
 import ScheduleDetails from "../pages/ScheduleDetails";
 import ScrappingYoutube from "../pages/ScrappingYoutube";
+import ScrappingWAV from "../pages/ScrappingWAV";
 
 type RouteMiddleware = RouteObject & {
   middleware?: boolean;
@@ -31,6 +32,11 @@ const routes : RouteMiddleware[] = [
   {
     path: "scrapping",
     Component: ScrappingYoutube,
+    middleware: false,
+  },
+  {
+    path: "scrapping-wav",
+    Component: ScrappingWAV,
     middleware: false,
   }
 ]
