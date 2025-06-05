@@ -7,6 +7,9 @@ import { authService } from "../../api/api";
 import { useAuth } from "../../stores/useAuth";
 import MyProfile from "./MyProfile";
 import { FcGoogle } from "react-icons/fc";
+import { GoogleLogin } from '@react-oauth/google';
+import { getProfileIconGoogle } from "../../libs/utils";
+import { storage_profile_icon } from "../../api/constants";
 
 export default function AuthController(){
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,6 +54,17 @@ export default function AuthController(){
       })
   }
 
+  async function handleLoginGoogle(credential: string){
+    await authService.googleLogin(credential)
+      .then((response) => {
+        setIsModalOpen(false);
+        auth.setTokens(response.access_token, response.refresh_token)
+        setEmail("");
+        setPassword("");
+        localStorage.setItem(storage_profile_icon, getProfileIconGoogle(credential) || "");
+      })
+  }
+
   return (
     <>
       {
@@ -88,21 +102,18 @@ export default function AuthController(){
               ) 
             }
           </div>
-          <div className="flex justify-center items-center dark:text-gray-400 mt-2">
-            ¿No tienes cuenta?
-            <button
-              className="text-blue-500 hover:text-blue-700 ml-1 font-semibold cursor-pointer"
-            >
-              Registrate
-            </button>
-          </div>
-          <section className="flex justify-center items-center gap-2">
-            <button className="w-full flex items-center justify-center gap-2 mt-5 py-1 bg-white border border-gray-300 rounded shadow-sm hover:bg-gray-100 dark:bg-[#0b0c10] dark:border-[#3c434d] dark:text-white dark:hover:bg-[#1f2833] transition cursor-pointer">
-              <FcGoogle className="w-8 h-8" />
-              <p className="text-gray-800 dark:text-white">
-                Iniciar sesión con Google
-              </p>
-            </button>
+          <section className="flex justify-center items-center gap-2 mt-5">
+            <GoogleLogin
+              size="large"
+              locale="es"
+              onSuccess={credentialResponse => {
+                console.log(credentialResponse);
+                handleLoginGoogle(credentialResponse.credential as string);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />;
           </section>
           <section className="flex items-center justify-center mt-4 gap-2">
             <hr className="my-4 w-full border-gray-400 dark:border-[#3c434d]" />

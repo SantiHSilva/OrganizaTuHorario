@@ -175,9 +175,8 @@ class AuthService {
   }
 
   // Método para el inicio de sesión con Google
-  async googleLogin() {
+  async googleLogin(token: string) {
     try {
-      const token = localStorage.getItem('googleToken');
       const response = await this.API.post('auth/google', {
         idToken: token
       });
@@ -187,10 +186,11 @@ class AuthService {
         localStorage.setItem(storage_access_token, data.access_token);
         localStorage.setItem(storage_refresh_token, data.refresh_token);
         toast.success('Inicio de sesión exitoso');
-        window.location.href = '/app/dashboard';
       } else if (data.statusCode === 409) {
         this.handleUserNotFound();
       }
+
+      return data
     } catch (error) {
       if (axios.isAxiosError(error) && error.response && error.response.status === 409) {
         this.handleUserNotFound();

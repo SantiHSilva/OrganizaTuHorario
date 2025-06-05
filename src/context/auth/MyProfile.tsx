@@ -1,3 +1,4 @@
+import { storage_profile_icon } from "../../api/constants";
 import { useAuth } from "../../stores/useAuth"
 import DropdownMenu from "../global/DropdownMenu"
 
@@ -22,6 +23,8 @@ export default function MyProfile(){
     }
   ];
 
+  const profileIcon = localStorage.getItem(storage_profile_icon) || `https://ui-avatars.com/api/?name=${auth.profile?.Personas.nombres} ${auth.profile?.Personas.apellidos}`;
+
   return (
     <>
       <DropdownMenu
@@ -33,7 +36,8 @@ export default function MyProfile(){
           className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
         >
           <img 
-            src={`https://ui-avatars.com/api/?name=${auth.profile?.Personas.nombres} ${auth.profile?.Personas.apellidos}`}
+            // src={`https://ui-avatars.com/api/?name=${auth.profile?.Personas.nombres} ${auth.profile?.Personas.apellidos}`}
+            src={profileIcon}
             className="rounded-full w-full h-7.5"
           />
         </button>

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { authService } from '../api/api';
-import { storage_access_token, storage_refresh_token } from '../api/constants';
+import { storage_access_token, storage_profile_icon, storage_refresh_token } from '../api/constants';
 import { Profile } from '../interfaces/account';
 
 interface AuthStore {
@@ -70,6 +70,7 @@ export const useAuth = create<AuthStore>()((set, get) => ({
     await authService.logout();
     localStorage.removeItem(storage_access_token);
     localStorage.removeItem(storage_refresh_token);
+    localStorage.removeItem(storage_profile_icon);
     set({
       access_token: '',
       refresh_token: '',
