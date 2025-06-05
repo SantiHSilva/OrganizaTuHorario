@@ -9,6 +9,7 @@ import ScheduleDetails from "../pages/ScheduleDetails";
 import ScrappingYoutube from "../pages/ScrappingYoutube";
 import ScrappingWAV from "../pages/ScrappingWAV";
 import SchedulePublic from "../pages/SchedulePublic";
+import Administration from "../pages/Administration";
 
 type RouteMiddleware = RouteObject & {
   middleware?: boolean;
@@ -44,6 +45,11 @@ const routes : RouteMiddleware[] = [
     path: "scrapping-wav",
     Component: ScrappingWAV,
     middleware: false,
+  },
+  {
+    path: "admin",
+    Component: Administration,
+    middleware: true,
   }
 ]
 

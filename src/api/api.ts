@@ -2,7 +2,7 @@ import axios from "axios";
 import { storage_access_token, storage_refresh_token } from "./constants";
 import { toast } from 'react-toastify';
 
-const API_URL = "http://localhost:3000/";
+export const API_URL = "http://localhost:3000/";
 
 interface LoginParams {
   email: string;

@@ -33,13 +33,7 @@ const menuItems: MenusItems[] = [
   {
     label: '🔰 Administración',
     requireLogin: true,
-    items: [
-      {
-        label: '👥 Gestión de usuarios',
-        action: () => console.log('Opción 1 clickeado'),
-        requireLogin: true
-      },
-    ]
+    action: () => router.navigate('/admin'),
   },
 ];
 
