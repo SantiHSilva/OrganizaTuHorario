@@ -11,7 +11,7 @@ export default function DataRoot({data}: {data: Horario[]}) {
   console.log("Updating DataRoot...");
 
   return (
-    <div className='px-4 md:px-0 grow gap-4 md:gap-0 w-full max-w-screen-xl mx-auto grid md:grid-cols-12 items-center'>
+    <div className='px-4 md:px-0 gap-4 md:gap-0 w-full max-w-screen-xl overflow-auto mx-auto grid md:grid-cols-12 items-center'>
       <div
         className="md:col-span-7 bg-white dark:bg-[#262c2c] rounded-lg md:rounded-l-lg md:rounded-r-none shadow-md h-full"
         style={{

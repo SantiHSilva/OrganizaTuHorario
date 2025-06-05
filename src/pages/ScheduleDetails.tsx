@@ -35,9 +35,9 @@ export default function ScheduleDetails(){
   }
 
   return (
-    <div className='bg-white dark:bg-[#101218] flex flex-col'>
+    <div className='bg-white dark:bg-[#101218] flex flex-col h-screen overflow-auto'>
       <HeaderBar />
-      <section className='px-4 md:px-5 m-5 grow gap-4 md:gap-0 w-full max-w-screen-xl mx-auto items-center dark:bg-[#1f2128] rounded-xl p-4 flex flex-row justify-between'>
+      <section className='px-4 md:px-5 m-5 gap-4 md:gap-0 w-full max-w-screen-xl mx-auto items-center dark:bg-[#1f2128] rounded-xl p-4 flex flex-row justify-between'>
         <p className="text-2xl font-bold text-gray-800 dark:text-white">
           Área Administrativa
         </p>

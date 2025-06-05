@@ -53,11 +53,11 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}: props)
           className='row p-1 text-center'
         >
           <span
-            className='fw-bold align-self-start col'
+            className='font-bold align-self-start col'
           >
             {
               adaptTitle(info.materiaBase.name).map(titulo => (
-                <section key={titulo} className='fst-italic'> {titulo} </section>
+                <section key={titulo}> {titulo} </section>
               ))
             }
           </span>
@@ -69,7 +69,7 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}: props)
             {
               info.materiaBase.materias[0].descripciones_generales.map((descripcion: DescripcionesGenerales, index: number) => (
                 descripcion.mostrar_en_tabla ?
-                <section key={index} className='fst-italic'> {descripcion.titulo} </section> : <></>
+                <section key={index} className='italic'> {descripcion.titulo} </section> : <></>
               ))
             }
 
@@ -82,7 +82,7 @@ export const TablaDeHorarios = ({combinaciones, numDeCombinacion, hours}: props)
             {
               info.materiaBase.materias[0].descripciones_por_dia[0].ajustes.map((ajuste: DescripcionesGenerales, index: number) => (
                 ajuste.mostrar_en_tabla ?
-                <section key={index} className='fw-light'> {ajuste.titulo} </section> : <></>
+                <section key={index} className='font-light'> {ajuste.titulo} </section> : <></>
               ))
             }
 

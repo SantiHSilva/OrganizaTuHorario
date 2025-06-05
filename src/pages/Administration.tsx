@@ -958,7 +958,7 @@ const tableConfigs: { [key: string]: ITableConfig<any> } = {
   usuarios: usuariosTableConfig,
   horariosUsuarios: horariosUsuariosTableConfig,
   compartirHorario: compartirHorarioTableConfig,
-  comentariosHorario: comentariosHorarioTableConfig,
+  // comentariosHorario: comentariosHorarioTableConfig,
   materias: materiasTableConfig,
   detallesMaterias: detallesMateriasTableConfig,
   horariosMaterias: horariosMateriasTableConfig,
