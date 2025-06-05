@@ -804,7 +804,7 @@ const compartirHorarioTableConfig: ITableConfig<CompartirHorario> = {
   name: 'Compartir Horario',
   endpoints: {
     read: `${BASE_API_URL}CompartirHorario/all`,
-    create: `${BASE_API_URL}CompartirHorario/save`,
+    create: `${BASE_API_URL}CompartirHorario`,
     update: `${BASE_API_URL}CompartirHorario`,
     delete: `${BASE_API_URL}CompartirHorario`,
     restore: `${BASE_API_URL}CompartirHorario/restore`,
@@ -827,7 +827,7 @@ const comentariosHorarioTableConfig: ITableConfig<ComentariosHorario> = {
   name: 'Comentarios Horario',
   endpoints: {
     read: `${BASE_API_URL}ComentariosHorario/all`,
-    create: `${BASE_API_URL}ComentariosHorario/save`,
+    create: `${BASE_API_URL}ComentariosHorario`,
     update: `${BASE_API_URL}ComentariosHorario`,
     delete: `${BASE_API_URL}ComentariosHorario`,
     restore: `${BASE_API_URL}ComentariosHorario/restore`,
@@ -857,7 +857,7 @@ const materiasTableConfig: ITableConfig<Materias> = {
   name: 'Materias',
   endpoints: {
     read: `${BASE_API_URL}Materias/all`,
-    create: `${BASE_API_URL}Materias/save`,
+    create: `${BASE_API_URL}Materias`,
     update: `${BASE_API_URL}Materias`,
     delete: `${BASE_API_URL}Materias`,
     restore: `${BASE_API_URL}Materias/restore`,
@@ -881,7 +881,7 @@ const detallesMateriasTableConfig: ITableConfig<DetallesMaterias> = {
   name: 'Detalles Materias',
   endpoints: {
     read: `${BASE_API_URL}DetallesMaterias/all`,
-    create: `${BASE_API_URL}DetallesMaterias/save`,
+    create: `${BASE_API_URL}DetallesMaterias`,
     update: `${BASE_API_URL}DetallesMaterias`,
     delete: `${BASE_API_URL}DetallesMaterias`,
     restore: `${BASE_API_URL}DetallesMaterias/restore`,
@@ -906,7 +906,7 @@ const horariosMateriasTableConfig: ITableConfig<HorariosMaterias> = {
   name: 'Horarios Materias',
   endpoints: {
     read: `${BASE_API_URL}HorariosMaterias/all`,
-    create: `${BASE_API_URL}HorariosMaterias/save`,
+    create: `${BASE_API_URL}HorariosMaterias`,
     update: `${BASE_API_URL}HorariosMaterias`,
     delete: `${BASE_API_URL}HorariosMaterias`,
     restore: `${BASE_API_URL}HorariosMaterias/restore`,
@@ -932,7 +932,7 @@ const detallesHorariosMateriasTableConfig: ITableConfig<DetallesHorariosMaterias
   name: 'Detalles Horarios Materias',
   endpoints: {
     read: `${BASE_API_URL}DetallesHorariosMaterias/all`,
-    create: `${BASE_API_URL}DetallesHorariosMaterias/save`,
+    create: `${BASE_API_URL}DetallesHorariosMaterias`,
     update: `${BASE_API_URL}DetallesHorariosMaterias`,
     delete: `${BASE_API_URL}DetallesHorariosMaterias`,
     restore: `${BASE_API_URL}DetallesHorariosMaterias/restore`,

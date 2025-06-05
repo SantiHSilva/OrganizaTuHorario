@@ -118,9 +118,9 @@ export default function ViewMySchedules(){
   }
 
   async function getSchedules(){
-    const response = (await API.get('/HorariosUsuarios/paginated/1/10'));
+    const response = (await API.get('/HorariosUsuarios/mySchedules'));
     if (response.status === 200) {
-      setSchedules(response.data.data);
+      setSchedules(response.data);
     } else {
       toast.error("Error al obtener los horarios.");
     }
@@ -131,7 +131,7 @@ export default function ViewMySchedules(){
   }, []);
 
   return (
-    <div className='bg-white dark:bg-[#101218] flex flex-col md:h-screen'>
+    <div className='bg-white dark:bg-[#101218] flex flex-col h-screen max-h-screen overflow-auto'>
       <HeaderBar />
       {/*  */}
       <section className='px-10 md:px-20 mt-10 md:gap-10 gap-5 grow h-full w-full max-w-screen-xl mx-auto'>
@@ -149,7 +149,7 @@ export default function ViewMySchedules(){
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mt-5">
           {
-            schedules.map((schedule, index) => (
+            schedules && schedules.map((schedule, index) => (
               <article key={index} className="flex flex-row gap-5 justify-between bg-white dark:bg-[#0b0c10] border border-gray-300 dark:border-[#3c434d] rounded-lg shadow-sm p-4">
                 <div className="w-full">
                   <p className="text-gray-800 dark:text-white text-lg font-semibold">
