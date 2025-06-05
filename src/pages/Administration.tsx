@@ -647,7 +647,8 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
               if (field.key !== 'id' && (field.editable !== false || currentRecord)) {
                 const value = formData.get(String(field.key));
                 if (value !== null) {
-                  if (field.type === 'number') {
+                  // MODIFICACIÓN CLAVE AQUÍ: Convertir a número si es 'number' O 'select' (llave foránea)
+                  if (field.type === 'number' || field.type === 'select') {
                     newRecord[field.key] = Number(value);
                   } else if (field.type === 'boolean') {
                     newRecord[field.key] = value === 'true'; // Convertir string a booleano
@@ -779,7 +780,7 @@ const horariosUsuariosTableConfig: ITableConfig<HorariosUsuarios> = {
   name: 'Horarios Usuarios',
   endpoints: {
     read: `${BASE_API_URL}HorariosUsuarios/all`,
-    create: `${BASE_API_URL}HorariosUsuarios/save`,
+    create: `${BASE_API_URL}HorariosUsuarios`,
     update: `${BASE_API_URL}HorariosUsuarios`, // Asumiendo PUT /HorariosUsuarios/:id
     delete: `${BASE_API_URL}HorariosUsuarios`, // Asumiendo DELETE /HorariosUsuarios/:id
     restore: `${BASE_API_URL}HorariosUsuarios/restore`, // Asumiendo POST /HorariosUsuarios/restore/:id
