@@ -5,12 +5,14 @@ import AuthController from "../auth/AuthController";
 import DropdownMenu from "./DropdownMenu";
 import ThemeToggle from "./ThemeMode";
 import { IoChevronDown } from "react-icons/io5";
+import { Profile } from "../../interfaces/account";
 
 interface MenusItems{
   label: string;
   action?: () => void;
   items?: MenusItems[];
   requireLogin: boolean;
+  onlyAdmin?: boolean;
   permissions?: string[];
 }
 
@@ -33,6 +35,7 @@ const menuItems: MenusItems[] = [
   {
     label: '🔰 Administración',
     requireLogin: true,
+    onlyAdmin: true,
     action: () => router.navigate('/admin'),
   },
 ];
@@ -45,8 +48,25 @@ export default function HeaderBar() {
     user.checkLoginStatus()
   }, []);
 
+  function currentUserIsAdmin() {
+    if(!user.profile) return false;
+    const profile: Profile = user.profile;
+    const permisos = profile.Roles.Permisos || [];
+    console.log(permisos)
+    if (permisos.length === 0) return false;
+    let isAdmin = true; // hasta que demuestre lo contrario
+    permisos.forEach(permiso => {
+      console.log('checking permiso', permiso)
+      if (!permiso.agregar || !permiso.eliminar || !permiso.modificar || !permiso.leer){
+        isAdmin = false; // If any permission is false, user is not admin
+      }
+    })
+    return isAdmin; // Return true if all permissions are true
+  }
+
   const newMenusBar = menuItems.filter(item => {
     if (item.requireLogin && !user.isLogged) return false; // Exclude if login is required and user is not logged in
+    if (item.onlyAdmin && !currentUserIsAdmin()) return false; // Exclude if only admin and user is not admin
     return true; 
   })
 
