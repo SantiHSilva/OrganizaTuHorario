@@ -41,6 +41,7 @@ export interface DetallesMateriaAPI {
     descripcion:         string;
     mostrar:             boolean;
     deleted_at:          null;
+    orden:               number;
     id_horario_materia?: number;
 }
 
@@ -50,6 +51,7 @@ export interface HorariosMateriaAPI {
     dia:                      string;
     hora_inicio:              string;
     hora_fin:                 string;
+    orden:               number;
     deleted_at:               null;
     DetallesHorariosMaterias: DetallesMateriaAPI[];
 }
@@ -62,38 +64,63 @@ function HorarioProduction() {
     // attempt to fetch data from localStorage
     const data : HorarioAPI = (await API.get(`HorariosUsuarios/get/${id}`)).data
     console.log("Data from API: ", data);
-    const dataFormatted : Horario[] = data.Materias.map((materia: MateriaAPI) => {
-      const descripcionesGenerales: DescripcionesGenerales[] = materia.DetallesMaterias.map((descripcion: DetallesMateriaAPI) => {
-        return {
-          mostrar_en_tabla: descripcion.mostrar,
-          titulo: descripcion.descripcion
-        }
-      })
-      return {
-        name: materia.nombre,
+    const dataFormatted: Horario[] = [];
+
+    data.Materias.forEach((materia: MateriaAPI) => {
+      const newMateria: Horario = {
         key: materia.id,
+        name: materia.nombre,
         color: materia.color,
-        materias: materia.HorariosMaterias.map((horario: HorariosMateriaAPI) => {
-          const descripcionesPorDia: DescripcionesPorDia[] = horario.DetallesHorariosMaterias.map((descripcion: DetallesMateriaAPI) => {
-            return {
-              dia: horario.dia,
-              inicio: horario.hora_inicio,
-              fin: horario.hora_fin,
-              ajustes: [
-                {
-                  mostrar_en_tabla: descripcion.mostrar,
-                  titulo: descripcion.descripcion
-                }
-              ]
-            }
-          })
-          return {
-            descripciones_generales: descripcionesGenerales,
-            descripciones_por_dia: descripcionesPorDia
-          }
-        })
+        materias: []
+      };
+
+      // a través de "orden", agruparlos
+      const DetallesMateriasAgrupados = materia.DetallesMaterias.reduce((acc: { [key: number]: DetallesMateriaAPI[] }, detalle) => {
+        if (!acc[detalle.orden]) {
+          acc[detalle.orden] = [];
+        }
+        acc[detalle.orden].push(detalle);
+        return acc;
+      }, {});
+
+      const HorariosMateriasAgrupados = materia.HorariosMaterias.reduce((acc: { [key: string]: HorariosMateriaAPI[] }, horario) => {
+        const key = horario.orden;
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(horario);
+        return acc;
       }
-    })
+      , {});
+
+      // Iterate through each group of HorariosMaterias
+      Object.keys(HorariosMateriasAgrupados).forEach((key) => {
+        const horario = HorariosMateriasAgrupados[key]; // Get the first horario of the group
+        const detalleGeneral = DetallesMateriasAgrupados[parseInt(key)]; // Get the first detalle of the group
+
+        const descripcionesGenerales: DescripcionesGenerales[] = detalleGeneral.map((detalle) => ({
+          mostrar_en_tabla: detalle.mostrar,
+          titulo: detalle.descripcion
+        }));
+
+        const descripcionesPorDia: DescripcionesPorDia[] = horario.map((horarioMateria) => ({
+          dia: horarioMateria.dia,
+          inicio: horarioMateria.hora_inicio,
+          fin: horarioMateria.hora_fin,
+          ajustes: detalleGeneral.map((detalle) => ({
+            mostrar_en_tabla: detalle.mostrar,
+            titulo: detalle.descripcion
+          }))
+        }));
+
+        newMateria.materias.push({
+          descripciones_generales: descripcionesGenerales,
+          descripciones_por_dia: descripcionesPorDia
+        });
+      })
+      
+      dataFormatted.push(newMateria);
+    });
 
     replaceGroupList(dataFormatted);
     setUpdate(!update);
