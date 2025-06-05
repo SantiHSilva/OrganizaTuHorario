@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback, createContext } from 'react';
-import { AxiosInstance } from 'axios';
-import { API, API_URL } from '../api/api';
+import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
+import { AxiosInstance } from 'axios'; // Asegúrate de importar axios aquí
+import { API } from '../api/api';
 
-// Define the API URL
-const BASE_API_URL = API_URL
+// Define la URL base para el backend
+const BASE_API_URL = 'http://127.0.0.1:3000/'; // URL del backend real
+
+// Crea la instancia de Axios globalmente dentro de este archivo
 
 interface AppContextType {
   axiosInstance: AxiosInstance;
@@ -13,6 +15,21 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+// Hook personalizado para usar el contexto de la aplicación
+const useAppContext = () => {
+  const context = useContext(AppContext);
+  if (!context) {
+    console.error("useAppContext debe ser usado dentro de un AppProvider");
+    // Se retorna una instancia de Axios por defecto en caso de no estar en un contexto,
+    // útil para desarrollo o pruebas aisladas.
+    return {
+      axiosInstance: API, // Usar la instancia global API como fallback
+      currentTable: '',
+      setCurrentTable: () => {},
+    };
+  }
+  return context;
+};
 
 // --- 1. Modelos TypeScript (models/TableModels.ts) ---
 
@@ -21,7 +38,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
  * @description Interfaz base para cualquier modelo de tabla, asegurando que todos los modelos tengan un ID.
  */
 interface IBaseModel {
-  id: string;
+  id: number; // Cambiado a number para Prisma Int @id
 }
 
 /**
@@ -41,30 +58,33 @@ interface IForeignKeyEndpoint {
  * @template T - El tipo del modelo de la tabla.
  * @property {keyof T} key - La clave del campo en el modelo de datos.
  * @property {string} label - La etiqueta amigable para mostrar en la UI.
- * @property {'text' | 'number' | 'select'} type - El tipo de entrada para el campo (texto, número, o select para llaves foráneas).
+ * @property {'text' | 'number' | 'select' | 'boolean' | 'date'} type - El tipo de entrada para el campo.
  * @property {IForeignKeyEndpoint} [foreignKey] - Opcional: Configuración si el campo es una llave foránea.
+ * @property {boolean} [editable] - Opcional: Controla si el campo es editable en el formulario. Por defecto es true.
  */
 interface IFieldConfig<T extends IBaseModel> {
   key: keyof T;
   label: string;
-  type: 'text' | 'number' | 'select';
+  type: 'text' | 'number' | 'select' | 'boolean' | 'date';
   foreignKey?: IForeignKeyEndpoint;
-  editable?: boolean; // New property to control field editability
+  editable?: boolean;
 }
 
 /**
  * @interface IEndpoints
- * @description Define los endpoints para las operaciones CRUD de una tabla.
+ * @description Define los endpoints para las operaciones CRUD de una tabla, incluyendo restauración.
  * @property {string} read - Endpoint para leer datos.
  * @property {string} create - Endpoint para crear un nuevo registro.
  * @property {string} update - Endpoint para actualizar un registro existente.
  * @property {string} delete - Endpoint para eliminar un registro.
+ * @property {string} [restore] - Opcional: Endpoint para restaurar un registro eliminado lógicamente.
  */
 interface IEndpoints {
   read: string;
   create: string;
   update: string;
   delete: string;
+  restore?: string;
 }
 
 /**
@@ -83,171 +103,64 @@ interface ITableConfig<T extends IBaseModel> {
   initialData: Omit<T, 'id'>;
 }
 
+// --- Modelos de Tablas del Backend (derivados de tu esquema Prisma) ---
 
-
-// --- Modelos de Ejemplo ---
-
-/*
-
-model HorariosUsuarios{
-  id Int @id @default(autoincrement())
-
-  nombre String @db.Text()
-  descripcion String @db.Text()
-
-  usuario_id Int
-  deleted_at DateTime?
-
-  Usuarios Usuarios @relation(fields: [usuario_id], references: [id])
-  
-  CompartirHorario CompartirHorario[]
-  ComentariosHorario ComentariosHorario[]
-  Materias Materias[]
+interface Usuarios extends IBaseModel {
+  correo: string;
+  deleted_at?: string | null;
 }
-
-model CompartirHorario{
-  id Int @id @default(autoincrement())
-
-  url String @db.Text() @unique
-  horario_id Int @unique
-  deleted_at DateTime?
-
-  HorariosUsuarios HorariosUsuarios @relation(fields: [horario_id], references: [id])
-}
-
-model ComentariosHorario{
-  id Int @id @default(autoincrement())
-
-  comentario String @db.Text()
-  fecha DateTime @db.Timestamp()
-
-  usuario_id Int
-  horario_id Int
-  deleted_at DateTime?
-
-  Usuarios Usuarios @relation(fields: [usuario_id], references: [id])
-  HorariosUsuarios HorariosUsuarios @relation(fields: [horario_id], references: [id])
-}
-
-model Materias{
-  id Int @id @default(autoincrement())
-
-  nombre String @db.Text()
-  color String @db.VarChar(15)
-  id_horario Int
-  deleted_at DateTime?
-
-  HorariosUsuarios HorariosUsuarios @relation(fields: [id_horario], references: [id])
-
-  HorariosMaterias HorariosMaterias[]
-  DetallesMaterias DetallesMaterias[]
-}
-
-model DetallesMaterias{
-  id Int @id @default(autoincrement())
-
-  id_materia Int
-  descripcion String @db.Text()
-  mostrar Boolean @default(true)
-  orden Int // Orden de la materia en el horario.
-  deleted_at DateTime?
-
-  Materias Materias @relation(fields: [id_materia], references: [id])
-}
-
-model HorariosMaterias{
-  id Int @id @default(autoincrement())
-
-  id_materia Int
-  dia String @db.VarChar(1) // Indice del día.
-  hora_inicio String @db.VarChar(5) // Formato 24 horas.
-  hora_fin String @db.VarChar(5) // Formato 24 horas.
-  orden Int // Orden de la materia en el horario.
-
-  deleted_at DateTime?
-
-  Materias Materias @relation(fields: [id_materia], references: [id])
-
-  DetallesHorariosMaterias DetallesHorariosMaterias[]
-}
-
-model DetallesHorariosMaterias{
-  id Int @id @default(autoincrement())
-
-  id_horario_materia Int
-  descripcion String @db.Text()
-  mostrar Boolean @default(true)
-  orden Int // Orden de la materia en el horario.
-  deleted_at DateTime?
-
-  HorariosMaterias HorariosMaterias @relation(fields: [id_horario_materia], references: [id])
-}
-
-*/
 
 interface HorariosUsuarios extends IBaseModel {
   nombre: string;
   descripcion: string;
   usuario_id: number;
+  deleted_at?: string | null;
 }
 
 interface CompartirHorario extends IBaseModel {
   url: string;
   horario_id: number;
+  deleted_at?: string | null;
 }
 
 interface ComentariosHorario extends IBaseModel {
   comentario: string;
-  fecha: Date;
+  fecha: string; // Se maneja como string para inputs de fecha o formato de backend
   usuario_id: number;
   horario_id: number;
+  deleted_at?: string | null;
 }
 
 interface Materias extends IBaseModel {
   nombre: string;
   color: string;
   id_horario: number;
+  deleted_at?: string | null;
 }
 
 interface DetallesMaterias extends IBaseModel {
   id_materia: number;
   descripcion: string;
   mostrar: boolean;
-  orden: number; // Orden de la materia en el horario.
+  orden: number;
+  deleted_at?: string | null;
 }
 
 interface HorariosMaterias extends IBaseModel {
   id_materia: number;
-  dia: string; // Indice del día.
-  hora_inicio: string; // Formato 24 horas.
-  hora_fin: string; // Formato 24 horas.
-  orden: number; // Orden de la materia en el horario.
+  dia: string;
+  hora_inicio: string;
+  hora_fin: string;
+  orden: number;
+  deleted_at?: string | null;
 }
 
 interface DetallesHorariosMaterias extends IBaseModel {
   id_horario_materia: number;
   descripcion: string;
   mostrar: boolean;
-  orden: number; // Orden de la materia en el horario.
-}
-
-/**
- * @interface IUser
- * @description Modelo de ejemplo para un usuario.
- */
-interface IUser extends IBaseModel {
-  name: string;
-  email: string;
-}
-
-/**
- * @interface IProduct
- * @description Modelo de ejemplo para un producto.
- */
-interface IProduct extends IBaseModel {
-  name: string;
-  price: number;
-  createdBy: string; // Foreign key to User ID
+  orden: number;
+  deleted_at?: string | null;
 }
 
 // --- 2. Servicio de API (api/apiService.ts) ---
@@ -271,21 +184,21 @@ class ApiService {
    * @returns {Promise<T[]>} Una promesa que resuelve con un array de datos.
    */
   async fetchData<T extends IBaseModel>(endpoint: string): Promise<T[]> {
-    console.log(`[API] Fetching data from: ${endpoint}`);
+    console.log(`[API] Obteniendo datos de: ${endpoint}`);
     const response = await this.axiosInstance.get<T[]>(endpoint);
     return response.data;
   }
 
   /**
    * @method createData
-   * @description Crea un nuevo registro.
+   * @description Crea un nuevo registro. El ID no se envía.
    * @template T - El tipo de los datos a crear.
    * @param {string} endpoint - El endpoint de la API.
    * @param {Omit<T, 'id'>} data - Los datos del nuevo registro (sin ID).
    * @returns {Promise<T>} Una promesa que resuelve con el registro creado (incluyendo ID).
    */
   async createData<T extends IBaseModel>(endpoint: string, data: Omit<T, 'id'>): Promise<T> {
-    console.log(`[API] Creating data at ${endpoint}:`, data);
+    console.log(`[API] Creando datos en ${endpoint}:`, data);
     const response = await this.axiosInstance.post<T>(endpoint, data);
     return response.data;
   }
@@ -299,7 +212,7 @@ class ApiService {
    * @returns {Promise<T>} Una promesa que resuelve con el registro actualizado.
    */
   async updateData<T extends IBaseModel>(endpoint: string, data: T): Promise<T> {
-    console.log(`[API] Updating data at ${endpoint}:`, data);
+    console.log(`[API] Actualizando datos en ${endpoint}:`, data);
     const response = await this.axiosInstance.put<T>(endpoint, data); // Usar PUT para actualizaciones completas
     return response.data;
   }
@@ -311,14 +224,25 @@ class ApiService {
    * @returns {Promise<void>} Una promesa que resuelve cuando el registro es eliminado.
    */
   async deleteData(endpoint: string): Promise<void> {
-    console.log(`[API] Deleting data from: ${endpoint}`);
+    console.log(`[API] Eliminando datos de: ${endpoint}`);
     await this.axiosInstance.delete(endpoint);
+  }
+
+  /**
+   * @method restoreData
+   * @description Restaura un registro eliminado lógicamente.
+   * @param {string} endpoint - El endpoint de la API para restaurar (ej. `/HorariosUsuarios/restore`).
+   * @param {number} id - El ID del registro a restaurar.
+   * @returns {Promise<void>} Una promesa que resuelve cuando el registro es restaurado.
+   */
+  async restoreData(endpoint: string, id: number): Promise<void> {
+    console.log(`[API] Restaurando datos en: ${endpoint}/${id}`);
+    await this.axiosInstance.post(`${endpoint}/${id}`); // Asume que la restauración es un POST a /restore/:id
   }
 }
 
-// Instancia de Axios para el servicio
-const axiosInstance = API
-const apiService = new ApiService(axiosInstance);
+// Instancia de Axios para el servicio, ahora usa la instancia API definida arriba
+const apiService = new ApiService(API);
 
 
 // --- 3. Componente Modal (components/Modal.tsx) ---
@@ -438,15 +362,21 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [currentRecord, setCurrentRecord] = useState<T | null>(null);
   const [foreignKeyData, setForeignKeyData] = useState<{ [key: string]: any[] }>({});
+  const { axiosInstance } = useAppContext(); // Get axiosInstance from context
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
-  const [recordToDeleteId, setRecordToDeleteId] = useState<string | null>(null);
+  const [recordToDeleteId, setRecordToDeleteId] = useState<number | null>(null); // Cambiado a number
+  const [showDeleted, setShowDeleted] = useState<boolean>(false);
 
 
   const fetchTableData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const result = await apiService.fetchData<T>(config.endpoints.read);
+      let url = config.endpoints.read;
+      if (showDeleted) {
+        url = `${url}?includeDeleted=true`; // Añadir parámetro para mostrar eliminados
+      }
+      const result = await apiService.fetchData<T>(url);
       setData(result);
     } catch (err: any) {
       setError(`Error al cargar los datos: ${err.message}`);
@@ -454,7 +384,7 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
     } finally {
       setLoading(false);
     }
-  }, [config.endpoints.read]);
+  }, [config.endpoints.read, showDeleted]); // Añadir showDeleted como dependencia
 
   const fetchForeignKeyData = useCallback(async () => {
     const fkPromises = config.fields
@@ -465,15 +395,15 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
           const result = await apiService.fetchData<any>(fk.endpoint);
           return { key: field.key as string, data: result };
         } catch (err: any) {
-          console.error(`Error fetching foreign key data for ${String(field.key)}:`, err);
-          return { key: field.key as string, data: [] }; // Return empty array on error
+          console.error(`Error al obtener datos de llave foránea para ${String(field.key)}:`, err);
+          return { key: field.key as string, data: [] }; // Retornar array vacío en caso de error
         }
       });
 
     const results = await Promise.all(fkPromises);
     const newForeignKeyData: { [key: string]: any[] } = {};
     results.forEach(res => {
-      if (res) { // Ensure res is not null/undefined
+      if (res) {
         newForeignKeyData[res.key] = res.data;
       }
     });
@@ -490,15 +420,15 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
     setError(null);
     try {
       if ('id' in formData && formData.id) {
-        // Update existing record
+        // Actualizar registro existente
         await apiService.updateData<T>(`${config.endpoints.update}/${formData.id}`, formData as T);
       } else {
-        // Create new record
+        // Crear nuevo registro (no se envía el ID)
         await apiService.createData<T>(config.endpoints.create, formData as Omit<T, 'id'>);
       }
       setIsModalOpen(false);
       setCurrentRecord(null);
-      fetchTableData(); // Refresh data after operation
+      fetchTableData(); // Recargar datos después de la operación
     } catch (err: any) {
       setError(`Error al guardar los datos: ${err.message}`);
       console.error(err);
@@ -507,18 +437,18 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
     }
   };
 
-  const handleDelete = (recordId: string) => {
+  const handleDelete = (recordId: number) => { // Cambiado a number
     setRecordToDeleteId(recordId);
     setIsConfirmationModalOpen(true);
   };
 
   const confirmDelete = async () => {
-    if (recordToDeleteId) {
+    if (recordToDeleteId !== null) { // Asegurar que el ID no es nulo
       setLoading(true);
       setError(null);
       try {
         await apiService.deleteData(`${config.endpoints.delete}/${recordToDeleteId}`);
-        fetchTableData(); // Refresh data after deletion
+        fetchTableData(); // Recargar datos después de la eliminación
       } catch (err: any) {
         setError(`Error al eliminar el registro: ${err.message}`);
         console.error(err);
@@ -535,13 +465,31 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
     setRecordToDeleteId(null);
   };
 
+  const handleRestore = async (recordId: number) => {
+    setLoading(true);
+    setError(null);
+    try {
+      if (config.endpoints.restore) {
+        await apiService.restoreData(config.endpoints.restore, recordId);
+        fetchTableData(); // Recargar datos después de la restauración
+      } else {
+        setError('El endpoint de restauración no está definido para esta tabla.');
+      }
+    } catch (err: any) {
+      setError(`Error al restaurar el registro: ${err.message}`);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const openCreateModal = () => {
-    setCurrentRecord(null); // Clear current record for creation
+    setCurrentRecord(null); // Limpiar registro actual para creación
     setIsModalOpen(true);
   };
 
   const openEditModal = (record: T) => {
-    setCurrentRecord(record); // Set current record for editing
+    setCurrentRecord(record); // Establecer registro actual para edición
     setIsModalOpen(true);
   };
 
@@ -551,7 +499,17 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
         Administrar {config.name}
       </h1>
 
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <button
+          onClick={() => setShowDeleted(!showDeleted)}
+          className={`py-2 px-4 rounded-md text-sm font-semibold transition duration-300 ease-in-out transform hover:scale-105
+            ${showDeleted
+              ? 'bg-orange-500 text-white shadow-md'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+        >
+          {showDeleted ? 'Ocultar Eliminados' : 'Mostrar Eliminados'}
+        </button>
         <button
           onClick={openCreateModal}
           className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105"
@@ -590,6 +548,12 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
                     {field.label}
                   </th>
                 ))}
+                {/* Añadir columna para deleted_at si existe en el modelo */}
+                {'deleted_at' in data[0] && (
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Eliminado
+                  </th>
+                )}
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Acciones
                 </th>
@@ -609,12 +573,33 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
                         </td>
                       );
                     }
+                    if (field.type === 'boolean') {
+                      return (
+                        <td key={String(field.key)} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {value ? 'Sí' : 'No'}
+                        </td>
+                      );
+                    }
+                    if (field.type === 'date') {
+                      const dateValue = value ? new Date(String(value)).toLocaleDateString() : 'N/A';
+                      return (
+                        <td key={String(field.key)} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {dateValue}
+                        </td>
+                      );
+                    }
                     return (
                       <td key={String(field.key)} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {String(value)}
                       </td>
                     );
                   })}
+                  {/* Mostrar estado de eliminado */}
+                  {'deleted_at' in record && (
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {(record as any).deleted_at ? 'Sí' : 'No'}
+                    </td>
+                  )}
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button
                       onClick={() => openEditModal(record)}
@@ -622,12 +607,21 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
                     >
                       Editar
                     </button>
-                    <button
-                      onClick={() => handleDelete(record.id)}
-                      className="text-red-600 hover:text-red-900 transition duration-150 ease-in-out"
-                    >
-                      Eliminar
-                    </button>
+                    {(record as any).deleted_at ? (
+                      <button
+                        onClick={() => handleRestore(record.id as number)}
+                        className="text-green-600 hover:text-green-900 transition duration-150 ease-in-out mr-3"
+                      >
+                        Restaurar
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleDelete(record.id as number)}
+                        className="text-red-600 hover:text-red-900 transition duration-150 ease-in-out"
+                      >
+                        Eliminar
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -645,52 +639,93 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.currentTarget);
+            // Si es un registro existente, copiamos sus datos; si no, usamos los datos iniciales (sin ID)
             const newRecord: any = currentRecord ? { ...currentRecord } : { ...config.initialData };
 
             config.fields.forEach(field => {
-              const value = formData.get(String(field.key));
-              if (value !== null) {
-                newRecord[field.key] = field.type === 'number' ? Number(value) : String(value);
+              // Solo procesar campos que no sean 'id' para la creación, y campos editables
+              if (field.key !== 'id' && (field.editable !== false || currentRecord)) {
+                const value = formData.get(String(field.key));
+                if (value !== null) {
+                  if (field.type === 'number') {
+                    newRecord[field.key] = Number(value);
+                  } else if (field.type === 'boolean') {
+                    newRecord[field.key] = value === 'true'; // Convertir string a booleano
+                  } else if (field.type === 'date') {
+                    // Si el backend espera un formato específico, se puede ajustar aquí
+                    newRecord[field.key] = value;
+                  } else {
+                    newRecord[field.key] = String(value);
+                  }
+                }
               }
             });
-
             handleCreateOrUpdate(newRecord as T);
           }}
           className="space-y-4"
         >
-          {config.fields.map(field => (
-            <div key={String(field.key)}>
-              <label htmlFor={String(field.key)} className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label}:
-              </label>
-              {field.type === 'select' && field.foreignKey ? (
-                <select
-                  id={String(field.key)}
-                  name={String(field.key)}
-                  defaultValue={currentRecord ? String(currentRecord[field.key]) : ''}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  required
-                >
-                  <option value="">Selecciona una opción</option>
-                  {foreignKeyData[field.key as string]?.map(option => (
-                    <option key={option.id} value={option.id}>
-                      {option[field.foreignKey!.displayField]}
-                    </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type={field.type === 'number' ? 'number' : 'text'}
-                  id={String(field.key)}
-                  name={String(field.key)}
-                  defaultValue={currentRecord ? String(currentRecord[field.key]) : ''}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  required
-                  readOnly={field.editable === false} // Apply readOnly based on editable prop
-                />
-              )}
-            </div>
-          ))}
+          {config.fields.map(field => {
+            // No renderizar el campo ID si estamos creando un nuevo registro o si no es editable
+            if (field.key === 'id' && !currentRecord) return null;
+            if (field.editable === false && !currentRecord) return null; // No mostrar campos no editables al crear
+
+            let inputValue = currentRecord ? String(currentRecord[field.key]) : '';
+            if (field.type === 'boolean' && currentRecord) {
+              inputValue = currentRecord[field.key] ? 'true' : 'false';
+            } else if (field.type === 'date' && currentRecord && currentRecord[field.key]) {
+               // Formatear la fecha para el input type="date"
+               inputValue = new Date(String(currentRecord[field.key])).toISOString().split('T')[0];
+            }
+
+
+            return (
+              <div key={String(field.key)}>
+                <label htmlFor={String(field.key)} className="block text-sm font-medium text-gray-700 mb-1">
+                  {field.label}:
+                </label>
+                {field.type === 'select' && field.foreignKey ? (
+                  <select
+                    id={String(field.key)}
+                    name={String(field.key)}
+                    defaultValue={inputValue}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                    disabled={field.editable === false && !!currentRecord} // Deshabilitar si no es editable y estamos editando
+                  >
+                    <option value="">Selecciona una opción</option>
+                    {foreignKeyData[field.key as string]?.map(option => (
+                      <option key={option.id} value={option.id}>
+                        {option[field.foreignKey!.displayField]}
+                      </option>
+                    ))}
+                  </select>
+                ) : field.type === 'boolean' ? (
+                  <select
+                    id={String(field.key)}
+                    name={String(field.key)}
+                    defaultValue={inputValue}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required
+                    disabled={field.editable === false && !!currentRecord}
+                  >
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                  </select>
+                ) : (
+                  <input
+                    type={field.type === 'number' ? 'number' : field.type === 'date' ? 'date' : 'text'}
+                    id={String(field.key)}
+                    name={String(field.key)}
+                    defaultValue={inputValue}
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    required={field.key !== 'id'} // ID no es requerido para creación
+                    readOnly={field.editable === false && !!currentRecord} // Apply readOnly based on editable prop and if we are editing
+                    disabled={field.editable === false && !!currentRecord} // Disabled property
+                  />
+                )}
+              </div>
+            );
+          })}
           <div className="flex justify-end space-x-3 mt-6">
             <button
               type="button"
@@ -723,42 +758,21 @@ const TableManager = <T extends IBaseModel>({ config }: TableManagerProps<T>): J
 // --- 5. Componente Principal App (App.tsx) ---
 
 // Definición de las configuraciones de las tablas
-const userTableConfig: ITableConfig<IUser> = {
+const usuariosTableConfig: ITableConfig<Usuarios> = {
   name: 'Usuarios',
   endpoints: {
-    read: `${BASE_API_URL}users`,
-    create: `${BASE_API_URL}users`,
-    update: `${BASE_API_URL}users`,
-    delete: `${BASE_API_URL}users`,
+    read: `${BASE_API_URL}usuarios`, // Suponiendo /usuarios para la tabla de usuarios
+    create: `${BASE_API_URL}usuarios`,
+    update: `${BASE_API_URL}usuarios`,
+    delete: `${BASE_API_URL}usuarios`,
+    restore: `${BASE_API_URL}usuarios/restore`, // Endpoint de restauración
   },
   fields: [
-    { key: 'id', label: 'ID', type: 'text', editable: false }, // ID is not editable
-    { key: 'name', label: 'Nombre', type: 'text' },
-    { key: 'email', label: 'Email', type: 'text' },
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    { key: 'correo', label: 'Email', type: 'text' },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
   ],
-  initialData: { name: '', email: '' },
-};
-
-const productTableConfig: ITableConfig<IProduct> = {
-  name: 'Productos',
-  endpoints: {
-    read: `${BASE_API_URL}products`,
-    create: `${BASE_API_URL}products`,
-    update: `${BASE_API_URL}products`,
-    delete: `${BASE_API_URL}products`,
-  },
-  fields: [
-    { key: 'id', label: 'ID', type: 'text', editable: false }, // ID is not editable
-    { key: 'name', label: 'Nombre', type: 'text' },
-    { key: 'price', label: 'Precio', type: 'number' },
-    {
-      key: 'createdBy',
-      label: 'Creado Por',
-      type: 'select',
-      foreignKey: { endpoint: `${BASE_API_URL}users`, displayField: 'name' },
-    },
-  ],
-  initialData: { name: '', price: 0, createdBy: '' },
+  initialData: { correo: '' },
 };
 
 const horariosUsuariosTableConfig: ITableConfig<HorariosUsuarios> = {
@@ -766,28 +780,195 @@ const horariosUsuariosTableConfig: ITableConfig<HorariosUsuarios> = {
   endpoints: {
     read: `${BASE_API_URL}HorariosUsuarios/all`,
     create: `${BASE_API_URL}HorariosUsuarios/save`,
-    update: `${BASE_API_URL}HorariosUsuarios`,
-    delete: `${BASE_API_URL}HorariosUsuarios`,
+    update: `${BASE_API_URL}HorariosUsuarios`, // Asumiendo PUT /HorariosUsuarios/:id
+    delete: `${BASE_API_URL}HorariosUsuarios`, // Asumiendo DELETE /HorariosUsuarios/:id
+    restore: `${BASE_API_URL}HorariosUsuarios/restore`, // Asumiendo POST /HorariosUsuarios/restore/:id
   },
   fields: [
-    { key: 'id', label: 'ID', type: 'text', editable: false }, // ID is not editable
+    { key: 'id', label: 'ID', type: 'number', editable: false },
     { key: 'nombre', label: 'Nombre', type: 'text' },
     { key: 'descripcion', label: 'Descripción', type: 'text' },
-    // { key: 'usuario_id', label: 'Usuario ID', type: 'select', foreignKey: { endpoint: `${BASE_API_URL}users`, displayField: 'name' } },
-  ]
-}
+    {
+      key: 'usuario_id',
+      label: 'Usuario',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}usuarios`, displayField: 'correo' } // Asumiendo endpoint para usuarios
+    },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { nombre: '', descripcion: '', usuario_id: 0 },
+};
+
+const compartirHorarioTableConfig: ITableConfig<CompartirHorario> = {
+  name: 'Compartir Horario',
+  endpoints: {
+    read: `${BASE_API_URL}CompartirHorario/all`,
+    create: `${BASE_API_URL}CompartirHorario/save`,
+    update: `${BASE_API_URL}CompartirHorario`,
+    delete: `${BASE_API_URL}CompartirHorario`,
+    restore: `${BASE_API_URL}CompartirHorario/restore`,
+  },
+  fields: [
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    { key: 'url', label: 'URL', type: 'text' },
+    {
+      key: 'horario_id',
+      label: 'Horario',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}HorariosUsuarios/all`, displayField: 'nombre' }
+    },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { url: '', horario_id: 0 },
+};
+
+const comentariosHorarioTableConfig: ITableConfig<ComentariosHorario> = {
+  name: 'Comentarios Horario',
+  endpoints: {
+    read: `${BASE_API_URL}ComentariosHorario/all`,
+    create: `${BASE_API_URL}ComentariosHorario/save`,
+    update: `${BASE_API_URL}ComentariosHorario`,
+    delete: `${BASE_API_URL}ComentariosHorario`,
+    restore: `${BASE_API_URL}ComentariosHorario/restore`,
+  },
+  fields: [
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    { key: 'comentario', label: 'Comentario', type: 'text' },
+    { key: 'fecha', label: 'Fecha', type: 'date' },
+    {
+      key: 'usuario_id',
+      label: 'Usuario',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}usuarios`, displayField: 'nombre' }
+    },
+    {
+      key: 'horario_id',
+      label: 'Horario',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}HorariosUsuarios/all`, displayField: 'nombre' }
+    },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { comentario: '', fecha: new Date().toISOString().split('T')[0], usuario_id: 0, horario_id: 0 },
+};
+
+const materiasTableConfig: ITableConfig<Materias> = {
+  name: 'Materias',
+  endpoints: {
+    read: `${BASE_API_URL}Materias/all`,
+    create: `${BASE_API_URL}Materias/save`,
+    update: `${BASE_API_URL}Materias`,
+    delete: `${BASE_API_URL}Materias`,
+    restore: `${BASE_API_URL}Materias/restore`,
+  },
+  fields: [
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    { key: 'nombre', label: 'Nombre', type: 'text' },
+    { key: 'color', label: 'Color', type: 'text' },
+    {
+      key: 'id_horario',
+      label: 'Horario',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}HorariosUsuarios/all`, displayField: 'nombre' }
+    },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { nombre: '', color: '#000000', id_horario: 0 },
+};
+
+const detallesMateriasTableConfig: ITableConfig<DetallesMaterias> = {
+  name: 'Detalles Materias',
+  endpoints: {
+    read: `${BASE_API_URL}DetallesMaterias/all`,
+    create: `${BASE_API_URL}DetallesMaterias/save`,
+    update: `${BASE_API_URL}DetallesMaterias`,
+    delete: `${BASE_API_URL}DetallesMaterias`,
+    restore: `${BASE_API_URL}DetallesMaterias/restore`,
+  },
+  fields: [
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    {
+      key: 'id_materia',
+      label: 'Materia',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}Materias/all`, displayField: 'nombre' }
+    },
+    { key: 'descripcion', label: 'Descripción', type: 'text' },
+    { key: 'mostrar', label: 'Mostrar', type: 'boolean' },
+    { key: 'orden', label: 'Orden', type: 'number' },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { id_materia: 0, descripcion: '', mostrar: true, orden: 0 },
+};
+
+const horariosMateriasTableConfig: ITableConfig<HorariosMaterias> = {
+  name: 'Horarios Materias',
+  endpoints: {
+    read: `${BASE_API_URL}HorariosMaterias/all`,
+    create: `${BASE_API_URL}HorariosMaterias/save`,
+    update: `${BASE_API_URL}HorariosMaterias`,
+    delete: `${BASE_API_URL}HorariosMaterias`,
+    restore: `${BASE_API_URL}HorariosMaterias/restore`,
+  },
+  fields: [
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    {
+      key: 'id_materia',
+      label: 'Materia',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}Materias/all`, displayField: 'nombre' }
+    },
+    { key: 'dia', label: 'Día', type: 'text' },
+    { key: 'hora_inicio', label: 'Hora Inicio', type: 'text' },
+    { key: 'hora_fin', label: 'Hora Fin', type: 'text' },
+    { key: 'orden', label: 'Orden', type: 'number' },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { id_materia: 0, dia: '', hora_inicio: '', hora_fin: '', orden: 0 },
+};
+
+const detallesHorariosMateriasTableConfig: ITableConfig<DetallesHorariosMaterias> = {
+  name: 'Detalles Horarios Materias',
+  endpoints: {
+    read: `${BASE_API_URL}DetallesHorariosMaterias/all`,
+    create: `${BASE_API_URL}DetallesHorariosMaterias/save`,
+    update: `${BASE_API_URL}DetallesHorariosMaterias`,
+    delete: `${BASE_API_URL}DetallesHorariosMaterias`,
+    restore: `${BASE_API_URL}DetallesHorariosMaterias/restore`,
+  },
+  fields: [
+    { key: 'id', label: 'ID', type: 'number', editable: false },
+    {
+      key: 'id_horario_materia',
+      label: 'Horario Materia',
+      type: 'select',
+      foreignKey: { endpoint: `${BASE_API_URL}HorariosMaterias/all`, displayField: 'dia' } // Display "dia" or another relevant field
+    },
+    { key: 'descripcion', label: 'Descripción', type: 'text' },
+    { key: 'mostrar', label: 'Mostrar', type: 'boolean' },
+    { key: 'orden', label: 'Orden', type: 'number' },
+    { key: 'deleted_at', label: 'Fecha Eliminación', type: 'date', editable: false },
+  ],
+  initialData: { id_horario_materia: 0, descripcion: '', mostrar: true, orden: 0 },
+};
+
 
 const tableConfigs: { [key: string]: ITableConfig<any> } = {
-  users: userTableConfig,
-  products: productTableConfig,
+  usuarios: usuariosTableConfig,
   horariosUsuarios: horariosUsuariosTableConfig,
+  compartirHorario: compartirHorarioTableConfig,
+  comentariosHorario: comentariosHorarioTableConfig,
+  materias: materiasTableConfig,
+  detallesMaterias: detallesMateriasTableConfig,
+  horariosMaterias: horariosMateriasTableConfig,
+  detallesHorariosMaterias: detallesHorariosMateriasTableConfig,
 };
 
 const App: React.FC = () => {
-  const [currentTable, setCurrentTable] = useState<string>('users'); // Default to 'users'
+  const [currentTable, setCurrentTable] = useState<string>('usuarios'); // Default a 'usuarios'
 
   return (
-    <AppContext.Provider value={{ axiosInstance, currentTable, setCurrentTable }}>
+    <AppContext.Provider value={{ axiosInstance: API, currentTable, setCurrentTable }}>
       <div className="min-h-screen bg-gray-100 font-sans text-gray-900 flex flex-col p-4 sm:p-6">
         <style>
           {`
