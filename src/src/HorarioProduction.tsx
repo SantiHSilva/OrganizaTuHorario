@@ -107,7 +107,7 @@ function HorarioProduction() {
           dia: horarioMateria.dia,
           inicio: horarioMateria.hora_inicio,
           fin: horarioMateria.hora_fin,
-          ajustes: detalleGeneral.map((detalle) => ({
+          ajustes: horarioMateria.DetallesHorariosMaterias.map((detalle) => ({
             mostrar_en_tabla: detalle.mostrar,
             titulo: detalle.descripcion
           }))
