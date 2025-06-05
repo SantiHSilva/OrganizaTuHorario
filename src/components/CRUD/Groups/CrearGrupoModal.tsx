@@ -1,6 +1,6 @@
 import {useState, useEffect, memo} from 'react';
 import { saveValues, getGroupList } from "../../../Data/groupManager.js";
-import {toast, ToastContainer} from "react-toastify";
+import {toast} from "react-toastify";
 import {BiBookAdd} from "react-icons/bi";
 import {Tooltip} from "react-tooltip";
 import { adaptColorByHexColor, getValueById, randomHexColor } from '../../../Utils/Utils.js';
@@ -116,8 +116,6 @@ function CreateGroupModal({toggleUpdate}: {toggleUpdate: (value?: boolean) => vo
 
   return (
     <div className='text-center'>
-
-      <ToastContainer />
 
       <BiBookAdd
         data-tooltip-id='crearGrupoBtn'

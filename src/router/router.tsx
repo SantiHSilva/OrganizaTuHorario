@@ -8,6 +8,7 @@ import ViewMySchedules from "../pages/ViewMySchedules";
 import ScheduleDetails from "../pages/ScheduleDetails";
 import ScrappingYoutube from "../pages/ScrappingYoutube";
 import ScrappingWAV from "../pages/ScrappingWAV";
+import SchedulePublic from "../pages/SchedulePublic";
 
 type RouteMiddleware = RouteObject & {
   middleware?: boolean;
@@ -27,6 +28,11 @@ const routes : RouteMiddleware[] = [
   {
     path: "schedules/:id",
     Component: ScheduleDetails,
+    middleware: true,
+  },
+  {
+    path: "view/:id",
+    Component: SchedulePublic,
     middleware: true,
   },
   {
