@@ -23,6 +23,7 @@ export default function AuthController(){
     if(auth.checkedLogin) {
       auth.checkLoginStatus()
     }
+    console.log(auth.profile)
   }, [auth.checkedLogin, auth])
 
   useEffect(() => {

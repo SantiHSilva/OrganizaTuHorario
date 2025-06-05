@@ -31,7 +31,7 @@ export const useAuth = create<AuthStore>()((set, get) => ({
     
     // Si no hay tokens, no está logueado
     if (!access_token || !refresh_token) {
-      set({ isLogged: false });
+      set({ isLogged: false, checkedLogin: true });
       return;
     }
 
