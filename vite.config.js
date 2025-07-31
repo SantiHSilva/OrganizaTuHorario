@@ -53,5 +53,5 @@ export default defineConfig({
       }
     )
   ],
-  base: "https://oth.jhonson.studio/",
+  base: "https://santihsilva.github.io/OrganizaTuHorario/",
 })
